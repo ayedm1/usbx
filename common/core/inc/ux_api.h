@@ -2748,10 +2748,6 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
 #define ux_system_uninitialize                                  _ux_system_uninitialize
 #define ux_system_tasks_run                                     _ux_system_tasks_run
 
-#define ux_host_class_hub_entry                                 _ux_host_class_hub_entry
-
-#define ux_host_class_storage_entry                             _ux_host_class_storage_entry
-
 #if defined(UX_HOST_STACK_ENABLE_ERROR_CHECKING)
 
 #define ux_host_stack_class_get                                 _uxe_host_stack_class_get
@@ -2843,10 +2839,7 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
 #define ux_device_stack_transfer_run                            _ux_device_stack_transfer_run
 
 #define ux_hcd_ehci_initialize                                  _ux_hcd_ehci_initialize
-#define ux_hcd_isp1161_initialize                               _ux_hcd_isp1161_initialize
 #define ux_hcd_ohci_initialize                                  _ux_hcd_ohci_initialize
-#define ux_hcd_sim_host_initialize                              _ux_hcd_sim_host_initialize
-#define ux_dcd_sim_slave_initialize                             _ux_dcd_sim_slave_initialize
 
 #define ux_network_driver_init                                  _ux_network_driver_init
 
@@ -2865,11 +2858,6 @@ UINT    uxe_system_initialize(VOID *non_cached_memory_pool_start, ULONG non_cach
 
 
 /* Define USBX Host API prototypes.  */
-
-UINT    ux_hcd_ehci_initialize(UX_HCD *hcd);
-UINT    ux_hcd_isp1161_initialize(UX_HCD *hcd);
-UINT    ux_hcd_ohci_initialize(UX_HCD *hcd);
-UINT    ux_hcd_sim_host_initialize(UX_HCD *hcd);
 
 UINT    ux_host_stack_class_get(UCHAR *class_name, UX_HOST_CLASS **host_class);
 UINT    ux_host_stack_class_instance_create(UX_HOST_CLASS *host_class, VOID *class_instance);
@@ -2903,13 +2891,6 @@ UINT    ux_host_stack_transfer_run(UX_TRANSFER *transfer_request);
 
 /* Define USBX Device API prototypes.  */
 
-UINT    ux_dcd_at91_initialize(ULONG dcd_io);
-UINT    ux_dcd_isp1181_initialize(ULONG dcd_io, ULONG dcd_irq, ULONG dcd_vbus_address);
-UINT    ux_dcd_ml6965_initialize(ULONG dcd_io, ULONG dcd_irq, ULONG dcd_vbus_address);
-UINT    ux_dcd_sim_slave_initialize(VOID);
-
-UINT    ux_device_class_storage_entry(UX_SLAVE_CLASS_COMMAND *command);
-VOID    ux_device_class_storage_thread(ULONG);
 UINT    ux_device_stack_alternate_setting_get(ULONG interface_value);
 UINT    ux_device_stack_alternate_setting_set(ULONG interface_value, ULONG alternate_setting_value);
 UINT    ux_device_stack_class_register(UCHAR *class_name,
