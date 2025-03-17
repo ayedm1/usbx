@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Simulator Controller Driver                                    */
 /**                                                                       */
@@ -29,49 +28,49 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_hcd_sim_host_request_control_transfer           PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_hcd_sim_host_request_control_transfer           PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*     This function performs a control transfer from a transfer request. */ 
+/*                                                                        */
+/*     This function performs a control transfer from a transfer request. */
 /*     The USB control transfer is in 3 phases (setup, data, status).     */
 /*     This function will chain all phases of the control sequence before */
-/*     setting the sim_host endpoint as a candidate for transfer.         */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hcd_sim_host                          Pointer to host controller    */ 
-/*    transfer_request                      Pointer to transfer request   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_hcd_sim_host_regular_td_obtain    Obtain regular TD             */ 
-/*    _ux_host_stack_transfer_request_abort Abort transfer request        */ 
-/*    _ux_utility_memory_allocate           Allocate memory block         */ 
-/*    _ux_utility_memory_free               Release memory block          */ 
-/*    _ux_utility_semaphore_get             Get semaphore                 */ 
-/*    _ux_utility_short_put                 Write 16-bit value            */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*     setting the sim_host endpoint as a candidate for transfer.         */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hcd_sim_host                          Pointer to host controller    */
+/*    transfer_request                      Pointer to transfer request   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_hcd_sim_host_regular_td_obtain    Obtain regular TD             */
+/*    _ux_host_stack_transfer_request_abort Abort transfer request        */
+/*    _ux_utility_memory_allocate           Allocate memory block         */
+/*    _ux_utility_memory_free               Release memory block          */
+/*    _ux_utility_semaphore_get             Get semaphore                 */
+/*    _ux_utility_short_put                 Write 16-bit value            */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Host Simulator Controller Driver                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            prefixed UX to MS_TO_TICK,  */
@@ -99,7 +98,7 @@ ULONG                   control_packet_payload_length;
 UCHAR                   *data_pointer;
 #if !defined(UX_HOST_STANDALONE)
 UINT                    status;
-#endif
+#endif /* !UX_HOST_STANDALONE */
 
 
     /* Get the pointer to the endpoint.  */
@@ -140,7 +139,7 @@ UINT                    status;
     setup_td -> ux_sim_host_td_status |=  UX_HCD_SIM_HOST_TD_SETUP_PHASE;
 
     /* Check if there is a data phase, if not jump to status phase.  */
-    data_td =  UX_NULL;    
+    data_td =  UX_NULL;
     start_data_td =  UX_NULL;
 
     /* Use local variables to manipulate data pointer and length.  */
@@ -219,7 +218,7 @@ UINT                    status;
         if (start_data_td == UX_NULL)
             start_data_td =  data_td;
 
-        /* Attach this new TD to the previous one.  */                                
+        /* Attach this new TD to the previous one.  */
         chain_td -> ux_sim_host_td_next_td =  data_td;
         chain_td -> ux_sim_host_td_next_td_transfer_request =  data_td;
         chain_td =  data_td;
@@ -274,7 +273,7 @@ UINT                    status;
     /* Hook the status phase to the previous TD.  */
     chain_td -> ux_sim_host_td_next_td =  status_td;
 
-    /* Since we have consumed out tail TD for the setup packet, we must get another one 
+    /* Since we have consumed out tail TD for the setup packet, we must get another one
        and hook it to the ED's tail.  */
     tail_td =  _ux_hcd_sim_host_regular_td_obtain(hcd_sim_host);
     if (tail_td == UX_NULL)
@@ -289,7 +288,7 @@ UINT                    status;
 
     /* Hook the new TD to the status TD.  */
     status_td -> ux_sim_host_td_next_td =  tail_td;
-            
+
     /* At this stage, the Head and Tail in the ED are still the same and
        the host simulator controller will skip this ED until we have hooked the new
        tail TD.  */
@@ -301,7 +300,7 @@ UINT                    status;
 #if defined(UX_HOST_STANDALONE)
     /* Transfer started in background, fine.  */
     return(UX_SUCCESS);
-#else
+#else /* UX_HOST_STANDALONE */
     /* Wait for the completion of the transfer request.  */
     status =  _ux_host_semaphore_get(&transfer_request -> ux_transfer_request_semaphore, UX_MS_TO_TICK(UX_CONTROL_TRANSFER_TIMEOUT));
 
@@ -311,22 +310,22 @@ UINT                    status;
 
         /* All transfers pending need to abort. There may have been a partial transfer.  */
         _ux_host_stack_transfer_request_abort(transfer_request);
-        
+
         /* There was an error, return to the caller.  */
         transfer_request -> ux_transfer_request_completion_code =  UX_TRANSFER_TIMEOUT;
-        
+
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_HCD, UX_TRANSFER_TIMEOUT);
 
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_TRANSFER_TIMEOUT, transfer_request, 0, 0, UX_TRACE_ERRORS, 0, 0)
-        
-    }            
+
+    }
 
     /* Free the resources.  */
     _ux_utility_memory_free(setup_request);
 
     /* Return completion to caller.  */
-    return(transfer_request -> ux_transfer_request_completion_code);           
-#endif
+    return(transfer_request -> ux_transfer_request_completion_code);
+#endif /* UX_HOST_STANDALONE */
 }

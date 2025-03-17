@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -345,7 +345,7 @@ UX_HOST_CLASS_CDC_ACM_LINE_STATE    line_state;
 #endif
 
     /* On error case, it's possible data buffer allocated for interrupt endpoint and transfer started, stop and free it.  */
-    if (cdc_acm -> ux_host_class_cdc_acm_interrupt_endpoint && 
+    if (cdc_acm -> ux_host_class_cdc_acm_interrupt_endpoint &&
         cdc_acm -> ux_host_class_cdc_acm_interrupt_endpoint -> ux_endpoint_transfer_request.ux_transfer_request_data_pointer)
     {
 

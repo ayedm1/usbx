@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -31,7 +31,7 @@
 #if UX_DEVICE_CLASS_DFU_STATUS_MODE == 1
 static inline VOID _ux_device_class_dfu_status_get(UX_SLAVE_CLASS_DFU *,
     UX_SLAVE_TRANSFER *, UCHAR, UCHAR, UCHAR, UCHAR);
-#endif
+#endif /* UX_DEVICE_CLASS_DFU_STATUS_MODE == 1 */
 
 
 /**************************************************************************/

@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -133,7 +133,7 @@ UX_EHCI_PERIODIC_LINK_POINTER   lp;
         /* Process TD until there is no next available.  */
         while (td != UX_NULL)
             td =  _ux_hcd_ehci_asynch_td_process(ed.ed_ptr, td);
-        
+
         /* Next ED.  */
         ed.ed_ptr = ed.ed_ptr -> ux_ehci_ed_next_ed;
     }

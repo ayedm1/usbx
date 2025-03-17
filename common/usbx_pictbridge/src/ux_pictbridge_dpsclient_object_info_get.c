@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Pictbridge Application                                              */
 /**                                                                       */
@@ -29,39 +29,39 @@
 #include "ux_device_class_pima.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_pictbridge_dpsclient_object_info_get            PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_pictbridge_dpsclient_object_info_get            PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function returns the information of the object.                */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    pima                                   Pima instance associated     */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    user application                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function returns the information of the object.                */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    pima                                   Pima instance associated     */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    user application                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -70,7 +70,7 @@
 /*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_pictbridge_dpsclient_object_info_get(UX_SLAVE_CLASS_PIMA *pima, ULONG object_handle, 
+UINT  _ux_pictbridge_dpsclient_object_info_get(UX_SLAVE_CLASS_PIMA *pima, ULONG object_handle,
                                                 UX_SLAVE_CLASS_PIMA_OBJECT **object)
 {
 
@@ -79,17 +79,17 @@ UX_SLAVE_CLASS_PIMA_OBJECT   *object_info;
 
     /* Get the pointer to the Pictbridge instance.  */
     pictbridge = (UX_PICTBRIDGE *)pima -> ux_device_class_pima_application;
-    
+
     /* Check the object handle. If this is handle 1 or 2 , we need to return the XML script object.
        If the handle is not 1 or 2, this is a JPEG picture or other object to be printed.  */
     if ((object_handle == UX_PICTBRIDGE_OBJECT_HANDLE_HOST_RESPONSE) || (object_handle == UX_PICTBRIDGE_OBJECT_HANDLE_CLIENT_REQUEST))
     {
         /* Check what XML object is requested. It is either a request script or a response.  */
-        if (object_handle == UX_PICTBRIDGE_OBJECT_HANDLE_HOST_RESPONSE)       
+        if (object_handle == UX_PICTBRIDGE_OBJECT_HANDLE_HOST_RESPONSE)
             object_info = (UX_SLAVE_CLASS_PIMA_OBJECT *) pictbridge -> ux_pictbridge_object_host;
-        else        
+        else
             object_info = (UX_SLAVE_CLASS_PIMA_OBJECT *) pictbridge -> ux_pictbridge_object_client;
-    }        
+    }
     else
     {
 
@@ -116,7 +116,7 @@ UX_SLAVE_CLASS_PIMA_OBJECT   *object_info;
     /* Return the pointer to this object.  */
     *object = object_info;
 
-    /* We are done.  */  
+    /* We are done.  */
     return(UX_SUCCESS);
 }
 

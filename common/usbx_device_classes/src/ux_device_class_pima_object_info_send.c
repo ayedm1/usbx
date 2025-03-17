@@ -1,20 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Pima Class                                                   */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device PIMA Class                                                   */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -29,49 +28,49 @@
 #include "ux_device_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_pima_object_info_send              PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_pima_object_info_send              PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function receives an object info structure from the host       */ 
-/*    before receiving the actual data.                                   */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    pima                                  Pointer to pima class         */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_stack_transfer_request     Transfer request              */ 
+/*                                                                        */
+/*    This function receives an object info structure from the host       */
+/*    before receiving the actual data.                                   */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    pima                                  Pointer to pima class         */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_stack_transfer_request     Transfer request              */
 /*    _ux_device_stack_endpoint_stall       Stall endpoint                */
-/*    _ux_utility_long_put                  Put 32-bit value              */ 
-/*    _ux_utility_short_put                 Put 32-bit value              */ 
+/*    _ux_utility_long_put                  Put 32-bit value              */
+/*    _ux_utility_short_put                 Put 32-bit value              */
 /*    _ux_utility_memory_allocate           Allocate memory               */
-/*    _ux_utility_memory_copy               Copy memory                   */ 
-/*    _ux_utility_memory_free               Free memory                   */ 
+/*    _ux_utility_memory_copy               Copy memory                   */
+/*    _ux_utility_memory_free               Free memory                   */
 /*    _ux_utility_descriptor_parse          Parse descriptor              */
 /*    _ux_device_class_pima_response_send   Send PIMA response            */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Storage Class                                                */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Storage Class                                                */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            verified memset and memcpy  */
@@ -98,24 +97,24 @@ ULONG                       object_handle;
 
     /* Obtain the pointer to the transfer request.  */
     transfer_request =  &pima -> ux_device_class_pima_bulk_out_endpoint -> ux_slave_endpoint_transfer_request;
-    
+
     /* Obtain memory for this object info. Use the transfer request pre-allocated memory.  */
     object_info =  transfer_request -> ux_slave_transfer_request_data_pointer;
 
     /* Get the data payload.  */
-    status =  _ux_device_stack_transfer_request(transfer_request, UX_DEVICE_CLASS_PIMA_TRANSFER_BUFFER_LENGTH, 
+    status =  _ux_device_stack_transfer_request(transfer_request, UX_DEVICE_CLASS_PIMA_TRANSFER_BUFFER_LENGTH,
                                                     UX_DEVICE_CLASS_PIMA_TRANSFER_BUFFER_LENGTH);
 
     /* Check if there was an error. If so, stall the endpoint.  */
     if (status != UX_SUCCESS)
     {
-    
+
         /* Stall the endpoint.  */
         _ux_device_stack_endpoint_stall(pima -> ux_device_class_pima_bulk_out_endpoint);
-        
+
         /* Return the status.  */
         return(status);
-        
+
     }
 
     /* Allocate some memory for the object.  */
@@ -136,7 +135,7 @@ ULONG                       object_handle;
 
     /* Copy the object filename  field.  Point to the beginning of the object description string.  */
     object_info_pointer =  object_info_pointer + UX_DEVICE_CLASS_PIMA_OBJECT_VARIABLE_OFFSET;
-    
+
     /* Get the unicode string length.  */
     unicode_string_length =  ((ULONG) *object_info_pointer * 2) + 1;
 
@@ -149,13 +148,13 @@ ULONG                       object_handle;
     /* Is there enough space?  */
     if (status == UX_SUCCESS)
     {
-        
+
         /* Copy that string into the object description field.  */
         _ux_utility_memory_copy(object -> ux_device_class_pima_object_filename, object_info_pointer, unicode_string_length); /* Use case of memcpy is verified. */
 
         /* Point to the next field.  */
         object_info_pointer += unicode_string_length;
-        
+
         /* Get the unicode string length.  */
         unicode_string_length =  ((ULONG) *object_info_pointer  * 2) + 1;
 
@@ -175,7 +174,7 @@ ULONG                       object_handle;
 
         /* Point to the next field.  */
         object_info_pointer += unicode_string_length;
-        
+
         /* Get the unicode string length.  */
         unicode_string_length =  ((ULONG) *object_info_pointer  * 2) + 1;
 
@@ -195,7 +194,7 @@ ULONG                       object_handle;
 
         /* Point to the next field.  */
         object_info_pointer += unicode_string_length;
-        
+
         /* Get the unicode string length.  */
         unicode_string_length =  ((ULONG) *object_info_pointer  * 2) + 1;
 
@@ -212,20 +211,20 @@ ULONG                       object_handle;
 
         /* Copy that string into the keywords field.  */
         _ux_utility_memory_copy(object -> ux_device_class_pima_object_keywords, object_info_pointer, unicode_string_length); /* Use case of memcpy is verified. */
-        
+
         /* Reset the rest of the other parameters.  */
         object -> ux_device_class_pima_object_state            =  0;
         object -> ux_device_class_pima_object_offset           =  0;
         object -> ux_device_class_pima_object_transfer_status  =  0;
         object -> ux_device_class_pima_object_handle_id        =  0;
         object -> ux_device_class_pima_object_length           =  0;
-        
+
         /* Send the object to the application.  */
         status = pima -> ux_device_class_pima_object_info_send(pima, object, storage_id, parent_object_handle, &object_handle);
-        
+
         /* Now we return a response with success.  */
         status = (status == UX_SUCCESS) ? UX_DEVICE_CLASS_PIMA_RC_OK : status;
-        _ux_device_class_pima_response_send(pima, status, 3, pima -> ux_device_class_pima_storage_id, 
+        _ux_device_class_pima_response_send(pima, status, 3, pima -> ux_device_class_pima_storage_id,
                                             object -> ux_device_class_pima_object_parent_object, object_handle);
 
         /* Store the object handle. It will be used for the OBJECT_SEND command.  */
@@ -243,7 +242,7 @@ ULONG                       object_handle;
 
     /* Free the resources. */
     _ux_utility_memory_free(object);
-    
+
     /* Return completion status.  */
     return(status);
 }

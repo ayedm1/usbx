@@ -1,72 +1,71 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_endpoint_instance_create             PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_endpoint_instance_create             PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function will create an endpoint instance. The HCD layer is    */
 /*    invoked to create each endpoint and the bandwidth claimed by each   */
-/*    endpoint is allocated.                                              */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    endpoint                              Endpoint to delete            */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_bandwidth_check        Check bandwidth               */ 
-/*    _ux_host_stack_bandwidth_claim        Claim bandwidth               */ 
-/*    _ux_utility_semaphore_create          Semaphore create              */ 
-/*    (ux_hcd_entry_function)               HCD entry function            */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    endpoint is allocated.                                              */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    endpoint                              Endpoint to delete            */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_bandwidth_check        Check bandwidth               */
+/*    _ux_host_stack_bandwidth_claim        Claim bandwidth               */
+/*    _ux_utility_semaphore_create          Semaphore create              */
+/*    (ux_hcd_entry_function)               HCD entry function            */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -96,15 +95,15 @@ UCHAR           endpoint_type;
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_ENDPOINT_INSTANCE_CREATE, endpoint -> ux_endpoint_device, endpoint, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
-    
     /* If the endpoint needs guaranteed bandwidth, check if we have enough */
     endpoint_type = (endpoint -> ux_endpoint_descriptor.bmAttributes) & UX_MASK_ENDPOINT_TYPE;
+
     switch (endpoint_type)
     {
 
     case UX_CONTROL_ENDPOINT:
     case UX_BULK_ENDPOINT:
-        
+
         break;
 
     default:
@@ -160,4 +159,3 @@ UCHAR           endpoint_type;
     /* Return completion status.  */
     return(status);
 }
-

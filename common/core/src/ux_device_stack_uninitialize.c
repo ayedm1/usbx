@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -46,21 +45,21 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_memory_free               Free                          */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_memory_free               Free                          */
 /*    _ux_utility_semaphore_delete          Delete semaphore              */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -93,7 +92,7 @@ ULONG                           endpoints_found;
     /* Free class memory. */
     _ux_utility_memory_free(_ux_system_slave -> ux_system_slave_class_array);
 
-    /* Allocate some memory for the Control Endpoint.  First get the address of the transfer request for the 
+    /* Allocate some memory for the Control Endpoint.  First get the address of the transfer request for the
        control endpoint. */
     transfer_request =  &device -> ux_slave_device_control_endpoint.ux_slave_endpoint_transfer_request;
 
@@ -102,7 +101,7 @@ ULONG                           endpoints_found;
 
     /* Get the number of endpoints found in the device framework.  */
     endpoints_found = device -> ux_slave_device_endpoints_pool_number;
-    
+
     /* Get the endpoint pool address in the device container.  */
     endpoints_pool =  device -> ux_slave_device_endpoints_pool;
 
@@ -114,11 +113,11 @@ ULONG                           endpoints_found;
 
         /* Free the memory for endpoint data pointer.  */
         _ux_utility_memory_free(endpoints_pool -> ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 0 */
 
         /* Remove the TX semaphore for the endpoint.  */
         _ux_device_semaphore_delete(&endpoints_pool -> ux_slave_endpoint_transfer_request.ux_slave_transfer_request_semaphore);
-    
+
         /* Next endpoint.  */
         endpoints_pool++;
     }
@@ -133,7 +132,3 @@ ULONG                           endpoints_found;
     /* Return successful completion.  */
     return(UX_SUCCESS);
 }
-
-
-
-

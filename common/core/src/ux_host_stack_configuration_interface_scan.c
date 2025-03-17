@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -135,7 +134,7 @@ UINT                    status;
     /* Activated later in state machine.  */
     status = (nb_class_owners > 0) ? UX_SUCCESS : UX_NO_CLASS_MATCH;
     return(status);
-#else
+#else /* UX_HOST_STANDALONE */
 
     /* Assume no classes.  */
     status = UX_NO_CLASS_MATCH;
@@ -188,6 +187,5 @@ UINT                    status;
 
     /* Return operation result.  */
     return(status);
-#endif
+#endif /* UX_HOST_STANDALONE */
 }
-

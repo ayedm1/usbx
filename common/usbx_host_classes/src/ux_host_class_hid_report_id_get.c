@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   HID Class                                                           */
 /**                                                                       */
@@ -29,48 +29,48 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_hid_report_id_get                    PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_hid_report_id_get                    PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function retrieves the report after                            */
 /*    report_id -> ux_host_class_hid_report_get_id and stores it in the   */
-/*    same pointer. If report_id -> ux_host_class_hid_report_get_id is    */ 
+/*    same pointer. If report_id -> ux_host_class_hid_report_get_id is    */
 /*    null, retrieves the first report of the type specified by           */
-/*    report_id -> ux_host_class_hid_report_get_type.                     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hid                                   Pointer to HID class          */ 
-/*    report_id                             Report id structure           */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_semaphore_get                Get protection semaphore      */ 
-/*    _ux_host_semaphore_put                Release protection semaphore  */ 
-/*    _ux_host_stack_class_instance_verify  Verify class instance is valid*/ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*    HID Class                                                           */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    report_id -> ux_host_class_hid_report_get_type.                     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hid                                   Pointer to HID class          */
+/*    report_id                             Report id structure           */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_semaphore_get                Get protection semaphore      */
+/*    _ux_host_semaphore_put                Release protection semaphore  */
+/*    _ux_host_stack_class_instance_verify  Verify class instance is valid*/
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*    HID Class                                                           */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -86,11 +86,11 @@ UX_INTERRUPT_SAVE_AREA
 #endif
 UINT                        status;
 UX_HOST_CLASS_HID_REPORT    *next_hid_report;
-                                                            
+
 
     /* Ensure the instance is valid.  */
     if (_ux_host_stack_class_instance_verify(_ux_system_host_class_hid_name, (VOID *) hid) != UX_SUCCESS)
-    {        
+    {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -129,7 +129,7 @@ UX_HOST_CLASS_HID_REPORT    *next_hid_report;
             /* Search for the feature report ID. */
             next_hid_report =  hid -> ux_host_class_hid_parser.ux_host_class_hid_parser_feature_report;
             break;
-            
+
         default :
 
             /* Error trap.  */
@@ -156,7 +156,7 @@ UX_HOST_CLASS_HID_REPORT    *next_hid_report;
 
         /* We want the first report, memorize the ID.  */
         report_id -> ux_host_class_hid_report_get_id =  next_hid_report -> ux_host_class_hid_report_id;
-        
+
         /* And remember where we left.  */
         report_id -> ux_host_class_hid_report_get_report =  next_hid_report;
 
@@ -172,7 +172,7 @@ UX_HOST_CLASS_HID_REPORT    *next_hid_report;
         /* No more reports.  */
         status =  UX_HOST_CLASS_HID_REPORT_ERROR;
     }
-    
+
     /* Unprotect thread reentry to this instance.  */
     _ux_host_class_hid_unlock(hid);
 

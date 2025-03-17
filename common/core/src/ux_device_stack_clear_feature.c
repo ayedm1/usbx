@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -45,26 +44,26 @@
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    request_type                          Request type                  */ 
+/*    request_type                          Request type                  */
 /*    request_value                         Request value                 */
 /*    request_index                         Request index                 */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    (ux_slave_dcd_function)               DCD dispatch function         */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -84,7 +83,7 @@ UX_SLAVE_DEVICE         *device;
 UX_SLAVE_INTERFACE      *interface_ptr;
 UX_SLAVE_ENDPOINT       *endpoint;
 UX_SLAVE_ENDPOINT       *endpoint_target;
-                                
+
     UX_PARAMETER_NOT_USED(request_value);
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -102,7 +101,7 @@ UX_SLAVE_ENDPOINT       *endpoint_target;
     /* The request can be for either the device or the endpoint.  */
     switch (request_type & UX_REQUEST_TARGET)
     {
-    
+
     case UX_REQUEST_TARGET_DEVICE:
 
         /* Check if we have a DEVICE_REMOTE_WAKEUP Feature.  */
@@ -124,22 +123,22 @@ UX_SLAVE_ENDPOINT       *endpoint_target;
         }
 
         break;
-            
+
     case UX_REQUEST_TARGET_ENDPOINT:
 
         /* The only clear feature for endpoint is ENDPOINT_STALL. This clears
-           the endpoint of the stall situation and resets its data toggle. 
+           the endpoint of the stall situation and resets its data toggle.
            We need to find the endpoint through the interface(s). */
         interface_ptr =  device -> ux_slave_device_first_interface;
 
 #if !defined(UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE) || UX_MAX_DEVICE_INTERFACES > 1
         while (interface_ptr != UX_NULL)
         {
-#endif
+#endif  /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
             /* Get the first endpoint for this interface.  */
             endpoint_target =  interface_ptr -> ux_slave_interface_first_endpoint;
-                
+
             /* Parse all the endpoints.  */
             while (endpoint_target != UX_NULL)
             {
@@ -150,7 +149,7 @@ UX_SLAVE_ENDPOINT       *endpoint_target;
 
                     /* Reset the endpoint.  */
                     dcd -> ux_slave_dcd_function(dcd, UX_DCD_RESET_ENDPOINT, endpoint_target);
-                    
+
                     /* Mark its state now.  */
                     endpoint_target -> ux_slave_endpoint_state = UX_ENDPOINT_RESET;
 
@@ -166,22 +165,21 @@ UX_SLAVE_ENDPOINT       *endpoint_target;
             /* Next interface.  */
             interface_ptr =  interface_ptr -> ux_slave_interface_next_interface;
         }
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
         /* Intentional fallthrough and go into the default case. */
         /* fall through */
 
     /* We get here when the endpoint is wrong. Should not happen though.  */
     default:
-        
+
         /* We stall the command.  */
         dcd -> ux_slave_dcd_function(dcd, UX_DCD_STALL_ENDPOINT, endpoint);
-    
+
         /* No more work to do here.  The command failed but the upper layer does not depend on it.  */
-        return(UX_SUCCESS);            
+        return(UX_SUCCESS);
     }
 
     /* Return the function status.  */
     return(UX_SUCCESS);
 }
-

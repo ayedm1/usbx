@@ -1,68 +1,67 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_interface_instance_create            PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_interface_instance_create            PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function will create an interface instance. It creates each    */
-/*    endpoint associated with the interface.                             */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    interface                             Pointer to interface          */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_endpoint_instance_create Create instance endpoint    */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    endpoint associated with the interface.                             */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    interface                             Pointer to interface          */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_endpoint_instance_create Create instance endpoint    */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -90,13 +89,13 @@ UINT            status;
 
         /* Create an endpoint for the instance.  */
         status = _ux_host_stack_endpoint_instance_create(endpoint);
-        
+
         /* Check status, the controller may have refused the endpoint creation.  */
         if (status != UX_SUCCESS)
-        
+
             /* An error occurred at the controller level.  */
             return(status);
-        
+
         /* Move to next endpoint.  */
         endpoint =  endpoint -> ux_endpoint_next_endpoint;
     }
@@ -105,6 +104,5 @@ UINT            status;
     UX_TRACE_OBJECT_REGISTER(UX_TRACE_HOST_OBJECT_TYPE_INTERFACE, interface_ptr, 0, 0, 0);
 
     /* Return completion status.  */
-    return(UX_SUCCESS); 
+    return(UX_SUCCESS);
 }
-

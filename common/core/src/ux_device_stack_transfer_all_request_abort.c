@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -51,20 +50,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_stack_transfer_abort       Transfer abort                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_stack_transfer_abort       Transfer abort                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -73,18 +72,17 @@
 UINT  _ux_device_stack_transfer_all_request_abort(UX_SLAVE_ENDPOINT *endpoint, ULONG completion_code)
 {
 
-UX_SLAVE_TRANSFER       *transfer_request;    
+UX_SLAVE_TRANSFER       *transfer_request;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_TRANSFER_ALL_REQUEST_ABORT, endpoint, completion_code, 0, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
 
     /* Get the transfer request for this endpoint.  */
     transfer_request =  &endpoint -> ux_slave_endpoint_transfer_request;
-    
+
     /* Abort this request.  */
     _ux_device_stack_transfer_abort(transfer_request, completion_code);
 
     /* Return successful completion.  */
     return(UX_SUCCESS);
 }
-

@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Simulator Controller Driver                                    */
 /**                                                                       */
@@ -31,43 +30,43 @@
 #include "tx_timer.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_hcd_sim_host_timer_function                     PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_hcd_sim_host_timer_function                     PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*     This function is the timer function of the simulator. It is        */
-/*     invoked on a timer every tick.                                     */ 
+/*     invoked on a timer every tick.                                     */
 /*                                                                        */
 /*     It's for RTOS mode.                                                */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hcd_sim_host_addr                     Address of host controller    */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_semaphore_put             Put semaphore                 */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    ThreadX                                                             */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hcd_sim_host_addr                     Address of host controller    */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_semaphore_put             Put semaphore                 */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    ThreadX                                                             */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -82,7 +81,7 @@ VOID  _ux_hcd_sim_host_timer_function(ULONG hcd_sim_host_addr)
 
 UX_HCD_SIM_HOST     *hcd_sim_host;
 UX_HCD              *hcd;
-            
+
 
     /* Setup pointer to simulator host structure.  */
     UX_TIMER_EXTENSION_PTR_GET(hcd_sim_host, UX_HCD_SIM_HOST, hcd_sim_host_addr)
@@ -102,4 +101,4 @@ UX_HCD              *hcd;
         _ux_host_semaphore_put(&_ux_system_host -> ux_system_host_hcd_semaphore);
     }
 }
-#endif
+#endif /* !UX_HOST_STANDALONE */

@@ -8,7 +8,6 @@
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -84,4 +83,3 @@ UINT  _ux_device_stack_microsoft_extension_register(ULONG vendor_request,
     /* Return successful completion.  */
     return(UX_SUCCESS);
 }
-

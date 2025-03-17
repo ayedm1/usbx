@@ -1,19 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device CDC Class                                                    */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device CDC ACM Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -29,51 +29,51 @@
 
 
 #if !defined(UX_DEVICE_STANDALONE)
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_cdc_acm_write                      PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_cdc_acm_write                      PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function writes to  the CDC class.                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function writes to  the CDC class.                             */
+/*                                                                        */
 /*    It's for RTOS mode.                                                 */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    cdc_acm                               Address of cdc_acm class      */ 
-/*                                                instance                */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    cdc_acm                               Address of cdc_acm class      */
+/*                                                instance                */
 /*    buffer                                Pointer to data to write      */
 /*    requested_length                      Length of bytes to write,     */
 /*                                                set to 0 to issue ZLP   */
 /*    actual_length                         Pointer to save number of     */
 /*                                                bytes written           */
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*   _ux_utility_memory_copy                Copy memory                   */ 
-/*   _ux_device_stack_transfer_request      Transfer request              */ 
-/*   _ux_device_mutex_on                    Take Mutex                    */ 
-/*   _ux_device_mutex_off                   Release Mutex                 */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*   _ux_utility_memory_copy                Copy memory                   */
+/*   _ux_device_stack_transfer_request      Transfer request              */
+/*   _ux_device_mutex_on                    Take Mutex                    */
+/*   _ux_device_mutex_off                   Release Mutex                 */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application                                                         */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            verified memset and memcpy  */
@@ -98,7 +98,7 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_cdc_acm_write(UX_SLAVE_CLASS_CDC_ACM *cdc_acm, UCHAR *buffer, 
+UINT _ux_device_class_cdc_acm_write(UX_SLAVE_CLASS_CDC_ACM *cdc_acm, UCHAR *buffer,
                                 ULONG requested_length, ULONG *actual_length)
 {
 
@@ -117,34 +117,34 @@ UINT                        status = 0;
 
     /* Check if current cdc-acm is using callback or not. We cannot use direct reads with callback on.  */
     if (cdc_acm -> ux_slave_class_cdc_acm_transmission_status == UX_TRUE)
-    
+
         /* Not allowed. */
         return(UX_ERROR);
 #endif
 
     /* Get the pointer to the device.  */
     device =  &_ux_system_slave -> ux_system_slave_device;
-    
+
     /* As long as the device is in the CONFIGURED state.  */
     if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
     {
-            
+
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_CONFIGURATION_HANDLE_UNKNOWN);
 
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
-    
+
         /* Cannot proceed with command, the interface is down.  */
         return(UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
-        
+
     /* We need the interface to the class.  */
     interface_ptr =  cdc_acm -> ux_slave_class_cdc_acm_interface;
-    
+
     /* Locate the endpoints.  */
     endpoint =  interface_ptr -> ux_slave_interface_first_endpoint;
-    
+
     /* Check the endpoint direction, if IN we have the correct endpoint.  */
     if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_IN)
     {
@@ -174,7 +174,7 @@ UINT                        status = 0;
     /* Check if the application forces a 0 length packet.  */
     if (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED && requested_length == 0)
     {
-        
+
         /* Send the request for 0 byte packet to the device controller.  */
         status =  _ux_device_stack_transfer_request(transfer_request, 0, 0);
 
@@ -183,7 +183,7 @@ UINT                        status = 0;
 
         /* Return the status.  */
         return(status);
-        
+
 
     }
     else
@@ -214,14 +214,14 @@ UINT                        status = 0;
         /* Check if we need more transactions.  */
         local_host_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE;
         while (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED && requested_length != 0)
-        { 
-    
+        {
+
             /* Check if we have enough in the local buffer.  */
             if (requested_length > UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE)
-    
+
                 /* We have too much to transfer.  */
                 local_requested_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE;
-                
+
             else
             {
 
@@ -238,36 +238,36 @@ UINT                        status = 0;
                 local_host_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE + 1;
 #endif
             }
-                            
+
             /* On a out, we copy the buffer to the caller. Not very efficient but it makes the API
                easier.  */
             _ux_utility_memory_copy(transfer_request -> ux_slave_transfer_request_data_pointer,
                                 buffer, local_requested_length); /* Use case of memcpy is verified. */
-        
+
             /* Send the request to the device controller.  */
             status =  _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_host_length);
-        
-            /* Check the status */    
+
+            /* Check the status */
             if (status == UX_SUCCESS)
             {
-    
+
                 /* Next buffer address.  */
                 buffer += transfer_request -> ux_slave_transfer_request_actual_length;
-    
+
                 /* Set the length actually received. */
-                *actual_length += transfer_request -> ux_slave_transfer_request_actual_length; 
-    
+                *actual_length += transfer_request -> ux_slave_transfer_request_actual_length;
+
                 /* Decrement what left has to be done.  */
                 requested_length -= transfer_request -> ux_slave_transfer_request_actual_length;
-    
+
             }
-            
+
             else
             {
-             
+
                 /* Free Mutex resource.  */
                 _ux_device_mutex_off(&cdc_acm -> ux_slave_class_cdc_acm_endpoint_in_mutex);
-                
+
                 /* We had an error, abort.  */
                 return(status);
             }
@@ -275,14 +275,14 @@ UINT                        status = 0;
 #endif /* _BUFF_OWNER && _ZERO_COPY */
     }
 
-    
+
     /* Free Mutex resource.  */
     _ux_device_mutex_off(&cdc_acm -> ux_slave_class_cdc_acm_endpoint_in_mutex);
 
     /* Check why we got here, either completion or device was extracted.  */
     if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
     {
-            
+
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_NO_ANSWER);
 
@@ -293,10 +293,10 @@ UINT                        status = 0;
         return (UX_TRANSFER_NO_ANSWER);
     }
     else
-    
+
         /* Simply return the last transaction result.  */
-        return(status);        
-          
+        return(status);
+
 }
 
 /**************************************************************************/

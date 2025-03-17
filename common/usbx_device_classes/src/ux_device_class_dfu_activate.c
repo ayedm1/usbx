@@ -1,16 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**************************************************************************/
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device DFU Class                                                    */
 /**                                                                       */
@@ -27,45 +28,45 @@
 #include "ux_device_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_dfu_activate                       PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_dfu_activate                       PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function initializes the USB DFU device.                       */ 
-/*    This class can be activated either as part of the device primary    */ 
-/*    framework or after a PORT_RESET detected.                           */ 
-/*    This is detected through the protocol field. If 1, we are in the    */ 
-/*    device regular mode. If 2, we are activated through the DFU         */ 
-/*    mode.                                                               */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    command                               Pointer to dfu command        */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_memory_allocate           Allocate memory               */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Source Code                                                    */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function initializes the USB DFU device.                       */
+/*    This class can be activated either as part of the device primary    */
+/*    framework or after a PORT_RESET detected.                           */
+/*    This is detected through the protocol field. If 1, we are in the    */
+/*    device regular mode. If 2, we are activated through the DFU         */
+/*    mode.                                                               */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    command                               Pointer to dfu command        */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_memory_allocate           Allocate memory               */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Source Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -83,8 +84,8 @@
 /**************************************************************************/
 UINT  _ux_device_class_dfu_activate(UX_SLAVE_CLASS_COMMAND *command)
 {
-                                          
-UX_SLAVE_INTERFACE                      *interface_ptr;         
+
+UX_SLAVE_INTERFACE                      *interface_ptr;
 UX_SLAVE_CLASS                          *class_ptr;
 UX_SLAVE_CLASS_DFU                      *dfu;
 
@@ -96,10 +97,10 @@ UX_SLAVE_CLASS_DFU                      *dfu;
 
     /* Get the interface that owns this instance.  */
     interface_ptr =  (UX_SLAVE_INTERFACE  *) command -> ux_slave_class_command_interface;
-    
+
     /* Store the class instance into the interface.  */
     interface_ptr -> ux_slave_interface_class_instance =  (VOID *)dfu;
-         
+
     /* Now the opposite, store the interface in the class instance.  */
     dfu -> ux_slave_class_dfu_interface =  interface_ptr;
 
@@ -107,9 +108,9 @@ UX_SLAVE_CLASS_DFU                      *dfu;
        we are.  */
     switch (command -> ux_slave_class_command_protocol)
     {
-    
+
         case UX_SLAVE_CLASS_DFU_PROTOCOL_RUNTIME    :
-        
+
             /* In the system, state the DFU state machine to application idle.  */
             _ux_system_slave -> ux_system_slave_device_dfu_state_machine = UX_SYSTEM_DFU_STATE_APP_IDLE;
 
@@ -120,26 +121,26 @@ UX_SLAVE_CLASS_DFU                      *dfu;
 
 
         case UX_SLAVE_CLASS_DFU_PROTOCOL_DFU_MODE    :
-        
+
             /* In the system, state the DFU state machine to DFU idle.  */
             _ux_system_slave -> ux_system_slave_device_dfu_state_machine = UX_SYSTEM_DFU_STATE_DFU_IDLE;
 
             /* Set the mode to DFU mode.  */
             _ux_system_slave -> ux_system_slave_device_dfu_mode =  UX_DEVICE_CLASS_DFU_MODE_DFU ;
 
-            break;       
+            break;
 
         default :
-        
+
             /* We should never get here.  */
             return(UX_ERROR);
-            
+
     }
-    
-    
+
+
     /* If there is a activate function call it.  */
     if (dfu -> ux_slave_class_dfu_instance_activate != UX_NULL)
-    {        
+    {
         /* Invoke the application.  */
         dfu -> ux_slave_class_dfu_instance_activate(dfu);
     }

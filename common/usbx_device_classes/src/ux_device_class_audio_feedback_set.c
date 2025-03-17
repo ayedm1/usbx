@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -73,7 +73,7 @@ UINT _ux_device_class_audio_feedback_set(UX_DEVICE_CLASS_AUDIO_STREAM *stream,
     UX_PARAMETER_NOT_USED(stream);
     UX_PARAMETER_NOT_USED(encoded_feedback);
     return(UX_FUNCTION_NOT_SUPPORTED);
-#else
+#else /* !UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
 
 UX_SLAVE_DEVICE             *device;
 UX_SLAVE_ENDPOINT           *endpoint;
@@ -112,7 +112,7 @@ UCHAR                       *buffer;
     if (_ux_system_slave -> ux_system_slave_speed == UX_HIGH_SPEED_DEVICE)
         *buffer = *encoded_feedback;
     return(UX_SUCCESS);
-#endif
+#endif /* !UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
 }
 
 /**************************************************************************/

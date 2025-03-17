@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -123,6 +122,7 @@ UX_ENDPOINT         *control_endpoint;
 
 
 #if UX_MAX_DEVICES > 1
+
     /* Verify the number of devices attached to the HCD already. Normally a HCD
        can have up to 127 devices but that can be tailored.  */
     if (hcd -> ux_hcd_nb_devices > UX_MAX_USB_DEVICES)
@@ -136,10 +136,12 @@ UX_ENDPOINT         *control_endpoint;
 
         return(UX_TOO_MANY_DEVICES);
     }
-#endif
+
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* Get a new device container to store this new device.  */
     device =  _ux_host_stack_new_device_get();
+
     if (device == UX_NULL)
     {
 
@@ -219,6 +221,7 @@ UX_ENDPOINT         *control_endpoint;
     status =  hcd -> ux_hcd_entry_function(hcd, UX_HCD_CREATE_ENDPOINT, (VOID *) control_endpoint);
 
 #if defined(UX_HOST_STANDALONE)
+
     if (status == UX_SUCCESS)
     {
 
@@ -236,7 +239,7 @@ UX_ENDPOINT         *control_endpoint;
 
     /* Enumeration steps will be done in task state machine.  */
 
-#else
+#else /* UX_HOST_STANDALONE */
 
     /* Going on to do enumeration (requests).  */
     if (status == UX_SUCCESS)
@@ -293,9 +296,10 @@ UX_ENDPOINT         *control_endpoint;
         /* If trace is enabled, register this object.  */
         UX_TRACE_OBJECT_REGISTER(UX_TRACE_HOST_OBJECT_TYPE_DEVICE, hcd, device_owner, port_index, 0);
     }
-#endif
 
-    /* Return status. If there's an error, device resources that have been 
+#endif /* UX_HOST_STANDALONE */
+
+    /* Return status. If there's an error, device resources that have been
        allocated until this point should be freed by the caller via _ux_host_stack_device_resources_free.  */
     return(status);
 }

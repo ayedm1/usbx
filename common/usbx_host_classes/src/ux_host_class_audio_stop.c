@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -82,7 +82,7 @@ UINT                    streaming_interface;
 
     /* Ensure the instance is valid.  */
     if (_ux_host_stack_class_instance_verify(_ux_system_host_class_audio_name, (VOID *) audio) != UX_SUCCESS)
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -184,7 +184,7 @@ UINT                    streaming_interface;
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    audio                                 Pointer to audio class        */ 
+/*    audio                                 Pointer to audio class        */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -83,7 +82,7 @@ UINT  _ux_host_stack_device_string_get(UX_DEVICE *device, UCHAR *descriptor_buff
 {
 #if defined(UX_HOST_STANDALONE)
 UX_INTERRUPT_SAVE_AREA
-#endif
+#endif /* UX_HOST_STANDALONE */
 UX_ENDPOINT     *control_endpoint;
 UX_TRANSFER     *transfer_request;
 UINT            status;
@@ -92,7 +91,7 @@ UINT            status;
     /* Do a sanity check on the device handle.  */
     if (device -> ux_device_handle != (ULONG) (ALIGN_TYPE) device)
     {
-        
+
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_ENUMERATOR, UX_DEVICE_HANDLE_UNKNOWN);
 
@@ -121,7 +120,7 @@ UINT            status;
     transfer_request -> ux_transfer_request_flags |=
                 (UX_TRANSFER_FLAG_LOCK | UX_TRANSFER_FLAG_AUTO_DEVICE_UNLOCK);
     UX_RESTORE
-#else
+#else /* UX_HOST_STANDALONE */
 
     /* Protect the control endpoint semaphore here.  It will be unprotected in the
        transfer request function.  */
@@ -130,7 +129,7 @@ UINT            status;
     /* Check for status.  */
     if (status != UX_SUCCESS)
         return(UX_SEMAPHORE_ERROR);
-#endif
+#endif /* UX_HOST_STANDALONE */
 
     /* Create a transfer request for the GET_DEVICE_ID request.  */
     transfer_request -> ux_transfer_request_data_pointer =      descriptor_buffer;

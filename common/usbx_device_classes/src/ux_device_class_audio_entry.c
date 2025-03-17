@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                    */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -100,9 +100,9 @@ UINT        status;
         /* Call the init function of the Audio class.  */
 #if defined(UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING)
         status =  _uxe_device_class_audio_initialize(command);
-#else
+#else /* UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING */
         status =  _ux_device_class_audio_initialize(command);
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING */
 
         /* Return the completion status.  */
         return(status);

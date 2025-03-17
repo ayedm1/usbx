@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -81,7 +80,7 @@ UX_HCD                  *hcd = hcd_sim_host -> ux_hcd_sim_host_hcd_owner;
 #if defined(UX_HOST_STANDALONE)
 UX_HCD_SIM_HOST_TD      *td;
 UINT                    td_index;
-#endif
+#endif /* UX_HOST_STANDALONE */
 
     /* Set the state of the controller to HALTED first.  */
     hcd -> ux_hcd_status =  UX_HCD_STATUS_HALTED;
@@ -114,7 +113,7 @@ UINT                    td_index;
         /* Free the TD buffer.  */
         _ux_utility_memory_free(td -> ux_sim_host_td_buffer);
     }
-#endif
+#endif /* UX_HOST_STANDALONE */
 
     /* Free TD/ED memories.  */
     if (hcd_sim_host -> ux_hcd_sim_host_iso_td_list)

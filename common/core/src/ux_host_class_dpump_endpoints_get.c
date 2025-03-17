@@ -1,69 +1,67 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Host Data Pump Class                                                */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Host DPUMP Class                                                    */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
-
-/* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
+
+/* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_host_class_dpump.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_dpump_endpoints_get                  PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_dpump_endpoints_get                  PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function search for the handle of the bulk out and bulk in     */
-/*    endpoints.                                                          */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    dpump                                   Pointer to dpump class      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_interface_endpoint_get Get interface endpoint        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    _ux_host_class_dpump_activate           Activate dpump class        */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    endpoints.                                                          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    dpump                                   Pointer to dpump class      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_interface_endpoint_get Get interface endpoint        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    _ux_host_class_dpump_activate           Activate dpump class        */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -83,7 +81,7 @@ UX_ENDPOINT     *endpoint;
     /* Search the bulk OUT endpoint. It is attached to the interface container.  */
     for (endpoint_index = 0; endpoint_index < dpump -> ux_host_class_dpump_interface -> ux_interface_descriptor.bNumEndpoints;
                         endpoint_index++)
-    {                        
+    {
 
         /* Get interface endpoint.  */
         status =  _ux_host_stack_interface_endpoint_get(dpump -> ux_host_class_dpump_interface, endpoint_index, &endpoint);
@@ -108,8 +106,8 @@ UX_ENDPOINT     *endpoint;
                 dpump -> ux_host_class_dpump_bulk_out_endpoint =  endpoint;
                 break;
             }
-        }                
-    }            
+        }
+    }
 
     /* The bulk out endpoint is mandatory.  */
     if (dpump -> ux_host_class_dpump_bulk_out_endpoint == UX_NULL)
@@ -123,12 +121,12 @@ UX_ENDPOINT     *endpoint;
 
         return(UX_ENDPOINT_HANDLE_UNKNOWN);
     }
-            
+
     /* Search the bulk IN endpoint. It is attached to the interface container.  */
 
     for (endpoint_index = 0; endpoint_index < dpump -> ux_host_class_dpump_interface -> ux_interface_descriptor.bNumEndpoints;
                         endpoint_index++)
-    {                        
+    {
 
         /* Get the endpoint handle.  */
         status =  _ux_host_stack_interface_endpoint_get(dpump -> ux_host_class_dpump_interface, endpoint_index, &endpoint);
@@ -153,12 +151,12 @@ UX_ENDPOINT     *endpoint;
                 dpump -> ux_host_class_dpump_bulk_in_endpoint =  endpoint;
                 break;
             }
-        }                
-    }    
+        }
+    }
 
     /* The bulk in endpoint is mandatory.  */
     if (dpump -> ux_host_class_dpump_bulk_in_endpoint == UX_NULL)
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ENDPOINT_HANDLE_UNKNOWN);
@@ -168,8 +166,7 @@ UX_ENDPOINT     *endpoint;
 
         return(UX_ENDPOINT_HANDLE_UNKNOWN);
     }
-    
+
     /* All endpoints have been mounted.  */
     return(UX_SUCCESS);
 }
-

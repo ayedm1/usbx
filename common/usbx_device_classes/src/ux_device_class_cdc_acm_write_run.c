@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device CDC Class                                                    */
+/**   Device CDC ACM Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -266,7 +266,7 @@ UINT                        zlp = UX_FALSE;
 
         /* On a out, we copy the buffer to the caller. Not very efficient but it makes the API
            easier.  */
-        _ux_utility_memory_copy(transfer_request -> ux_slave_transfer_request_data_pointer, 
+        _ux_utility_memory_copy(transfer_request -> ux_slave_transfer_request_data_pointer,
                             cdc_acm -> ux_device_class_cdc_acm_write_buffer,
                             cdc_acm -> ux_device_class_cdc_acm_write_transfer_length); /* Use case of memcpy is verified. */
 

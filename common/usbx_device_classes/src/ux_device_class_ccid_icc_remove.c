@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -112,7 +112,7 @@ UX_DEVICE_CLASS_CCID_SLOT       *ccid_slot;
 #if defined(UX_DEVICE_STANDALONE)
         if (ccid -> ux_device_class_ccid_notify_state == UX_DEVICE_CLASS_CCID_NOTIFY_IDLE)
             ccid -> ux_device_class_ccid_notify_state = UX_DEVICE_CLASS_CCID_NOTIFY_LOCK;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
         return(UX_SUCCESS);
     }
     _ux_device_class_ccid_unlock(ccid);

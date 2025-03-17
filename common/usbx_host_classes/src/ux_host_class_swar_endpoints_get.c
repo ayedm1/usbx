@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Sierra Wireless AR module class                                */
 /**                                                                       */
@@ -29,43 +29,43 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_swar_endpoints_get                   PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_swar_endpoints_get                   PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function search for the handle of the bulk out and bulk in     */
-/*    endpoints. The Sierra Wireless USB device has multiple interfaces.  */ 
-/*    We first need to find the interface which uses Bulk endpoints to    */ 
-/*    carry data.                                                         */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    swar                                     Pointer to swar class      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_interface_endpoint_get Get interface endpoint        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    _ux_host_class_swar_activate             Activate swar class        */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    endpoints. The Sierra Wireless USB device has multiple interfaces.  */
+/*    We first need to find the interface which uses Bulk endpoints to    */
+/*    carry data.                                                         */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    swar                                     Pointer to swar class      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_interface_endpoint_get Get interface endpoint        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    _ux_host_class_swar_activate             Activate swar class        */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -81,7 +81,7 @@ UINT            endpoint_index;
     /* Search the bulk OUT endpoint. It is attached to the interface container.  */
     for (endpoint_index = 0; endpoint_index < swar -> ux_host_class_swar_interface -> ux_interface_descriptor.bNumEndpoints;
                         endpoint_index++)
-    {                        
+    {
 
         /* Get interface endpoint.  */
         status =  _ux_host_stack_interface_endpoint_get(swar -> ux_host_class_swar_interface, endpoint_index, &endpoint);
@@ -102,8 +102,8 @@ UINT            endpoint_index;
                 swar -> ux_host_class_swar_bulk_out_endpoint =  endpoint;
                 break;
             }
-        }                
-    }            
+        }
+    }
 
     /* The bulk out endpoint is mandatory.  */
     if (swar -> ux_host_class_swar_bulk_out_endpoint == UX_NULL)
@@ -117,12 +117,12 @@ UINT            endpoint_index;
 
         return(UX_ENDPOINT_HANDLE_UNKNOWN);
     }
-            
+
     /* Search the bulk IN endpoint. It is attached to the interface container.  */
 
     for (endpoint_index = 0; endpoint_index < swar -> ux_host_class_swar_interface -> ux_interface_descriptor.bNumEndpoints;
                         endpoint_index++)
-    {                        
+    {
 
         /* Get the endpoint handle.  */
         status =  _ux_host_stack_interface_endpoint_get(swar -> ux_host_class_swar_interface, endpoint_index, &endpoint);
@@ -143,12 +143,12 @@ UINT            endpoint_index;
                 swar -> ux_host_class_swar_bulk_in_endpoint =  endpoint;
                 break;
             }
-        }                
-    }    
+        }
+    }
 
     /* The bulk in endpoint is mandatory.  */
     if (swar -> ux_host_class_swar_bulk_in_endpoint == UX_NULL)
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ENDPOINT_HANDLE_UNKNOWN);
@@ -158,7 +158,7 @@ UINT            endpoint_index;
 
         return(UX_ENDPOINT_HANDLE_UNKNOWN);
     }
-    
+
     /* All endpoints have been mounted.  */
     return(UX_SUCCESS);
 }

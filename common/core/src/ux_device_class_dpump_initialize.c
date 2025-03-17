@@ -1,20 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Data Pump Class                                              */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device DPUMP Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -28,40 +27,40 @@
 #include "ux_device_class_dpump.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_dpump_initialize                   PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_dpump_initialize                   PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function initializes the USB dpump device.                     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    command                                 Pointer to dpump command    */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function initializes the USB dpump device.                     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    command                                 Pointer to dpump command    */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_utility_memory_allocate             Allocate memory             */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Data Pump Class                                              */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Data Pump Class                                              */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -77,7 +76,7 @@
 /**************************************************************************/
 UINT  _ux_device_class_dpump_initialize(UX_SLAVE_CLASS_COMMAND *command)
 {
-                                          
+
 UX_SLAVE_CLASS_DPUMP                    *dpump;
 UX_SLAVE_CLASS                          *class_ptr;
 UX_SLAVE_CLASS_DPUMP_PARAMETER          *dpump_parameter;
@@ -105,7 +104,7 @@ UX_SLAVE_CLASS_DPUMP_PARAMETER          *dpump_parameter;
         _ux_utility_memory_free(dpump);
         return(UX_MEMORY_INSUFFICIENT);
     }
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
     /* Get the pointer to the application parameters for the cdc class.  */
     dpump_parameter =  command -> ux_slave_class_command_parameter;
@@ -117,5 +116,3 @@ UX_SLAVE_CLASS_DPUMP_PARAMETER          *dpump_parameter;
     /* Return completion status.  */
     return(UX_SUCCESS);
 }
-
-

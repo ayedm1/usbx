@@ -1,20 +1,20 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Storage Class                                                */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device STORAGE Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -34,48 +34,48 @@
 /* Build option checked runtime by UX_ASSERT  */
 #endif
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_storage_read_capacity              PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_storage_read_capacity              PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function performs a READ_CAPACITY command.                     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    storage                               Pointer to storage class      */ 
+/*                                                                        */
+/*    This function performs a READ_CAPACITY command.                     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    storage                               Pointer to storage class      */
 /*    endpoint_in                           Pointer to IN endpoint        */
 /*    endpoint_out                          Pointer to OUT endpoint       */
-/*    cbwcb                                 Pointer to CBWCB              */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_class_storage_csw_send     Send CSW                      */ 
-/*    _ux_device_stack_transfer_request     Transfer request              */ 
+/*    cbwcb                                 Pointer to CBWCB              */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_class_storage_csw_send     Send CSW                      */
+/*    _ux_device_stack_transfer_request     Transfer request              */
 /*    _ux_device_stack_endpoint_stall       Stall endpoint                */
-/*    _ux_utility_long_put_big_endian       Put 32-bit big endian         */ 
-/*    _ux_utility_memory_copy               Copy memory                   */ 
-/*    _ux_utility_memory_set                Set memory                    */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Storage Class                                                */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    _ux_utility_long_put_big_endian       Put 32-bit big endian         */
+/*    _ux_utility_memory_copy               Copy memory                   */
+/*    _ux_utility_memory_set                Set memory                    */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Storage Class                                                */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized command logic,    */
@@ -111,7 +111,7 @@ UCHAR                   *read_capacity_buffer;
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_READ_CAPACITY, storage, lun, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
     /* Obtain the status of the device.  */
-    status =  storage -> ux_slave_class_storage_lun[lun].ux_slave_class_storage_media_status(storage, lun, 
+    status =  storage -> ux_slave_class_storage_lun[lun].ux_slave_class_storage_media_status(storage, lun,
                                 storage -> ux_slave_class_storage_lun[lun].ux_slave_class_storage_media_id, &media_status);
 
     /* Update the request sense.  */
@@ -133,24 +133,24 @@ UCHAR                   *read_capacity_buffer;
     }
     else
     {
-    
+
         /* Obtain the pointer to the transfer request.  */
         transfer_request =  &endpoint_in -> ux_slave_endpoint_transfer_request;
 
         /* Obtain read capacity response buffer.  */
         read_capacity_buffer = transfer_request -> ux_slave_transfer_request_data_pointer;
-    
+
         /* Ensure it is cleaned.  */
         _ux_utility_memory_set(read_capacity_buffer, 0, UX_SLAVE_CLASS_STORAGE_READ_CAPACITY_RESPONSE_LENGTH); /* Use case of memcpy is verified. */
-    
+
         /* Insert the last LBA address in the response.  */
         _ux_utility_long_put_big_endian(&read_capacity_buffer[UX_SLAVE_CLASS_STORAGE_READ_CAPACITY_RESPONSE_LAST_LBA],
                                         storage -> ux_slave_class_storage_lun[lun].ux_slave_class_storage_media_last_lba);
-    
+
         /* Insert the block length in the response.  */
         _ux_utility_long_put_big_endian(&read_capacity_buffer[UX_SLAVE_CLASS_STORAGE_READ_CAPACITY_RESPONSE_BLOCK_SIZE],
                                         storage -> ux_slave_class_storage_lun[lun].ux_slave_class_storage_media_block_length);
-    
+
 #if defined(UX_DEVICE_STANDALONE)
 
         /* Next: Transfer (DATA).  */
@@ -168,7 +168,7 @@ UCHAR                   *read_capacity_buffer;
 #else
 
         /* Send a data payload with the read_capacity response buffer.  */
-        _ux_device_stack_transfer_request(transfer_request, 
+        _ux_device_stack_transfer_request(transfer_request,
                                       UX_SLAVE_CLASS_STORAGE_READ_CAPACITY_RESPONSE_LENGTH,
                                       UX_SLAVE_CLASS_STORAGE_READ_CAPACITY_RESPONSE_LENGTH);
 #endif
@@ -177,7 +177,7 @@ UCHAR                   *read_capacity_buffer;
         storage -> ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
         status = UX_SUCCESS;
     }
-        
+
     /* Return completion status.  */
     return(status);
 }

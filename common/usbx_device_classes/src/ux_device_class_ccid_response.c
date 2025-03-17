@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -100,11 +100,11 @@ UINT                            status;
     status = UX_SUCCESS;
 
     ccid -> ux_device_class_ccid_rsp_state = UX_DEVICE_CLASS_CCID_RSP_START;
-#else
+#else /* UX_DEVICE_STANDALONE */
 
     /* Transfer data.  */
     status = _ux_device_stack_transfer_request(transfer, length, length);
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 
     /* Unlock bulk IN.  */
     _ux_device_mutex_off(&ccid -> ux_device_class_ccid_response_mutex);

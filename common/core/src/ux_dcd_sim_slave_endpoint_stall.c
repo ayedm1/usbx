@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Slave Simulator Controller Driver                                   */
 /**                                                                       */
@@ -49,20 +48,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Slave Simulator Controller Driver                                   */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -74,7 +73,7 @@ UINT  _ux_dcd_sim_slave_endpoint_stall(UX_DCD_SIM_SLAVE *dcd_sim_slave, UX_SLAVE
 UX_DCD_SIM_SLAVE_ED     *ed;
 
     UX_PARAMETER_NOT_USED(dcd_sim_slave);
-                            
+
     /* Get the physical endpoint address in the endpoint container.  */
     ed =  (UX_DCD_SIM_SLAVE_ED *) endpoint -> ux_slave_endpoint_ed;
 
@@ -82,6 +81,5 @@ UX_DCD_SIM_SLAVE_ED     *ed;
     ed -> ux_sim_slave_ed_status |=  UX_DCD_SIM_SLAVE_ED_STATUS_STALLED;
 
     /* This function never fails.  */
-    return(UX_SUCCESS);         
+    return(UX_SUCCESS);
 }
-

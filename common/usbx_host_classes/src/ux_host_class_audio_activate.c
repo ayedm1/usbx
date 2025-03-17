@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -364,7 +364,7 @@ UINT                    status;
         {
 
             /* Check interface number to see if it's right AC.  */
-            if ((ac -> ux_host_class_audio_interface -> ux_interface_configuration == 
+            if ((ac -> ux_host_class_audio_interface -> ux_interface_configuration ==
                     interface_ptr -> ux_interface_configuration) &&
                 (ac -> ux_host_class_audio_interface -> ux_interface_descriptor.bInterfaceNumber ==
                     audio -> ux_host_class_audio_control_interface_number) &&

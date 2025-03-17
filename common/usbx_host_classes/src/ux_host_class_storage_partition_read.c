@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Storage Class                                                       */
 /**                                                                       */
@@ -29,46 +29,46 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_storage_partition_read               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_storage_partition_read               PORTABLE C      */
 /*                                                           6.1.2        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function will analyze the partition table and parse all the    */
 /*    partitions. It may happen that a partition entry points to a        */
-/*    secondary partition table.                                          */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    storage                               Pointer to storage class      */ 
-/*    sector_memory                         Pointer to memory for sector  */ 
-/*    sector                                Sector number                 */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_class_storage_media_mount    Mount media                   */ 
-/*    _ux_host_class_storage_media_open     Open media                    */ 
-/*    _ux_utility_long_get                  Get 32-bit word               */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    _ux_host_class_storage_media_mount    Mount media                   */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    secondary partition table.                                          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    storage                               Pointer to storage class      */
+/*    sector_memory                         Pointer to memory for sector  */
+/*    sector                                Sector number                 */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_class_storage_media_mount    Mount media                   */
+/*    _ux_host_class_storage_media_open     Open media                    */
+/*    _ux_utility_long_get                  Get 32-bit word               */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    _ux_host_class_storage_media_mount    Mount media                   */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            added option to disable FX  */
@@ -89,11 +89,11 @@ UINT  _ux_host_class_storage_partition_read(UX_HOST_CLASS_STORAGE *storage, UCHA
 #else
 UINT        status =  UX_ERROR;
 UINT        partition_index;
-    
+
 
     /* Point the sector buffer to the first partition entry.  */
     sector_memory +=  UX_HOST_CLASS_STORAGE_PARTITION_TABLE_START;
-    
+
     /* There are 4 partitions in a partition table.  */
     for (partition_index = 0; partition_index < 4; partition_index++)
     {
@@ -102,26 +102,26 @@ UINT        partition_index;
         switch(*(sector_memory + UX_HOST_CLASS_STORAGE_PARTITION_TYPE))
         {
 
-        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_12:       
-        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_16:   
-        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_16L: 
-        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_16_LBA_MAPPED: 
-        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_32_1:   
-        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_32_2:   
+        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_12:
+        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_16:
+        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_16L:
+        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_16_LBA_MAPPED:
+        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_32_1:
+        case UX_HOST_CLASS_STORAGE_PARTITION_FAT_32_2:
         case UX_HOST_CLASS_STORAGE_PARTITION_EXFAT:
 
             /* We have found a legal partition entry pointing to a potential boot sector.  */
             status =  _ux_host_class_storage_media_open(storage, sector + _ux_utility_long_get(sector_memory + UX_HOST_CLASS_STORAGE_PARTITION_SECTORS_BEFORE));
-            break;                              
-            
-        case UX_HOST_CLASS_STORAGE_PARTITION_EXTENDED:   
-        case UX_HOST_CLASS_STORAGE_PARTITION_EXTENDED_LBA_MAPPED:   
+            break;
+
+        case UX_HOST_CLASS_STORAGE_PARTITION_EXTENDED:
+        case UX_HOST_CLASS_STORAGE_PARTITION_EXTENDED_LBA_MAPPED:
 
             /* We have found an entry to an extended partition. We need to read that partition sector
                and recursively mount all partitions found.  */
             status =  _ux_host_class_storage_media_mount(storage, sector + _ux_utility_long_get(sector_memory + UX_HOST_CLASS_STORAGE_PARTITION_SECTORS_BEFORE));
             break;
-                
+
         default:
 
             /* We have found something which is not a DOS recognized partition, or an empty entry.

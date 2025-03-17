@@ -328,10 +328,10 @@ extern  ALIGN_TYPE  _ux_utility_time_elapsed(ALIGN_TYPE, ALIGN_TYPE);
 #ifdef UX_DISABLE_ERROR_HANDLER
 #define          _ux_system_error_handler(system_level, system_context, error_code) do {} while(0)
 #define          _ux_utility_error_callback_register(error_callback)                do {} while(0)
-#else
+#else /* UX_DISABLE_ERROR_HANDLER */
 VOID             _ux_system_error_handler(UINT system_level, UINT system_context, UINT error_code);
 VOID             _ux_utility_error_callback_register(VOID (*error_callback)(UINT system_level, UINT system_context, UINT error_code));
-#endif
+#endif /* UX_DISABLE_ERROR_HANDLER */
 
 #define          UX_UTILITY_ADD_SAFE(add_a, add_b, result, status) do {     \
         if (UX_OVERFLOW_CHECK_ADD_ULONG(add_a, add_b))                      \
@@ -459,4 +459,4 @@ VOID*            _ux_utility_memory_allocate_add_safe(ULONG align,ULONG cache,UL
 #define ux_utility_time_elapsed                        _ux_utility_time_elapsed
 #endif
 
-#endif
+#endif /* !UX_UTILITY_H */

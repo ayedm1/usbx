@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   HUB Class                                                           */
 /**                                                                       */
@@ -29,48 +29,48 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_hub_feature                          PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_hub_feature                          PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function will send a command to the HUB on a specific port.    */
-/*    The commands can be SET_FEATURE or CLEAR_FEATURE.                   */ 
+/*    The commands can be SET_FEATURE or CLEAR_FEATURE.                   */
 /*                                                                        */
 /*    In standalone mode, this functioin prepares the control transfer    */
 /*    request context of specific command, for host stack transfer        */
 /*    function to process, in next steps.                                 */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hub                                   Pointer to HUB class          */ 
-/*    port                                  Port number                   */ 
-/*    command                               Command to send               */ 
-/*    feature                               Feature to send               */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_transfer_request       Process transfer request      */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    HUB Class                                                           */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hub                                   Pointer to HUB class          */
+/*    port                                  Port number                   */
+/*    command                               Command to send               */
+/*    feature                               Feature to send               */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_transfer_request       Process transfer request      */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    HUB Class                                                           */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -94,7 +94,7 @@ UINT            status;
 
     /* The target is DEVICE for the HUB and OTHER for the downstream ports.  */
     if (port == 0)
-        target =  UX_REQUEST_TARGET_DEVICE;        
+        target =  UX_REQUEST_TARGET_DEVICE;
     else
         target =  UX_REQUEST_TARGET_OTHER;
 

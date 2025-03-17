@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Slave Simulator Controller Driver                                   */
 /**                                                                       */
@@ -54,21 +53,21 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_semaphore_get             Get semaphore                 */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_semaphore_get             Get semaphore                 */
 /*    _ux_dcd_sim_slave_transfer_abort      Abort transfer                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Slave Simulator Controller Driver                                   */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -93,7 +92,7 @@ UINT                    status;
 
     /* Get the slave endpoint.  */
     ed = (UX_DCD_SIM_SLAVE_ED *) endpoint -> ux_slave_endpoint_ed;
-    
+
     /* We have a request for a OUT or IN transaction from the host.
        If the endpoint is a Control endpoint, all this is happening under Interrupt and there is no
        thread to suspend.  */
@@ -106,7 +105,7 @@ UINT                    status;
         /* We should wait for the semaphore to wake us up.  */
         status =  _ux_device_semaphore_get(&transfer_request -> ux_slave_transfer_request_semaphore,
                                             transfer_request -> ux_slave_transfer_request_timeout);
-           
+
         /* Check the completion code. */
         if (status != UX_SUCCESS)
         {
@@ -126,4 +125,3 @@ UINT                    status;
     /* Return to caller with success.  */
     return(UX_SUCCESS);
 }
-

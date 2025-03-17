@@ -1,20 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device CDC-ECM Class                                                */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device CDC ECM Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -29,45 +28,45 @@
 #include "ux_device_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_cdc_ecm_uninitialize               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_cdc_ecm_uninitialize               PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function deinitializes the resources for the specified CDC-ECM */ 
-/*    instance.                                                           */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function deinitializes the resources for the specified CDC-ECM */
+/*    instance.                                                           */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
 /*    command                               Pointer to cdc ecm command    */
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_mutex_delete               Delete mutex                  */ 
-/*    _ux_device_thread_delete              Delete thread                 */ 
-/*    _ux_utility_memory_free               Free memory                   */ 
-/*    _ux_utility_event_flags_delete        Delete event flags            */ 
-/*    _ux_device_semaphore_delete           Delete semaphore              */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device CDC-ECM Class                                                */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_mutex_delete               Delete mutex                  */
+/*    _ux_device_thread_delete              Delete thread                 */
+/*    _ux_utility_memory_free               Free memory                   */
+/*    _ux_utility_event_flags_delete        Delete event flags            */
+/*    _ux_device_semaphore_delete           Delete semaphore              */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device CDC-ECM Class                                                */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -92,7 +91,7 @@
 /**************************************************************************/
 UINT  _ux_device_class_cdc_ecm_uninitialize(UX_SLAVE_CLASS_COMMAND *command)
 {
-                                          
+
 UX_SLAVE_CLASS_CDC_ECM                  *cdc_ecm;
 UX_SLAVE_CLASS                          *class_ptr;
 
@@ -102,7 +101,7 @@ UX_SLAVE_CLASS                          *class_ptr;
 
     /* Get the class instance in the container.  */
     cdc_ecm = (UX_SLAVE_CLASS_CDC_ECM *) class_ptr -> ux_slave_class_instance;
-    
+
     /* Sanity check.  */
     if (cdc_ecm != UX_NULL)
     {
@@ -145,7 +144,7 @@ UX_SLAVE_CLASS                          *class_ptr;
 #endif
         _ux_utility_memory_free(cdc_ecm);
     }
-    
+
     /* Return completion status.  */
     return(UX_SUCCESS);
 }

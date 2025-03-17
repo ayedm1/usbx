@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -14,7 +14,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Storage Class                                                */
+/**   Device STORAGE Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -491,7 +491,7 @@ UCHAR               lun;
 
         _ux_device_class_storage_test_ready(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
-            
+
     case UX_SLAVE_CLASS_STORAGE_SCSI_REQUEST_SENSE:
 
         _ux_device_class_storage_request_sense(storage, lun, endpoint_in, endpoint_out, cbwcb);
@@ -511,7 +511,7 @@ UCHAR               lun;
 
         _ux_device_class_storage_start_stop(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
-            
+
     case UX_SLAVE_CLASS_STORAGE_SCSI_PREVENT_ALLOW_MEDIA_REMOVAL:
 
         _ux_device_class_storage_prevent_allow_media_removal(storage, lun, endpoint_in, endpoint_out, cbwcb);
@@ -545,13 +545,13 @@ UCHAR               lun;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_READ32:
 
-        _ux_device_class_storage_read(storage, lun, endpoint_in, endpoint_out, cbwcb, 
+        _ux_device_class_storage_read(storage, lun, endpoint_in, endpoint_out, cbwcb,
                                         UX_SLAVE_CLASS_STORAGE_SCSI_READ32);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_READ16:
 
-        _ux_device_class_storage_read(storage, lun, endpoint_in, endpoint_out, cbwcb, 
+        _ux_device_class_storage_read(storage, lun, endpoint_in, endpoint_out, cbwcb,
                                         UX_SLAVE_CLASS_STORAGE_SCSI_READ16);
         break;
 
@@ -563,7 +563,7 @@ UCHAR               lun;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_WRITE16:
 
-        _ux_device_class_storage_write(storage, lun, endpoint_in, endpoint_out, cbwcb, 
+        _ux_device_class_storage_write(storage, lun, endpoint_in, endpoint_out, cbwcb,
                                         UX_SLAVE_CLASS_STORAGE_SCSI_WRITE16);
         break;
 
@@ -575,37 +575,37 @@ UCHAR               lun;
 #ifdef UX_SLAVE_CLASS_STORAGE_INCLUDE_MMC
     case UX_SLAVE_CLASS_STORAGE_SCSI_GET_STATUS_NOTIFICATION:
 
-        _ux_device_class_storage_get_status_notification(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_get_status_notification(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_GET_CONFIGURATION:
 
-        _ux_device_class_storage_get_configuration(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_get_configuration(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_READ_DISK_INFORMATION:
 
-        _ux_device_class_storage_read_disk_information(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_read_disk_information(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_REPORT_KEY:
 
-        _ux_device_class_storage_report_key(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_report_key(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_GET_PERFORMANCE:
 
-        _ux_device_class_storage_get_performance(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_get_performance(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_READ_DVD_STRUCTURE:
 
-        _ux_device_class_storage_read_dvd_structure(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_read_dvd_structure(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
     case UX_SLAVE_CLASS_STORAGE_SCSI_READ_TOC:
 
-        _ux_device_class_storage_read_toc(storage, lun, endpoint_in, endpoint_out, cbwcb); 
+        _ux_device_class_storage_read_toc(storage, lun, endpoint_in, endpoint_out, cbwcb);
         break;
 
 #endif
@@ -751,7 +751,7 @@ static inline UINT _ux_device_class_storage_data_next(UX_SLAVE_CLASS_STORAGE *st
             if (storage -> ux_device_class_storage_device_length >
                 storage -> ux_device_class_storage_data_count)
             {
-                
+
                 /* Update bCSWStatus.  */
                 storage -> ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_FAILED;
             }
@@ -866,7 +866,7 @@ static inline UINT _ux_device_class_storage_data_next(UX_SLAVE_CLASS_STORAGE *st
         if (storage -> ux_device_class_storage_device_length >
             storage -> ux_device_class_storage_data_count)
         {
-            
+
             /* Update bCSWStatus.  */
             storage -> ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_FAILED;
         }

@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -115,7 +114,7 @@ UINT                status = UX_ERROR;
     /* Initialize the max bandwidth for periodic endpoints. In simulation this is
        not very important.  */
     hcd -> ux_hcd_available_bandwidth =  UX_HCD_SIM_HOST_AVAILABLE_BANDWIDTH;
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* Set the state of the controller to HALTED first.  */
     hcd -> ux_hcd_status =  UX_HCD_STATUS_HALTED;
@@ -224,4 +223,3 @@ UINT                status = UX_ERROR;
     /* Return successful completion.  */
     return(UX_SUCCESS);
 }
-

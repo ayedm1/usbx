@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -404,8 +404,8 @@ ULONG                   res_bytes;
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    audio                                 Pointer to audio class        */ 
-/*    audio_sampling                        Pointer to audio sampling     */ 
+/*    audio                                 Pointer to audio class        */
+/*    audio_sampling                        Pointer to audio sampling     */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

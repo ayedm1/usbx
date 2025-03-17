@@ -2612,8 +2612,8 @@ typedef struct UX_SYSTEM_HOST_STRUCT
 #if UX_MAX_DEVICES > 1
     struct UX_HOST_CLASS_HUB_STRUCT
                     *ux_system_host_hub_list;
-#endif
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
+#endif /* UX_HOST_STANDALONE */
 
     UINT            (*ux_system_host_change_function) (ULONG, UX_HOST_CLASS *, VOID *);
 } UX_SYSTEM_HOST;
@@ -2621,26 +2621,26 @@ typedef struct UX_SYSTEM_HOST_STRUCT
 #if UX_MAX_CLASS_DRIVER > 1
 #define UX_SYSTEM_HOST_MAX_CLASS_GET()          (_ux_system_host->ux_system_host_max_class)
 #define UX_SYSTEM_HOST_MAX_CLASS_SET(n)         do { _ux_system_host->ux_system_host_max_class = (n); } while(0)
-#else
+#else /* UX_MAX_CLASS_DRIVER > 1 */
 #define UX_SYSTEM_HOST_MAX_CLASS_GET()          (1)
 #define UX_SYSTEM_HOST_MAX_CLASS_SET(n)         UX_PARAMETER_NOT_USED(n)
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
 #if UX_MAX_HCD > 1
 #define UX_SYSTEM_HOST_MAX_HCD_GET()            (_ux_system_host->ux_system_host_max_hcd)
 #define UX_SYSTEM_HOST_MAX_HCD_SET(n)           do { _ux_system_host->ux_system_host_max_hcd = (n); } while(0)
-#else
+#else /* UX_MAX_HCD > 1 */
 #define UX_SYSTEM_HOST_MAX_HCD_GET()            (1)
 #define UX_SYSTEM_HOST_MAX_HCD_SET(n)           UX_PARAMETER_NOT_USED(n)
-#endif
+#endif /* UX_MAX_HCD > 1 */
 
 #if UX_MAX_DEVICES > 1
 #define UX_SYSTEM_HOST_MAX_DEVICES_SET(n)       do { _ux_system_host->ux_system_host_max_devices = (n); } while(0)
 #define UX_SYSTEM_HOST_MAX_DEVICES_GET()        (_ux_system_host->ux_system_host_max_devices)
-#else
+#else /* UX_MAX_DEVICES > 1 */
 #define UX_SYSTEM_HOST_MAX_DEVICES_SET(n)       UX_PARAMETER_NOT_USED(n)
 #define UX_SYSTEM_HOST_MAX_DEVICES_GET()        (1)
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
 
 typedef struct UX_SYSTEM_SLAVE_STRUCT
@@ -2662,7 +2662,7 @@ typedef struct UX_SYSTEM_SLAVE_STRUCT
     ULONG           ux_system_slave_dfu_framework_length;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
     UINT            ux_system_slave_max_class;
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
     UX_SLAVE_CLASS  *ux_system_slave_class_array;
     UX_SLAVE_CLASS  *ux_system_slave_interface_class_array[UX_MAX_SLAVE_INTERFACES];
     ULONG           ux_system_slave_speed;
@@ -2683,10 +2683,10 @@ typedef struct UX_SYSTEM_SLAVE_STRUCT
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
 #define UX_SYSTEM_DEVICE_MAX_CLASS_SET(n)       do { _ux_system_slave->ux_system_slave_max_class = (n); } while(0)
 #define UX_SYSTEM_DEVICE_MAX_CLASS_GET()        (_ux_system_slave->ux_system_slave_max_class)
-#else
+#else /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 #define UX_SYSTEM_DEVICE_MAX_CLASS_SET(n)       do { UX_PARAMETER_NOT_USED(n); } while(0)
 #define UX_SYSTEM_DEVICE_MAX_CLASS_GET()        (1)
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
 #define UX_SLAVE_DEVICE_CHECK_STATE(state)                                                        \
   (_ux_system_slave->ux_system_slave_device.ux_slave_device_state & (state)) ? UX_TRUE : UX_FALSE \
@@ -2699,7 +2699,7 @@ typedef struct UX_SYSTEM_OTG_STRUCT
     UX_THREAD       ux_system_otg_thread;
     UCHAR           *ux_system_otg_thread_stack;
     UX_SEMAPHORE    ux_system_otg_semaphore;
-#endif
+#endif /* !UX_OTG_STANDALONE */
     UINT            (*ux_system_otg_function) (ULONG);
     ULONG           ux_system_otg_mode;
     ULONG           ux_system_otg_io;
@@ -2730,9 +2730,9 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
     UINT            ux_host_class_dpump_state;
 #if !defined(UX_HOST_STANDALONE)
     UX_SEMAPHORE    ux_host_class_dpump_semaphore;
-#else
+#else /* !UX_HOST_STANDALONE */
     ULONG           ux_host_class_dpump_flags;
-#endif
+#endif /* !UX_HOST_STANDALONE */
 } UX_HOST_CLASS_DPUMP;
 
 
@@ -2747,10 +2747,10 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
 /* Define USBX Services.  */
 
 #if defined(UX_SYSTEM_ENABLE_ERROR_CHECKING)
-#define ux_system_initialize                                    _ux_system_initialize
-#else
 #define ux_system_initialize                                    _uxe_system_initialize
-#endif
+#else /* UX_SYSTEM_ENABLE_ERROR_CHECKING */
+#define ux_system_initialize                                    _ux_system_initialize
+#endif /* UX_SYSTEM_ENABLE_ERROR_CHECKING */
 
 #define ux_system_uninitialize                                  _ux_system_uninitialize
 #define ux_system_tasks_run                                     _ux_system_tasks_run
@@ -2777,7 +2777,7 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
 #define ux_host_stack_transfer_request                          _uxe_host_stack_transfer_request
 #define ux_host_stack_transfer_request_abort                    _uxe_host_stack_transfer_request_abort
 
-#else
+#else /* UX_HOST_STACK_ENABLE_ERROR_CHECKING */
 
 #define ux_host_stack_class_get                                 _ux_host_stack_class_get
 #define ux_host_stack_class_instance_get                        _ux_host_stack_class_instance_get
@@ -2795,7 +2795,7 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
 #define ux_host_stack_transfer_request                          _ux_host_stack_transfer_request
 #define ux_host_stack_transfer_request_abort                    _ux_host_stack_transfer_request_abort
 
-#endif
+#endif /* UX_HOST_STACK_ENABLE_ERROR_CHECKING */
 
 #define ux_host_stack_class_instance_create                     _ux_host_stack_class_instance_create
 #define ux_host_stack_class_instance_destroy                    _ux_host_stack_class_instance_destroy
@@ -2821,13 +2821,14 @@ typedef struct UX_HOST_CLASS_DPUMP_STRUCT
 #define ux_device_stack_class_unregister                        _uxe_device_stack_class_unregister
 #define ux_device_stack_initialize                              _uxe_device_stack_initialize
 
-#else
+#else /* UX_HOST_STACK_ENABLE_ERROR_CHECKING */
 
 #define ux_device_stack_class_register                          _ux_device_stack_class_register
 #define ux_device_stack_class_unregister                        _ux_device_stack_class_unregister
 #define ux_device_stack_initialize                              _ux_device_stack_initialize
 
-#endif
+#endif /* UX_HOST_STACK_ENABLE_ERROR_CHECKING */
+
 #define ux_device_stack_uninitialize                            _ux_device_stack_uninitialize
 
 #define ux_device_stack_alternate_setting_get                   _ux_device_stack_alternate_setting_get
@@ -2967,6 +2968,6 @@ UINT    ux_device_stack_transfer_run(UX_SLAVE_TRANSFER *transfer_request, ULONG 
 #endif
 
 
-#endif
+#endif /* !UX_API_H */
 
 

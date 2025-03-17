@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -195,8 +195,8 @@ UINT            status;
 /*  INPUT                                                                 */
 /*                                                                        */
 /*    hid                                   Pointer to HID class          */
-/*    idle_time                             Idle time                     */ 
-/*    report_id                             Report ID                     */ 
+/*    idle_time                             Idle time                     */
+/*    report_id                             Report ID                     */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

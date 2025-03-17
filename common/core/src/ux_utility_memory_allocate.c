@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 
@@ -96,7 +95,7 @@ ULONG               available_bytes;
 ALIGN_TYPE          int_memory_buffer;
 #ifdef UX_ENABLE_MEMORY_STATISTICS
 UINT                index;
-#endif
+#endif /* UX_ENFORCE_SAFE_ALIGNMENT */
 
     /* Get the pool ptr */
     if (memory_cache_flag == UX_REGULAR_MEMORY)
@@ -193,7 +192,7 @@ UINT                index;
     if (memory_alignment == UX_SAFE_ALIGN)
         memory_alignment = UX_NO_ALIGN;
 
-#endif
+#endif /* UX_ENFORCE_SAFE_ALIGNMENT */
 
     /* Ensure the alignment meats the minimum.  */
     if (memory_alignment < UX_ALIGN_MIN)
@@ -343,7 +342,7 @@ UINT                index;
     /* Log max usage of memory pool.  */
     if (_ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_min_free > _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_available)
         _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_min_free = _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_available;
-#endif
+#endif /* UX_ENABLE_MEMORY_STATISTICS */
 
     /* Release the protection.  */
     _ux_system_mutex_off(&_ux_system -> ux_system_mutex);

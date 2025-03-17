@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -83,11 +83,11 @@ ULONG                           stream_index;
 UINT                            status;
 #if defined(UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT)
 ULONG                           interrupt_running_count = 0;
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT*/
 ULONG                           stream_running_count = 0;
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
 ULONG                           feedback_running_count = 0;
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
 
     /* Get audio instance.  */
     audio = (UX_DEVICE_CLASS_AUDIO *) instance;
@@ -107,7 +107,7 @@ ULONG                           feedback_running_count = 0;
         return(status);
     if (status == UX_STATE_WAIT)
         interrupt_running_count++;
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
 
     for (stream_index = 0;
          stream_index < audio -> ux_device_class_audio_streams_nb;
@@ -129,16 +129,16 @@ ULONG                           feedback_running_count = 0;
             if (status == UX_STATE_WAIT)
                 feedback_running_count ++;
         }
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
     }
 
     if ((stream_running_count > 0)
 #if defined(UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT)
         || (interrupt_running_count > 0)
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
         || (feedback_running_count > 0)
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
         )
     {
         return UX_STATE_WAIT;
@@ -148,5 +148,4 @@ ULONG                           feedback_running_count = 0;
         return UX_STATE_IDLE;
     }
 }
-
-#endif
+#endif /* UX_DEVICE_STANDALONE */

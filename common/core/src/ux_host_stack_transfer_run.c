@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -196,10 +195,10 @@ UINT            status;
 
                 /* All transfers pending need to abort. There may have been a partial transfer.  */
                 _ux_host_stack_transfer_request_abort(transfer_request);
-                
+
                 /* Set the completion code.  */
                 transfer_request -> ux_transfer_request_completion_code = UX_TRANSFER_TIMEOUT;
-        
+
                 /* There was an error: simplify to idle.  */
                 UX_DISABLE
                 UX_TRANSFER_STATE_IDLE(transfer_request);
@@ -347,4 +346,4 @@ UINT  _uxe_host_stack_transfer_run(UX_TRANSFER *transfer_request)
     /* Invoke transfer request function.  */
     return(_ux_host_stack_transfer_run(transfer_request));
 }
-#endif
+#endif /* UX_HOST_STANDALONE */

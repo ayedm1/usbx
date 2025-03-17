@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   HUB Class                                                           */
 /**                                                                       */
@@ -29,52 +29,52 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_hub_status_get                       PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_hub_status_get                       PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function will do a GET_STATUS from the HUB. This function      */ 
-/*    retrieves the current status and the changed bits.                  */ 
+/*                                                                        */
+/*    This function will do a GET_STATUS from the HUB. This function      */
+/*    retrieves the current status and the changed bits.                  */
 /*                                                                        */
 /*    In standalone mode, this functioin prepares the control transfer    */
 /*    request data memory and request context of specific command, for    */
 /*    host stack transfer function to process, in next steps. The         */
 /*    allocated memory must be freed after transfer request is processed. */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hub                                   Pointer to HUB class          */ 
-/*    port                                  Port of device                */ 
-/*    port_status                           Destination for port status   */ 
-/*    port_change                           Destination for port change   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_transfer_request       Process transfer request      */ 
-/*    _ux_utility_memory_allocate           Allocate memory block         */ 
-/*    _ux_utility_memory_free               Release memory block          */ 
-/*    _ux_utility_short_get                 Get 16-bit word               */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    HUB Class                                                           */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hub                                   Pointer to HUB class          */
+/*    port                                  Port of device                */
+/*    port_status                           Destination for port status   */
+/*    port_change                           Destination for port change   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_transfer_request       Process transfer request      */
+/*    _ux_utility_memory_allocate           Allocate memory block         */
+/*    _ux_utility_memory_free               Release memory block          */
+/*    _ux_utility_short_get                 Get 16-bit word               */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    HUB Class                                                           */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -99,11 +99,11 @@ UINT            status;
 
     /* The target is DEVICE for the HUB and OTHER for the downstream ports.  */
     if (port == 0)
-        target =  UX_REQUEST_TARGET_DEVICE;        
+        target =  UX_REQUEST_TARGET_DEVICE;
     else
         target =  UX_REQUEST_TARGET_OTHER;
 
-    /* Allocate a buffer for the port status and change: 2 words.  */        
+    /* Allocate a buffer for the port status and change: 2 words.  */
     port_data =  _ux_utility_memory_allocate(UX_SAFE_ALIGN, UX_CACHE_SAFE_MEMORY, 4);
     if(port_data == UX_NULL)
         return(UX_MEMORY_INSUFFICIENT);

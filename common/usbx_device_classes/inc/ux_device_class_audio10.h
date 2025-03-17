@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -65,15 +65,15 @@
 #ifndef UX_DEVICE_CLASS_AUDIO10_H
 #define UX_DEVICE_CLASS_AUDIO10_H
 
-/* Determine if a C++ compiler is being used.  If so, ensure that standard 
-   C is used to process the API information.  */ 
+/* Determine if a C++ compiler is being used.  If so, ensure that standard
+   C is used to process the API information.  */
 
-#ifdef   __cplusplus 
+#ifdef   __cplusplus
 
-/* Yes, C++ compiler is present.  Use standard C.  */ 
-extern   "C" { 
+/* Yes, C++ compiler is present.  Use standard C.  */
+extern   "C" {
 
-#endif  
+#endif
 
 
 /* Internal option: enable the basic USBX error checking. This define is typically used
@@ -432,10 +432,10 @@ UINT _uxe_device_class_audio10_control_process(UX_DEVICE_CLASS_AUDIO *audio,
 
 #endif
 
-/* Determine if a C++ compiler is being used.  If so, complete the standard 
-   C conditional started above.  */   
+/* Determine if a C++ compiler is being used.  If so, complete the standard
+   C conditional started above.  */
 #ifdef __cplusplus
-} 
-#endif 
+}
+#endif
 
-#endif /* ifndef UX_DEVICE_CLASS_AUDIO10_H */
+#endif /* !UX_DEVICE_CLASS_AUDIO10_H */

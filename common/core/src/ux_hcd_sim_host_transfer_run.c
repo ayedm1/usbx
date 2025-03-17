@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -162,4 +161,4 @@ UINT                status = 0;
 
     return (status == UX_SUCCESS) ? (UX_STATE_WAIT) : (UX_STATE_ERROR);
 }
-#endif
+#endif /* UX_HOST_STANDALONE */

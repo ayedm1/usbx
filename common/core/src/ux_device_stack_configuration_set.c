@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -51,25 +50,25 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
+/*  CALLS                                                                 */
 /*                                                                        */
-/*    (ux_slave_class_entry_function)       Device class entry function   */ 
-/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
+/*    (ux_slave_class_entry_function)       Device class entry function   */
+/*    (ux_slave_dcd_function)               DCD dispatch function         */
 /*    _ux_device_stack_interface_delete     Delete interface              */
-/*    _ux_device_stack_interface_set        Set interface                 */ 
-/*    _ux_utility_descriptor_parse          Parse descriptor              */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
+/*    _ux_device_stack_interface_set        Set interface                 */
+/*    _ux_utility_descriptor_parse          Parse descriptor              */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -91,10 +90,10 @@ ULONG                           descriptor_length;
 UCHAR                           descriptor_type;
 UX_CONFIGURATION_DESCRIPTOR     configuration_descriptor = { 0 };
 UX_INTERFACE_DESCRIPTOR         interface_descriptor;
-UX_SLAVE_INTERFACE              *interface_ptr; 
+UX_SLAVE_INTERFACE              *interface_ptr;
 #if !defined(UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE) || UX_MAX_DEVICE_INTERFACES > 1
-UX_SLAVE_INTERFACE              *next_interface; 
-#endif
+UX_SLAVE_INTERFACE              *next_interface;
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 UX_SLAVE_CLASS                  *class_inst;
 UX_SLAVE_CLASS                  *current_class =  UX_NULL;
 UX_SLAVE_CLASS_COMMAND          class_command;
@@ -104,7 +103,7 @@ ULONG                           iad_first_interface =  0;
 ULONG                           iad_number_interfaces =  0;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
 ULONG                           class_index;
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -115,7 +114,7 @@ ULONG                           class_index;
 
     /* Get the pointer to the device.  */
     device =  &_ux_system_slave -> ux_system_slave_device;
-    
+
     /* Reset the IAD flag.  */
     iad_flag =  UX_FALSE;
 
@@ -174,7 +173,7 @@ ULONG                           class_index;
         /* Deactivate all the interfaces if any.  */
         while (interface_ptr != UX_NULL)
         {
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
             /* Build all the fields of the Class Command.  */
             class_command.ux_slave_class_command_request =   UX_SLAVE_CLASS_COMMAND_DEACTIVATE;
             class_command.ux_slave_class_command_interface =  (VOID *) interface_ptr;
@@ -194,7 +193,7 @@ ULONG                           class_index;
 #if !defined(UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE) || UX_MAX_DEVICE_INTERFACES > 1
             /* Get the next interface.  */
             next_interface =  interface_ptr -> ux_slave_interface_next_interface;
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
             /* Remove the interface and all endpoints associated with it.  */
             _ux_device_stack_interface_delete(interface_ptr);
@@ -203,7 +202,7 @@ ULONG                           class_index;
             /* Now we refresh the interface pointer.  */
             interface_ptr =  next_interface;
         }
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
     }
 
@@ -296,7 +295,7 @@ ULONG                           class_index;
                         /* Parse all the class drivers.  */
                         for (class_index = 0; class_index < _ux_system_slave -> ux_system_slave_max_class; class_index++)
                         {
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
                             /* Check if this class driver is used.  */
                             if (class_inst -> ux_slave_class_status == UX_USED)
@@ -316,7 +315,7 @@ ULONG                           class_index;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
                                     /* We are done here.  */
                                     break;
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
                                 }
                             }
 
@@ -324,7 +323,7 @@ ULONG                           class_index;
                             /* Move to the next registered class.  */
                             class_inst ++;
                         }
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
                     }
                     else
 
@@ -351,7 +350,7 @@ ULONG                           class_index;
                     /* Parse all the class drivers.  */
                     for (class_index = 0; class_index < _ux_system_slave -> ux_system_slave_max_class; class_index++)
                     {
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
                         /* Check if this class driver is used.  */
                         if (class_inst -> ux_slave_class_status == UX_USED)
@@ -368,7 +367,7 @@ ULONG                           class_index;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
                                 /* We are done here.  */
                                 break;
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
                             }
                         }
 
@@ -376,7 +375,7 @@ ULONG                           class_index;
                         /* Move to the next registered class.  */
                         class_inst ++;
                     }
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
                 }
 
                 /* Set the interface.  */
@@ -400,4 +399,3 @@ ULONG                           class_index;
     /* Configuration mounted. */
     return(UX_SUCCESS);
 }
-

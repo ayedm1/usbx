@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -332,7 +332,7 @@ UINT            status;
 
     if (audio -> ux_host_class_audio_type == UX_HOST_CLASS_AUDIO_INPUT)
     {
-    
+
         /* If audio input, streaming is from output terminal (OT).  */
         descriptor = _ux_host_class_audio_ac_find(audio,
                                         UX_CLASS_AUDIO20_AC_OUTPUT_TERMINAL,
@@ -654,7 +654,7 @@ UX_HOST_CLASS_AUDIO_SAMPLING_CHARACTERISTICS    sam_attr;
         parser -> status = UX_MATH_OVERFLOW;
         return(1);
     }
- 
+
     /* Allocate buffer for GET_RANGE.  */
     buffer = _ux_utility_memory_allocate(UX_NO_ALIGN, UX_CACHE_SAFE_MEMORY, param_len);
     if (buffer == UX_NULL)

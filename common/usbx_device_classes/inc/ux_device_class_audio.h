@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -96,7 +96,7 @@ extern   "C" {
    while debugging application.  */
 #if defined(UX_ENABLE_ERROR_CHECKING) && !defined(UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING)
 #define UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING
-#endif
+#endif /* UX_ENABLE_ERROR_CHECKING && !UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING */
 
 
 /* Works if UX_DEVICE_ENDPOINT_BUFFER_OWNER is 1.
@@ -372,18 +372,18 @@ typedef struct UX_DEVICE_CLASS_AUDIO_STREAM_PARAMETER_STRUCT
 #if !defined(UX_DEVICE_STANDALONE)
     ULONG                                         ux_device_class_audio_stream_parameter_thread_stack_size;
     VOID                                        (*ux_device_class_audio_stream_parameter_thread_entry)(ULONG id);
-#else
+#else /* !UX_DEVICE_STANDALONE */
     UINT                                        (*ux_device_class_audio_stream_parameter_task_function)(struct UX_DEVICE_CLASS_AUDIO_STREAM_STRUCT*);
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
 
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
 #if !defined(UX_DEVICE_STANDALONE)
     ULONG                                         ux_device_class_audio_stream_parameter_feedback_thread_stack_size;
     VOID                                        (*ux_device_class_audio_stream_parameter_feedback_thread_entry)(ULONG id);
-#else
+#else /* UX_DEVICE_STANDALONE */
     UINT                                        (*ux_device_class_audio_stream_parameter_feedback_task_function)(struct UX_DEVICE_CLASS_AUDIO_STREAM_STRUCT*);
-#endif
-#endif
+#endif /* UX_DEVICE_STANDALONE */
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
     UX_DEVICE_CLASS_AUDIO_STREAM_CALLBACKS        ux_device_class_audio_stream_parameter_callbacks;
 
     ULONG                                         ux_device_class_audio_stream_parameter_max_frame_buffer_size;
@@ -401,7 +401,7 @@ typedef struct UX_DEVICE_CLASS_AUDIO_PARAMETER_STRUCT
 #if defined(UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT)
     ULONG                                         ux_device_class_audio_parameter_status_size;
     ULONG                                         ux_device_class_audio_parameter_status_queue_size;
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
 } UX_DEVICE_CLASS_AUDIO_PARAMETER;
 
 
@@ -427,29 +427,29 @@ typedef struct UX_DEVICE_CLASS_AUDIO_STREAM_STRUCT
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
     UCHAR                                   *ux_device_class_audio_stream_feedback_buffer;
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
 
 #if !defined(UX_DEVICE_STANDALONE)
     UCHAR                                   *ux_device_class_audio_stream_feedback_thread_stack;
     UX_THREAD                                ux_device_class_audio_stream_feedback_thread;
-#else
+#else /* !UX_DEVICE_STANDALONE */
     UINT                                   (*ux_device_class_audio_stream_feedback_task_function)(struct UX_DEVICE_CLASS_AUDIO_STREAM_STRUCT*);
     UINT                                     ux_device_class_audio_stream_feedback_task_state;
     UINT                                     ux_device_class_audio_stream_feedback_task_status;
-#endif
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
 
     UX_DEVICE_CLASS_AUDIO_STREAM_CALLBACKS   ux_device_class_audio_stream_callbacks;
 
 #if !defined(UX_DEVICE_STANDALONE)
     UCHAR                                   *ux_device_class_audio_stream_thread_stack;
     UX_THREAD                                ux_device_class_audio_stream_thread;
-#else
+#else /* !UX_DEVICE_STANDALONE */
     UINT                                   (*ux_device_class_audio_stream_task_function)(struct UX_DEVICE_CLASS_AUDIO_STREAM_STRUCT*);
     UINT                                     ux_device_class_audio_stream_task_state;
     UINT                                     ux_device_class_audio_stream_task_status;
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
 
     UCHAR                                   *ux_device_class_audio_stream_buffer;
     ULONG                                    ux_device_class_audio_stream_buffer_size;
@@ -477,7 +477,7 @@ typedef struct UX_DEVICE_CLASS_AUDIO_STRUCT
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
     UCHAR                                   *ux_device_class_audio_interrupt_buffer;
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
     ULONG                                   ux_device_class_audio_status_size;       /* in Bytes.  */
     ULONG                                   ux_device_class_audio_status_queue_bytes;/* in Bytes.  */
@@ -489,11 +489,11 @@ typedef struct UX_DEVICE_CLASS_AUDIO_STRUCT
 #if !defined(UX_DEVICE_STANDALONE)
     UX_SEMAPHORE                            ux_device_class_audio_status_semaphore;
     UX_MUTEX                                ux_device_class_audio_status_mutex;
-#else
+#else /* !UX_DEVICE_STANDALONE */
     UINT                                    ux_device_class_audio_interrupt_task_state;
     UINT                                    ux_device_class_audio_interrupt_task_status;
-#endif
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
 } UX_DEVICE_CLASS_AUDIO;
 
 
@@ -619,7 +619,7 @@ UINT    _uxe_device_class_audio_interrupt_send(UX_DEVICE_CLASS_AUDIO *audio, UCH
 
 #define ux_device_class_audio_interrupt_send          _uxe_device_class_audio_interrupt_send
 
-#else
+#else /* UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING */
 
 #define ux_device_class_audio_entry                   _ux_device_class_audio_entry
 
@@ -656,7 +656,7 @@ UINT    _uxe_device_class_audio_interrupt_send(UX_DEVICE_CLASS_AUDIO *audio, UCH
 
 #define ux_device_class_audio_interrupt_send          _ux_device_class_audio_interrupt_send
 
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING */
 
 /* Determine if a C++ compiler is being used.  If so, complete the standard
    C conditional started above.  */
@@ -664,4 +664,4 @@ UINT    _uxe_device_class_audio_interrupt_send(UX_DEVICE_CLASS_AUDIO *audio, UCH
 }
 #endif
 
-#endif /* ifndef UX_DEVICE_CLASS_AUDIO_H */
+#endif /* !UX_DEVICE_CLASS_AUDIO_H */

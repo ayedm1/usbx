@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Audio Class                                                         */
 /**                                                                       */
@@ -29,48 +29,48 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_audio_write                          PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_audio_write                          PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function writes to the audio streaming interface.              */ 
+/*                                                                        */
+/*    This function writes to the audio streaming interface.              */
 /*                                                                        */
 /*    Note the request packet size should not exceed endpoint max packet  */
 /*    size, and the request length should be aligned with packet size.    */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    audio                                 Pointer to audio class        */ 
-/*    audio_transfer_request                Pointer to transfer request   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_class_audio_transfer_request Start audio transfer request  */ 
-/*    _ux_host_stack_class_instance_verify  Verify instance is valid      */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    audio                                 Pointer to audio class        */
+/*    audio_transfer_request                Pointer to transfer request   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_class_audio_transfer_request Start audio transfer request  */
+/*    _ux_host_stack_class_instance_verify  Verify instance is valid      */
 /*    _ux_host_mutex_on                     Get mutex                     */
 /*    _ux_host_mutex_off                    Release mutex                 */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*    Audio Class                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*    Audio Class                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -95,12 +95,12 @@ UINT        status;
 ULONG       mps;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_CLASS_AUDIO_WRITE, audio, audio_transfer_request -> ux_host_class_audio_transfer_request_data_pointer, 
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_CLASS_AUDIO_WRITE, audio, audio_transfer_request -> ux_host_class_audio_transfer_request_data_pointer,
                             audio_transfer_request -> ux_host_class_audio_transfer_request_requested_length, 0, UX_TRACE_HOST_CLASS_EVENTS, 0, 0)
 
     /* Ensure the instance is valid.  */
     if (_ux_host_stack_class_instance_verify(_ux_system_host_class_audio_name, (VOID *) audio) != UX_SUCCESS)
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -161,8 +161,8 @@ ULONG       mps;
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    audio                                 Pointer to audio class        */ 
-/*    audio_transfer_request                Pointer to transfer request   */ 
+/*    audio                                 Pointer to audio class        */
+/*    audio_transfer_request                Pointer to transfer request   */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

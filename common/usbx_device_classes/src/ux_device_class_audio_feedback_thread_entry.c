@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -79,7 +79,7 @@ VOID _ux_device_class_audio_feedback_thread_entry(ULONG audio_stream)
 #if defined(UX_DEVICE_STANDALONE)
     UX_PARAMETER_NOT_USED(audio_stream);
     return;
-#else
+#else /* UX_DEVICE_STANDALONE */
 UINT                            status;
 UX_DEVICE_CLASS_AUDIO_STREAM    *stream;
 UX_SLAVE_DEVICE                 *device;
@@ -133,6 +133,6 @@ ULONG                           transfer_length;
         /* We need to suspend ourselves. We will be resumed by the device enumeration module or when a change of alternate setting happens.  */
         _ux_utility_thread_suspend(&stream -> ux_device_class_audio_stream_feedback_thread);
     }
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 }
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */

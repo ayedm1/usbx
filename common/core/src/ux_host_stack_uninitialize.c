@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -103,7 +102,7 @@ UINT  _ux_host_stack_uninitialize(VOID)
 
     /* Free HCD thread stack.  */
     _ux_utility_memory_free(_ux_system_host -> ux_system_host_hcd_thread_stack);
-#endif
+#endif /* !UX_HOST_STANDALONE */
 
 #if defined(UX_OTG_SUPPORT) && !defined(UX_OTG_STANDALONE)
 
@@ -112,7 +111,7 @@ UINT  _ux_host_stack_uninitialize(VOID)
 
     /* Free HNP thread stack.  */
     _ux_utility_memory_free(_ux_system_host -> ux_system_host_hnp_polling_thread_stack);
-#endif
+#endif /* UX_OTG_SUPPORT && !UX_OTG_STANDALONE */
 
     /* Free HCD array.  */
     _ux_utility_memory_free(_ux_system_host -> ux_system_host_hcd_array);

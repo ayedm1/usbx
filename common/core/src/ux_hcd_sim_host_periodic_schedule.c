@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Simulator Controller Driver                                    */
 /**                                                                       */
@@ -28,42 +27,42 @@
 #include "ux_hcd_sim_host.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_hcd_sim_host_periodic_schedule                  PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_hcd_sim_host_periodic_schedule                  PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*     This function schedules new transfers from the periodic interrupt  */ 
-/*     list.                                                              */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hcd_sim_host                          Pointer to host controller    */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_hcd_sim_host_frame_number_get     Get frame number              */ 
+/*                                                                        */
+/*     This function schedules new transfers from the periodic interrupt  */
+/*     list.                                                              */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hcd_sim_host                          Pointer to host controller    */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_hcd_sim_host_frame_number_get     Get frame number              */
 /*    _ux_hcd_sim_host_transaction_schedule Schedule the transaction      */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Host Simulator Controller Driver                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -77,7 +76,7 @@ ULONG                   frame_number;
 
     /* Get the current frame number.  */
     _ux_hcd_sim_host_frame_number_get(hcd_sim_host, &frame_number);
-    
+
     /* Isolate the low bits to match an entry in the upper periodic entry list.  */
     frame_number &=  UX_HCD_SIM_HOST_PERIODIC_ENTRY_MASK;
 
@@ -85,7 +84,7 @@ ULONG                   frame_number;
     ed =  hcd_sim_host -> ux_hcd_sim_host_interrupt_ed_list[frame_number];
 
     /* Search for an entry in the periodic tree.  */
-    while (ed != UX_NULL) 
+    while (ed != UX_NULL)
     {
 
         /* The ED has to be a real ED (not static) and has to have a different tail and head TD.  */
@@ -107,4 +106,3 @@ ULONG                   frame_number;
     /* Return to caller.  */
     return;
 }
-

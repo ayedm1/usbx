@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -56,22 +55,22 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_utility_string_length_check       Check C string and return     */
 /*                                          its length if null-terminated */
-/*    _ux_utility_memory_copy               Memory copy                   */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    _ux_utility_memory_copy               Memory copy                   */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -93,7 +92,7 @@ UX_SLAVE_CLASS_COMMAND      command;
 UINT                        class_name_length =  0;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
 ULONG                       class_index;
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
 
     /* Get the length of the class name (exclude null-terminator).  */
@@ -111,7 +110,7 @@ ULONG                       class_index;
     /* We need to parse the class table to find an empty spot.  */
     for (class_index = 0; class_index < _ux_system_slave -> ux_system_slave_max_class; class_index++)
     {
-#endif
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
         /* Check if this class is already used.  */
         if (class_inst -> ux_slave_class_status == UX_UNUSED)
@@ -119,23 +118,23 @@ ULONG                       class_index;
 
 #if defined(UX_NAME_REFERENCED_BY_POINTER)
             class_inst -> ux_slave_class_name = (const UCHAR *)class_name;
-#else
+#else /* UX_NAME_REFERENCED_BY_POINTER */
             /* We have found a free container for the class. Copy the name (with null-terminator).  */
             _ux_utility_memory_copy(class_inst -> ux_slave_class_name, class_name, class_name_length + 1); /* Use case of memcpy is verified. */
-#endif
-            
+#endif /* UX_NAME_REFERENCED_BY_POINTER */
+
             /* Memorize the entry function of this class.  */
             class_inst -> ux_slave_class_entry_function =  class_entry_function;
 
             /* Memorize the pointer to the application parameter.  */
             class_inst -> ux_slave_class_interface_parameter =  parameter;
-            
+
             /* Memorize the configuration number on which this instance will be called.  */
             class_inst -> ux_slave_class_configuration_number =  configuration_number;
-            
+
             /* Memorize the interface number on which this instance will be called.  */
             class_inst -> ux_slave_class_interface_number =  interface_number;
-            
+
             /* Build all the fields of the Class Command to initialize the class.  */
             command.ux_slave_class_command_request    =  UX_SLAVE_CLASS_COMMAND_INITIALIZE;
             command.ux_slave_class_command_parameter  =  parameter;
@@ -143,11 +142,11 @@ ULONG                       class_index;
 
             /* Call the class initialization routine.  */
             status = class_entry_function(&command);
-            
+
             /* Check the status.  */
             if (status != UX_SUCCESS)
                 return(status);
-            
+
             /* Make this class used now.  */
             class_inst -> ux_slave_class_status = UX_USED;
 
@@ -158,8 +157,8 @@ ULONG                       class_index;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
         /* Move to the next class.  */
         class_inst ++;
-    }    
-#endif
+    }
+#endif /* UX_MAX_SLAVE_CLASS_DRIVER > 1 */
 
     /* No more entries in the class table.  */
     return(UX_MEMORY_INSUFFICIENT);

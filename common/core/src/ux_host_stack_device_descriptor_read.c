@@ -1,70 +1,69 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_device_descriptor_read               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_device_descriptor_read               PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function reads the device descriptor.                          */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    device                                Pointer to device             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_transfer_request       Process transfer request      */ 
-/*    _ux_utility_descriptor_parse          Parse descriptor              */ 
-/*    _ux_utility_memory_allocate           Allocate memory block         */ 
-/*    _ux_utility_memory_free               Free memory block             */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function reads the device descriptor.                          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    device                                Pointer to device             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_transfer_request       Process transfer request      */
+/*    _ux_utility_descriptor_parse          Parse descriptor              */
+/*    _ux_utility_memory_allocate           Allocate memory block         */
+/*    _ux_utility_memory_free               Free memory block             */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -97,7 +96,7 @@ UX_ENDPOINT     *control_endpoint;
     if (descriptor == UX_NULL)
         return(UX_MEMORY_INSUFFICIENT);
 
-    /* Create a transfer_request for the GET_DESCRIPTOR request. The first transfer_request asks 
+    /* Create a transfer_request for the GET_DESCRIPTOR request. The first transfer_request asks
        for the first 8 bytes only. This way we will know the real MaxPacketSize
        value for the control endpoint.  */
     transfer_request -> ux_transfer_request_data_pointer =      descriptor;
@@ -111,7 +110,7 @@ UX_ENDPOINT     *control_endpoint;
     device -> ux_device_enum_trans = transfer_request;
     status = UX_SUCCESS;
     return(status);
-#else
+#else /* UX_HOST_STANDALONE */
 
     /* Send request to HCD layer.  */
     status =  _ux_host_stack_transfer_request(transfer_request);
@@ -131,7 +130,7 @@ UX_ENDPOINT     *control_endpoint;
         _ux_utility_memory_free(descriptor);
 
         /* Return completion status.  */
-        return(status);             
+        return(status);
     }
 
     /* Validate the bMaxPacketSize0.  */
@@ -163,7 +162,7 @@ UX_ENDPOINT     *control_endpoint;
         _ux_utility_memory_free(descriptor);
         return(UX_DESCRIPTOR_CORRUPTED);
     }
-#endif
+#endif /* UX_HOST_DEVICE_CLASS_CODE_VALIDATION_ENABLE */
 
     /* Update the max packet size value for the endpoint.  */
     control_endpoint -> ux_endpoint_descriptor.wMaxPacketSize =  device -> ux_device_descriptor.bMaxPacketSize0;
@@ -200,12 +199,11 @@ UX_ENDPOINT     *control_endpoint;
         /* The device descriptor does not contain the right amount of data. Maybe corruption.  */
         status =  UX_DESCRIPTOR_CORRUPTED;
     }
-    
+
     /* Free all used resources.  */
     _ux_utility_memory_free(descriptor);
 
     /* Return completion status.  */
     return(status);
-#endif
+#endif /* UX_HOST_STANDALONE */
 }
-

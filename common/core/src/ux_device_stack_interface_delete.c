@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -42,7 +41,7 @@
 /*                                                                        */
 /*    This function deletes an interface. Semaphore and memory are        */
 /*    released and the controller driver is invoked to disable the        */
-/*    hardware endpoint.  The interface is then removed from the          */ 
+/*    hardware endpoint.  The interface is then removed from the          */
 /*    configuration.                                                      */
 /*                                                                        */
 /*  INPUT                                                                 */
@@ -51,20 +50,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    (ux_slave_dcd_function)               DCD dispatch function         */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -91,19 +90,19 @@ UX_SLAVE_ENDPOINT       *next_endpoint;
     /* Get the pointer to the device.  */
     device =  &_ux_system_slave -> ux_system_slave_device;
 
-    /* Find the first endpoints associated with this interface.  */    
-    next_endpoint =  interface_ptr -> ux_slave_interface_first_endpoint;        
-    
-    /* Parse all the endpoints.  */    
+    /* Find the first endpoints associated with this interface.  */
+    next_endpoint =  interface_ptr -> ux_slave_interface_first_endpoint;
+
+    /* Parse all the endpoints.  */
     while (next_endpoint != UX_NULL)
     {
 
         /* Save this endpoint.  */
         endpoint =  next_endpoint;
-        
+
         /* Find the next endpoint.  */
         next_endpoint =  endpoint -> ux_slave_endpoint_next_endpoint;
-        
+
         /* Get the pointer to the DCD.  */
         dcd =  &_ux_system_slave->ux_system_slave_dcd;
 
@@ -118,7 +117,7 @@ UX_SLAVE_ENDPOINT       *next_endpoint;
         endpoint -> ux_slave_endpoint_next_endpoint =  UX_NULL;
         endpoint -> ux_slave_endpoint_interface =  UX_NULL;
         endpoint -> ux_slave_endpoint_device =  UX_NULL;
-    }        
+    }
 
     /* It's always from first one (to delete).  */
     /* Rebuild the first link.  */
@@ -131,7 +130,6 @@ UX_SLAVE_ENDPOINT       *next_endpoint;
     interface_ptr -> ux_slave_interface_first_endpoint =  UX_NULL;
     interface_ptr -> ux_slave_interface_status         =  UX_UNUSED;
 
-    /* Return successful completion.  */    
-    return(UX_SUCCESS);       
+    /* Return successful completion.  */
+    return(UX_SUCCESS);
 }
-

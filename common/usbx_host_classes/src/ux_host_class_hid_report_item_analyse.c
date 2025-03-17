@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   HID Class                                                           */
 /**                                                                       */
@@ -29,41 +29,41 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_hid_report_item_analyse              PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_hid_report_item_analyse              PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function gets the report descriptor and analyzes it.           */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    descriptor                            Pointer to descriptor         */ 
-/*    item                                  Pointer to item               */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    HID Class                                                           */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function gets the report descriptor and analyzes it.           */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    descriptor                            Pointer to descriptor         */
+/*    item                                  Pointer to item               */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    HID Class                                                           */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -73,13 +73,13 @@ UINT  _ux_host_class_hid_report_item_analyse(UCHAR *descriptor, UX_HOST_CLASS_HI
 {
 
 UCHAR       item_byte;
-    
+
 
     /* Get the first byte from the descriptor.  */
     item_byte =  *descriptor;
-    
+
     /*  We need to determine if this is a short or long item.
-        For long items, the tag is always 1111.  */   
+        For long items, the tag is always 1111.  */
     if ((item_byte & UX_HOST_CLASS_HID_ITEM_TAG_MASK) == UX_HOST_CLASS_HID_ITEM_TAG_LONG)
     {
 
@@ -100,7 +100,7 @@ UCHAR       item_byte;
 
         /* We have a short item. Mark its format */
         item -> ux_host_class_hid_item_report_format =  UX_HOST_CLASS_HID_ITEM_TAG_SHORT;
-        
+
         /* Get the length of the item.  */
         switch (item_byte & UX_HOST_CLASS_HID_ITEM_LENGTH_MASK)
         {

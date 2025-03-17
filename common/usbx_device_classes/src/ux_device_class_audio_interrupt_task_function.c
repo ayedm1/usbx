@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -26,6 +26,7 @@
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
+
 
 #if defined(UX_DEVICE_STANDALONE) && defined(UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT)
 /**************************************************************************/
@@ -98,7 +99,7 @@ UCHAR                           *buff;
         audio -> ux_device_class_audio_interrupt_task_state = UX_STATE_EXIT;
         return(UX_STATE_EXIT);
     }
-    
+
     /* Get endpoint instance.  */
     endpoint = audio -> ux_device_class_audio_interrupt;
 
@@ -150,7 +151,7 @@ UCHAR                           *buff;
     case UX_DEVICE_CLASS_AUDIO_INTERRUPT_WAIT:
 
         /* Start frame transfer anyway.  */
-        status = _ux_device_stack_transfer_run(transfer, audio -> ux_device_class_audio_status_size, 
+        status = _ux_device_stack_transfer_run(transfer, audio -> ux_device_class_audio_status_size,
                                                 audio -> ux_device_class_audio_status_size);
 
         /* Any error or success case.  */
@@ -161,7 +162,7 @@ UCHAR                           *buff;
             _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_ERROR);
 
             audio -> ux_device_class_audio_interrupt_task_state = UX_STATE_RESET;
-            audio -> ux_device_class_audio_interrupt_task_status = 
+            audio -> ux_device_class_audio_interrupt_task_status =
                     transfer -> ux_slave_transfer_request_completion_code;
             return(UX_STATE_EXIT);
         }
@@ -174,11 +175,11 @@ UCHAR                           *buff;
 
             if (buff >= (audio -> ux_device_class_audio_status_queue + audio -> ux_device_class_audio_status_queue_bytes))
                 buff = audio -> ux_device_class_audio_status_queue;
-            
+
             audio -> ux_device_class_audio_status_tail = buff;
             audio -> ux_device_class_audio_status_queued -= audio -> ux_device_class_audio_status_size;
             audio -> ux_device_class_audio_interrupt_task_state = UX_DEVICE_CLASS_AUDIO_INTERRUPT_START;
-            audio -> ux_device_class_audio_interrupt_task_status = 
+            audio -> ux_device_class_audio_interrupt_task_status =
                     transfer -> ux_slave_transfer_request_completion_code;
         }
 
@@ -194,4 +195,4 @@ UCHAR                           *buff;
     /* Error case.  */
     return(UX_STATE_EXIT);
 }
-#endif
+#endif /* UX_DEVICE_STANDALONE && UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */

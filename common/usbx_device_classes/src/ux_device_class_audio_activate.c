@@ -1,18 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 /**************************************************************************/
+/**************************************************************************/
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -131,8 +132,8 @@ ULONG                                    stream_index;
             audio -> ux_device_class_audio_interrupt ->
                 ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer =
                                 audio -> ux_device_class_audio_interrupt_buffer;
-#endif
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
     }
     else
     {
@@ -184,7 +185,7 @@ ULONG                                    stream_index;
         /* Reset stream task state.  */
         stream -> ux_device_class_audio_stream_task_state = UX_STATE_RESET;
         stream -> ux_device_class_audio_stream_task_state = UX_SUCCESS;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
     }
 
     /* If there is a activate function call it.  */
@@ -198,4 +199,3 @@ ULONG                                    stream_index;
     /* Return completion status.  */
     return(UX_SUCCESS);
 }
-

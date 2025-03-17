@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -106,7 +105,7 @@ UX_SLAVE_TRANSFER               *transfer_request;
 UX_CONFIGURATION_DESCRIPTOR     configuration_descriptor;
 #ifndef UX_BOS_SUPPORT_DISABLE
 UX_BOS_DESCRIPTOR               bos_descriptor;
-#endif
+#endif /* !UX_BOS_SUPPORT_DISABLE */
 UX_SLAVE_ENDPOINT               *endpoint;
 UCHAR                           *device_framework;
 UCHAR                           *device_framework_end;
@@ -218,7 +217,7 @@ ULONG                           string_length;
 #ifndef UX_BOS_SUPPORT_DISABLE
     case UX_BOS_DESCRIPTOR_ITEM:
         /* Fall through.  */
-#endif
+#endif /* !UX_BOS_SUPPORT_DISABLE */
     case UX_OTHER_SPEED_DESCRIPTOR_ITEM:
         /* Fall through.  */
     case UX_CONFIGURATION_DESCRIPTOR_ITEM:
@@ -273,7 +272,7 @@ ULONG                           string_length;
                 }
             }
             else
-#endif
+#endif /* !UX_BOS_SUPPORT_DISABLE */
 
             {
 
@@ -409,7 +408,7 @@ ULONG                           string_length;
                 /* Get the first language ID in the language ID framework.  */
                 request_index =  _ux_utility_short_get(_ux_system_slave -> ux_system_slave_language_id_framework);
             }
-#endif
+#endif /* UX_DEVICE_ENABLE_GET_STRING_WITH_ZERO_LANGUAGE_ID */
 
             /* The host wants a specific string index returned. Get the string framework pointer
                and length.  */
@@ -507,4 +506,3 @@ ULONG                           string_length;
     /* Return the status to the caller.  */
     return(status);
 }
-

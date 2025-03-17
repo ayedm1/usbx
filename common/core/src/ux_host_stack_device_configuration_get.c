@@ -1,72 +1,71 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_device_configuration_get             PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_device_configuration_get             PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function returns a configuration container based on a device   */
-/*    handle and a configuration index.                                   */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    device                                Pointer to device             */ 
-/*    configuration_index                   Index of configuration        */ 
-/*    configuration                         Pointer to configuration      */ 
-/*                                            destination                 */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    handle and a configuration index.                                   */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    device                                Pointer to device             */
+/*    configuration_index                   Index of configuration        */
+/*    configuration                         Pointer to configuration      */
+/*                                            destination                 */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -82,7 +81,7 @@ UX_CONFIGURATION        *current_configuration;
     /* Do a sanity check on the device handle.  */
     if (device -> ux_device_handle != (ULONG) (ALIGN_TYPE) device)
     {
-        
+
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_ENUMERATOR, UX_DEVICE_HANDLE_UNKNOWN);
 
@@ -91,14 +90,14 @@ UX_CONFIGURATION        *current_configuration;
 
         return(UX_DEVICE_HANDLE_UNKNOWN);
     }
-        
+
     /* Start with the configuration attached to the device.  */
     current_configuration =  device -> ux_device_first_configuration;
 
-    /* The first configuration has the index 0.  */    
+    /* The first configuration has the index 0.  */
     current_configuration_index =  0;
-    
-    /* Traverse the list of the configurations until we found the right one.  */        
+
+    /* Traverse the list of the configurations until we found the right one.  */
     while (current_configuration != UX_NULL)
     {
 
@@ -115,20 +114,20 @@ UX_CONFIGURATION        *current_configuration;
             /* Return successful completion.  */
             return(UX_SUCCESS);
         }
-        
+
         /* Move to the next configuration.  */
         current_configuration =  current_configuration -> ux_configuration_next_configuration;
-        
+
         /* Move to the next index.  */
         current_configuration_index++;
     }
-    
+
     /* Error trap. */
     _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_ENUMERATOR, UX_CONFIGURATION_HANDLE_UNKNOWN);
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, configuration, 0, 0, UX_TRACE_ERRORS, 0, 0)
-    
+
     /* Return an error.  */
     return(UX_CONFIGURATION_HANDLE_UNKNOWN);
 }

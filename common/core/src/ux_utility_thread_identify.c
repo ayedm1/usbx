@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 
@@ -82,4 +81,4 @@ UX_THREAD *_ux_utility_thread_identify(VOID)
         is the thread running prior to the ISR. Instead, we set it to null.  */
     return(UX_THREAD_GET_SYSTEM_STATE() ? UX_NULL : tx_thread_identify());
 }
-#endif
+#endif /* !UX_STANDALONE */

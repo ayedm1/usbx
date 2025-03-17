@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -80,7 +79,7 @@ UINT  _ux_host_stack_device_get(ULONG device_index, UX_DEVICE **device)
 UX_DEVICE   *current_device;
 #if UX_MAX_DEVICES > 1
 ULONG       current_device_index;
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_DEVICE_GET, device_index, 0, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
@@ -130,7 +129,7 @@ ULONG       current_device_index;
         /* Move to next device.  */
         current_device++;
     }
-#else
+#else /* UX_MAX_DEVICES > 1 */
 
     /* Only one device, just check if it's used.  */
     current_device = _ux_system_host -> ux_system_host_device_array;
@@ -139,7 +138,7 @@ ULONG       current_device_index;
         *device = current_device;
         return(UX_SUCCESS);
     }
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_DEVICE_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)

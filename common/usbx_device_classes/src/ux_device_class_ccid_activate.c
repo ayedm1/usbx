@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -85,7 +85,7 @@ UX_SLAVE_ENDPOINT                       *endpoint;
 ULONG                                   endpoint_type;
 #if !defined(UX_DEVICE_STANDALONE)
 UINT                                    i;
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
 
     /* Get the class container.  */
     ccid_class =  command -> ux_slave_class_command_class_ptr;
@@ -116,7 +116,7 @@ UINT                                    i;
             endpoint -> ux_slave_endpoint_transfer_request.
                 ux_slave_transfer_request_data_pointer =
                                 UX_DEVICE_CLASS_CCID_INTERRUPTIN_BUFFER(ccid);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
         }
         if (endpoint_type == UX_BULK_ENDPOINT)
         {
@@ -127,7 +127,7 @@ UINT                                    i;
                 endpoint -> ux_slave_endpoint_transfer_request.
                     ux_slave_transfer_request_data_pointer =
                                 UX_DEVICE_CLASS_CCID_BULKIN_BUFFER(ccid);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
             }
             else
             {
@@ -136,7 +136,7 @@ UINT                                    i;
                 endpoint -> ux_slave_endpoint_transfer_request.
                     ux_slave_transfer_request_data_pointer =
                                 UX_DEVICE_CLASS_CCID_BULKOUT_BUFFER(ccid);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
             }
         }
         endpoint = endpoint -> ux_slave_endpoint_next_endpoint;
@@ -156,7 +156,7 @@ UINT                                    i;
 
     /* Initialize runner task state (optimized for 1 slot).  */
     ccid -> ux_device_class_ccid_runners -> ux_device_class_ccid_runner_state = UX_DEVICE_CLASS_CCID_RUNNER_IDLE;
-#else
+#else /* UX_DEVICE_STANDALONE */
 
     /* Initialize slots.  */
     for (i = 0;
@@ -182,7 +182,7 @@ UINT                                    i;
         _ux_device_thread_resume(&ccid -> ux_device_class_ccid_runners[i].
                                            ux_device_class_ccid_runner_thread);
     }
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 
     /* If there is a activate function call it.  */
     if (ccid -> ux_device_class_ccid_parameter.ux_device_class_ccid_instance_activate != UX_NULL)

@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -480,7 +480,7 @@ ULONG               requested_length;
     if (storage -> ux_host_class_storage_trans_stage == UX_HOST_CLASS_STORAGE_STAGE_DATA)
     {
         /* Update data count.  */
-        storage -> ux_host_class_storage_data_phase_length += 
+        storage -> ux_host_class_storage_data_phase_length +=
                                 trans -> ux_transfer_request_requested_length;
 
         /* Check if all data is done.  */
@@ -533,7 +533,7 @@ UCHAR                   csw_status;
         storage -> ux_host_class_storage_trans_data =
                                 storage -> ux_host_class_storage_trans_data_bak;
 
-        /* Get sense code from response buffer.  */ 
+        /* Get sense code from response buffer.  */
         sense_code = UX_HOST_CLASS_STORAGE_SENSE_STATUS(
                 (ULONG) *(resp + UX_HOST_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_SENSE_KEY),
                 (ULONG) *(resp + UX_HOST_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_CODE),

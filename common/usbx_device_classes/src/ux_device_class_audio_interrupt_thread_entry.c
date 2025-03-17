@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -153,4 +153,4 @@ UCHAR                           *buff;
         _ux_device_thread_suspend(&audio -> ux_device_class_audio_class -> ux_slave_class_thread);
     }
 }
-#endif
+#endif /* !UX_DEVICE_STANDALONE && UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */

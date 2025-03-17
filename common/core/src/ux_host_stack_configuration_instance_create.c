@@ -1,69 +1,68 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_configuration_instance_create        PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_configuration_instance_create        PORTABLE C      */
 /*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function will create a configuration instance. It scan all the */
 /*    interfaces hooked to the configuration and enable each interface    */
-/*    with the alternate setting 0.                                       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    configuration                         Pointer to configuration      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_interface_instance_create  Create interface instance */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    with the alternate setting 0.                                       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    configuration                         Pointer to configuration      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_interface_instance_create  Create interface instance */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -82,7 +81,7 @@ UINT  _ux_host_stack_configuration_instance_create(UX_CONFIGURATION *configurati
 
 UX_INTERFACE    *interface_ptr;
 UINT            status;
-    
+
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_CONFIGURATION_INSTANCE_CREATE, configuration, 0, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
@@ -101,13 +100,13 @@ UINT            status;
 
             /* Create the interface, if it's usable. */
             if (interface_ptr -> ux_interface_class || configuration -> ux_configuration_device -> ux_device_class)
-#endif
+#endif /* UX_HOST_STACK_CONFIGURATION_INSTANCE_CREATE_CONTROL == UX_HOST_STACK_CONFIGURATION_INSTANCE_CREATE_OWNED */
             {
                 status = _ux_host_stack_interface_instance_create(interface_ptr);
 
                 /* Check status, the controller may have refused the endpoint creation.  */
                 if (status != UX_SUCCESS)
-                
+
                     /* An error occurred.  The interface cannot be mounted.  */
                     return(status);
             }
@@ -118,6 +117,5 @@ UINT            status;
     }
 
     /* Return successful completion.  */
-    return(UX_SUCCESS); 
+    return(UX_SUCCESS);
 }
-

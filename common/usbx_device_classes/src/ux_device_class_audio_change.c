@@ -1,18 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 /**************************************************************************/
+/**************************************************************************/
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -147,17 +148,17 @@ ULONG                                    endpoint_dir;
         endpoint_dir = (stream -> ux_device_class_audio_stream_task_function ==
                         _ux_device_class_audio_read_task_function) ?
                         UX_ENDPOINT_OUT: UX_ENDPOINT_IN;
-#else
+#else /* UX_DEVICE_STANDALONE */
 
         endpoint_dir = (stream -> ux_device_class_audio_stream_thread.tx_thread_entry ==
                         _ux_device_class_audio_read_thread_entry) ?
                         UX_ENDPOINT_OUT : UX_ENDPOINT_IN;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
         stream -> ux_device_class_audio_stream_endpoint = UX_NULL;
 
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
         stream -> ux_device_class_audio_stream_feedback = UX_NULL;
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
         while(endpoint != UX_NULL)
         {
 
@@ -211,14 +212,14 @@ ULONG                                    endpoint_dir;
                     /* Save it.  */
                     stream -> ux_device_class_audio_stream_feedback = endpoint;
                 }
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
             }
 
             /* Check if done.  */
             if (stream -> ux_device_class_audio_stream_endpoint
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
                 && stream -> ux_device_class_audio_stream_feedback
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
                 )
                 break;
 
@@ -243,14 +244,14 @@ ULONG                                    endpoint_dir;
         stream -> ux_device_class_audio_stream_feedback ->
             ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer =
                         stream -> ux_device_class_audio_stream_feedback_buffer;
-#endif
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
 #if defined(UX_DEVICE_STANDALONE)
 
         /* Reset background transfer state.  */
         stream -> ux_device_class_audio_stream_task_state = UX_STATE_RESET;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 
         /* Now reset payload buffer error count.  */
         stream -> ux_device_class_audio_stream_buffer_error_count = 0;
@@ -274,7 +275,7 @@ ULONG                                    endpoint_dir;
         /* If feedback supported, resume the thread.  */
         if (stream -> ux_device_class_audio_stream_feedback_thread_stack)
             _ux_utility_thread_resume(&stream -> ux_device_class_audio_stream_feedback_thread);
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT && !UX_DEVICE_STANDALONE */
     }
     else
     {
@@ -283,7 +284,7 @@ ULONG                                    endpoint_dir;
         stream -> ux_device_class_audio_stream_endpoint = UX_NULL;
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
         stream -> ux_device_class_audio_stream_feedback = UX_NULL;
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
 
         /* In this case, we are reverting to the Alternate Setting 0.  We need to terminate the pending transactions.  */
         /* Endpoints actually aborted and destroyed before change command.  */

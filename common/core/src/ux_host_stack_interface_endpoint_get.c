@@ -1,71 +1,70 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_interface_endpoint_get               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_interface_endpoint_get               PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function returns an endpoint container based on the interface  */
-/*    handle and an endpoint index.                                       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    interface                             Pointer to interface          */ 
-/*    endpoint_index                        Index of endpoint to get      */ 
-/*    endpoint                              Destination for endpoint      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    handle and an endpoint index.                                       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    interface                             Pointer to interface          */
+/*    endpoint_index                        Index of endpoint to get      */
+/*    endpoint                              Destination for endpoint      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -96,14 +95,14 @@ UX_ENDPOINT     *current_endpoint;
 
         return(UX_INTERFACE_HANDLE_UNKNOWN);
     }
-            
+
     /* Start with the endpoint attached to the interface.  */
     current_endpoint =  interface_ptr -> ux_interface_first_endpoint;
 
-    /* The first endpoint has the index 0.  */    
+    /* The first endpoint has the index 0.  */
     current_endpoint_index =  0;
-    
-    /* Traverse the list of the endpoints until we found the right one.  */        
+
+    /* Traverse the list of the endpoints until we found the right one.  */
     while (current_endpoint != UX_NULL)
     {
 
@@ -117,10 +116,10 @@ UX_ENDPOINT     *current_endpoint;
             /* Return success to the caller.  */
             return(UX_SUCCESS);
         }
-        
+
         /* Move to the next endpoint.  */
         current_endpoint =  current_endpoint -> ux_endpoint_next_endpoint;
-        
+
         /* Move to the next index.  */
         current_endpoint_index++;
     }
@@ -153,9 +152,9 @@ UX_ENDPOINT     *current_endpoint;
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    interface_ptr                         Pointer to interface          */ 
-/*    endpoint_index                        Index of endpoint to get      */ 
-/*    endpoint                              Destination for endpoint      */ 
+/*    interface_ptr                         Pointer to interface          */
+/*    endpoint_index                        Index of endpoint to get      */
+/*    endpoint                              Destination for endpoint      */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -51,20 +50,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
+/*  CALLS                                                                 */
 /*                                                                        */
-/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    (ux_slave_dcd_function)               DCD dispatch function         */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -110,7 +109,7 @@ UINT                    status;
         /* Parse the interfaces if any.  */
         while (interface_ptr != UX_NULL)
         {
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
             /* Check if this is the interface we have an inquiry for.  */
             if (interface_ptr -> ux_slave_interface_descriptor.bInterfaceNumber == interface_value)
@@ -140,7 +139,7 @@ UINT                    status;
             /* Get the next interface.  */
             interface_ptr =  interface_ptr -> ux_slave_interface_next_interface;
         }
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
     }
 
@@ -150,4 +149,3 @@ UINT                    status;
     /* Return the status to the caller.  */
     return(UX_ERROR);
 }
-

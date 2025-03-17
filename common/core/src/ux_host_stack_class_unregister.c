@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -79,7 +78,7 @@ UX_HOST_CLASS           *class_inst;
 UX_HOST_CLASS_COMMAND   class_command;
 #if UX_MAX_CLASS_DRIVER > 1
 ULONG                   class_index;
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -92,7 +91,7 @@ ULONG                   class_index;
     /* We need to parse the class table to find right class instance.  */
     for (class_index = 0; class_index < _ux_system_host -> ux_system_host_max_class; class_index++)
     {
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
         /* Check if the class is expected.  */
         if (class_inst -> ux_host_class_entry_function == class_entry_function)
@@ -117,7 +116,7 @@ ULONG                   class_index;
         /* Move to the next class.  */
         class_inst ++;
     }
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
     /* No more entries in the class table.  */
     return(UX_NO_CLASS_MATCH);

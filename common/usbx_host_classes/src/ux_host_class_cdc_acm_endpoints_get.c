@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   CDC ACM Class                                                       */
 /**                                                                       */
@@ -29,42 +29,42 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_cdc_acm_endpoints_get                PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_cdc_acm_endpoints_get                PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This function distinguishes for either the Data or Control Class.   */
-/*    For the data class, we mount the bulk in and bulk out endpoints.    */ 
-/*    For the control class, we mount the optional interrupt endpoint.    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    cdc_acm                               Pointer to cdc_acm class      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_interface_endpoint_get Get interface endpoint        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    _ux_host_class_cdc_acm_activate       Activate cdc_acm class        */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    For the data class, we mount the bulk in and bulk out endpoints.    */
+/*    For the control class, we mount the optional interrupt endpoint.    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    cdc_acm                               Pointer to cdc_acm class      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_interface_endpoint_get Get interface endpoint        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    _ux_host_class_cdc_acm_activate       Activate cdc_acm class        */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -99,15 +99,15 @@ UX_TRANSFER     *transfer_request;
         /* Search the bulk OUT endpoint. It is attached to the interface container.  */
         for (endpoint_index = 0; endpoint_index < cdc_acm -> ux_host_class_cdc_acm_interface -> ux_interface_descriptor.bNumEndpoints;
                             endpoint_index++)
-        {                        
-    
+        {
+
             /* Get interface endpoint.  */
             status = _ux_host_stack_interface_endpoint_get(cdc_acm -> ux_host_class_cdc_acm_interface, endpoint_index, &endpoint);
 
             /* Check status.  */
             if (status != UX_SUCCESS)
                 continue;
-    
+
             /* Check if endpoint is bulk and OUT.  */
             if (((endpoint -> ux_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) == UX_ENDPOINT_OUT) &&
                 ((endpoint -> ux_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE) == UX_BULK_ENDPOINT))
@@ -166,8 +166,8 @@ UX_TRANSFER     *transfer_request;
         /* Search the Interrupt endpoint. It is attached to the interface container of the control interface. It is not mandatory.  */
         for (endpoint_index = 0; endpoint_index < cdc_acm -> ux_host_class_cdc_acm_interface -> ux_interface_descriptor.bNumEndpoints;
                             endpoint_index++)
-        {                        
-    
+        {
+
             /* Get the endpoint handle.  */
             status = _ux_host_stack_interface_endpoint_get(cdc_acm -> ux_host_class_cdc_acm_interface, endpoint_index, &endpoint);
 
@@ -201,19 +201,19 @@ UX_TRANSFER     *transfer_request;
                 transfer_request -> ux_transfer_request_completion_function =  _ux_host_class_cdc_acm_transfer_request_completed;
 
                 /* Obtain a buffer for this transaction. The buffer will always be reused.  */
-                transfer_request -> ux_transfer_request_data_pointer =  _ux_utility_memory_allocate(UX_SAFE_ALIGN, UX_CACHE_SAFE_MEMORY, 
+                transfer_request -> ux_transfer_request_data_pointer =  _ux_utility_memory_allocate(UX_SAFE_ALIGN, UX_CACHE_SAFE_MEMORY,
                                                                 transfer_request -> ux_transfer_request_requested_length);
 
                 /* If the endpoint is available and we have memory, we start the interrupt endpoint.  */
                 if (transfer_request -> ux_transfer_request_data_pointer != UX_NULL)
                 {
-                    
+
                     /* The transfer on the interrupt endpoint can be started.  */
                     status =  _ux_host_stack_transfer_request(transfer_request);
-                    
+
                     /* Check error, if endpoint interrupt IN transfer not successful, do not proceed. */
                     if (status != UX_SUCCESS)
-                    
+
                         /* Error, do not proceed.  */
                         return(status);
                 }

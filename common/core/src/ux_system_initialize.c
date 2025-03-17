@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -23,11 +22,9 @@
 /* Define UX_SYSTEM_INIT to bring in the USBX version ID string.  */
 
 #define UX_SYSTEM_INIT
-
+#define UX_SOURCE_CODE
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_system.h"
@@ -130,7 +127,7 @@ VOID                *cache_safe_memory_pool_end;
 ULONG               memory_pool_offset;
 #if !defined(UX_STANDALONE)
 UINT                status;
-#endif
+#endif /* UX_STANDALONE */
 ULONG               pool_size;
 
     /* Check if the regular memory pool is valid.  */
@@ -154,7 +151,7 @@ ULONG               pool_size;
     /* Add to the memory offset the size of the allocated block.  */
     memory_pool_offset += (ULONG)sizeof(UX_SYSTEM_HOST);
 
-#endif
+#endif /* UX_DEVICE_SIDE_ONLY */
 
 #ifndef UX_HOST_SIDE_ONLY
 
@@ -164,7 +161,7 @@ ULONG               pool_size;
     /* Add to the memory offset the size of the allocated block.  */
     memory_pool_offset += (ULONG)sizeof(UX_SYSTEM_SLAVE);
 
-#endif
+#endif /* UX_HOST_SIDE_ONLY */
 
 
 #ifdef UX_OTG_SUPPORT
@@ -174,7 +171,7 @@ ULONG               pool_size;
 
     /* Add to the memory offset the size of the allocated block.  */
     memory_pool_offset += (ULONG)sizeof(UX_SYSTEM_OTG);
-#endif
+#endif /* UX_OTG_SUPPORT */
 
     /* Set the regular memory pool structure.  */
     _ux_system -> ux_system_memory_byte_pool[UX_MEMORY_BYTE_POOL_REGULAR] = (UX_MEMORY_BYTE_POOL *) (((UCHAR *) regular_memory_pool_start) + memory_pool_offset);
@@ -259,7 +256,7 @@ ULONG               pool_size;
             _ux_system -> ux_system_memory_byte_pool[UX_MEMORY_BYTE_POOL_CACHE_SAFE] -> ux_byte_pool_available;
 
     /* Other fields are kept zero.  */
-#endif
+#endif /* UX_ENABLE_MEMORY_STATISTICS */
 
 #ifdef UX_ENABLE_DEBUG_LOG
 
@@ -275,7 +272,7 @@ ULONG               pool_size;
     /* Keep the size in system structure variable.  */
     _ux_system -> ux_system_debug_log_size = UX_DEBUG_LOG_SIZE;
 
-#endif
+#endif /* UX_ENABLE_DEBUG_LOG */
 
 #if !defined(UX_STANDALONE)
 
@@ -283,7 +280,7 @@ ULONG               pool_size;
     status =  _ux_system_mutex_create(&_ux_system -> ux_system_mutex, "ux_system_mutex");
     if(status != UX_SUCCESS)
         return(UX_MUTEX_ERROR);
-#endif
+#endif /* UX_STANDALONE */
 
     return(UX_SUCCESS);
 }

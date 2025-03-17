@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,12 +13,13 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Stack                                                        */
+/**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
 #define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
 
@@ -841,7 +842,7 @@ INT                     immediate_state = UX_TRUE;
             /* The device is now in the unconfigured state. We need to deal
                with the amount of power the device is consuming before allowing
                it to be configured. Otherwise we may run the risk of an over
-               current fault. */        
+               current fault. */
             configuration = device -> ux_device_enum_inst.configuration;
             if (((configuration -> ux_configuration_descriptor.bmAttributes &
                     UX_CONFIGURATION_DEVICE_SELF_POWERED) == 0) &&
@@ -1153,4 +1154,4 @@ UX_TRANSFER         *transfer, *next;
         transfer = next;
     }
 }
-#endif
+#endif /* UX_HOST_STANDALONE */

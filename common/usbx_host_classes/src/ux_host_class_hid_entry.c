@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -389,7 +389,7 @@ UINT                    status = UX_SUCCESS;
             status =  _ux_host_class_hid_global_item_parse(hid, &item, descriptor);
             break;
 
-        
+
         case UX_HOST_CLASS_HID_TYPE_MAIN:
 
             /* This is a main item.  */
@@ -401,13 +401,13 @@ UINT                    status = UX_SUCCESS;
 
             /* This is a local item.  */
             status =  _ux_host_class_hid_local_item_parse(hid, &item, descriptor);
-            break;          
+            break;
 
         default:
 
             /* This is a reserved item, meaning it shouldn't be used!  */
 
-            /* Set status to error. The check after this switch statement 
+            /* Set status to error. The check after this switch statement
                 will handle the rest.  */
             status =  UX_DESCRIPTOR_CORRUPTED;
             break;
@@ -421,7 +421,7 @@ UINT                    status = UX_SUCCESS;
 
         /* Jump to the next item.  */
         descriptor +=  item.ux_host_class_hid_item_report_length;
-    
+
         /* Verify that the report descriptor is not corrupted.  */
         if (length < item.ux_host_class_hid_item_report_length)
         {

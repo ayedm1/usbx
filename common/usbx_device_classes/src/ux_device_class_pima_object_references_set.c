@@ -1,20 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Pima Class                                                   */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device PIMA Class                                                   */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -29,47 +28,47 @@
 #include "ux_device_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_pima_object_references_set         PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_pima_object_references_set         PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*   Set object references associated with an object handle.              */ 
-/*   The pima class will call the application to set the array of         */ 
-/*   references.                                                          */ 
-/*                                                                        */ 
 /*                                                                        */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    pima                                  Pointer to pima class         */ 
+/*   Set object references associated with an object handle.              */
+/*   The pima class will call the application to set the array of         */
+/*   references.                                                          */
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    pima                                  Pointer to pima class         */
 /*    object_handle                         Object Handle                 */
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_device_stack_transfer_request     Transfer request              */
 /*    _ux_device_stack_endpoint_stall       Stall endpoint                */
 /*    _ux_device_class_pima_response_send   Send PIMA response            */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Pima Class                                                   */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Pima Class                                                   */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -93,26 +92,26 @@ ULONG                   object_references_length;
 
     /* Obtain the pointer to the transfer request.  */
     transfer_request =  &pima -> ux_device_class_pima_bulk_out_endpoint -> ux_slave_endpoint_transfer_request;
-    
+
     /* Obtain memory for this object info. Use the transfer request pre-allocated memory.  */
     pima_data_buffer =  transfer_request -> ux_slave_transfer_request_data_pointer;
 
     /* Get the data payload.  */
-    status =  _ux_device_stack_transfer_request(transfer_request, UX_DEVICE_CLASS_PIMA_OBJECT_PROP_VALUE_BUFFER_SIZE, 
+    status =  _ux_device_stack_transfer_request(transfer_request, UX_DEVICE_CLASS_PIMA_OBJECT_PROP_VALUE_BUFFER_SIZE,
                                                     UX_DEVICE_CLASS_PIMA_OBJECT_PROP_VALUE_BUFFER_SIZE);
 
     /* Check if there was an error. If so, stall the endpoint.  */
     if (status != UX_SUCCESS)
     {
-    
+
         /* Stall the endpoint.  */
         _ux_device_stack_endpoint_stall(pima -> ux_device_class_pima_bulk_out_endpoint);
-        
+
         /* Return the status.  */
         return(status);
-        
+
     }
-        
+
     /* Allocate the device info pointer to the beginning of the dynamic object info field.  */
     object_references = pima_data_buffer + UX_DEVICE_CLASS_PIMA_DATA_HEADER_SIZE;
 
@@ -125,17 +124,17 @@ ULONG                   object_references_length;
 
         /* Take out the header.  */
         object_references_length -= UX_DEVICE_CLASS_PIMA_DATA_HEADER_SIZE;
-    
+
         /* Send the object references to the application.  */
         status = pima -> ux_device_class_pima_object_references_set(pima, object_handle, object_references, object_references_length);
-    
+
         /* Now we return a response with success.  */
         status = (status == UX_SUCCESS) ? UX_DEVICE_CLASS_PIMA_RC_OK : status;
         _ux_device_class_pima_response_send(pima, status, 0, 0, 0, 0);
 
     }
     else
-    {    
+    {
         /* We return an error.  */
         _ux_device_class_pima_response_send(pima, UX_DEVICE_CLASS_PIMA_RC_INVALID_PARAMETER, 0, 0, 0, 0);
 

@@ -1,20 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Pima Class                                                   */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device PIMA Class                                                   */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -36,43 +35,43 @@
 /* Build option checked runtime by UX_ASSERT  */
 #endif
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_pima_storage_id_send               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_pima_storage_id_send               PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function returns the storage id array to the host.             */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    pima                                  Pointer to pima class         */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function returns the storage id array to the host.             */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    pima                                  Pointer to pima class         */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_device_stack_transfer_request     Transfer request              */
 /*    _ux_utility_long_put                  Put 32-bit value              */
 /*    _ux_utility_short_put                 Put 32-bit value              */
 /*    _ux_device_class_pima_response_send   Send PIMA response            */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Pima Class                                                   */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Pima Class                                                   */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -95,8 +94,8 @@ UCHAR                   *storage_id;
 
     /* Build option check.  */
     UX_ASSERT(UX_DEVICE_CLASS_PIMA_TRANSFER_BUFFER_LENGTH >=
-                                (UX_DEVICE_CLASS_PIMA_DATA_HEADER_SIZE + 
-                                 4 +                                     
+                                (UX_DEVICE_CLASS_PIMA_DATA_HEADER_SIZE +
+                                 4 +
                                  (4 * UX_DEVICE_CLASS_PIMA_MAX_STORAGE_IDS)));
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -107,19 +106,19 @@ UCHAR                   *storage_id;
 
     /* Obtain memory for this object. Use the transfer request pre-allocated memory.  */
     storage_id =  transfer_request -> ux_slave_transfer_request_data_pointer;
-    
+
     /* Fill in the data container type.  */
     _ux_utility_short_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_TYPE,
                             UX_DEVICE_CLASS_PIMA_CT_DATA_BLOCK);
-    
+
     /* Fill in the data code.  */
     _ux_utility_short_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_CODE,
                             UX_DEVICE_CLASS_PIMA_OC_GET_STORAGE_IDS);
-    
+
     /* Fill in the Transaction ID.  */
-    _ux_utility_long_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_TRANSACTION_ID, 
+    _ux_utility_long_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_TRANSACTION_ID,
                             pima -> ux_device_class_pima_transaction_id);
-        
+
     /* We have one element only to report.  */
     _ux_utility_long_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_SIZE, UX_DEVICE_CLASS_PIMA_MAX_STORAGE_IDS);
 
@@ -128,14 +127,14 @@ UCHAR                   *storage_id;
 
     /* Compute the overall length of the device info structure.  */
     storage_id_length = UX_DEVICE_CLASS_PIMA_DATA_HEADER_SIZE + sizeof(ULONG) + (sizeof(ULONG) * UX_DEVICE_CLASS_PIMA_MAX_STORAGE_IDS);
-    
+
     /* Fill in the size of the response header.  */
-    _ux_utility_long_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_LENGTH, 
+    _ux_utility_long_put(storage_id + UX_DEVICE_CLASS_PIMA_DATA_HEADER_LENGTH,
                             storage_id_length);
-    
+
     /* Send a data payload with the storage id data set.  */
     status =  _ux_device_stack_transfer_request(transfer_request, storage_id_length, 0);
-    
+
     /* Now we return a response with success.  */
     _ux_device_class_pima_response_send(pima, UX_DEVICE_CLASS_PIMA_RC_OK, 0, 0, 0, 0);
 

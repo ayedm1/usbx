@@ -1,20 +1,20 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Storage Class                                                */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device STORAGE Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -34,46 +34,46 @@
 /* Build option checked runtime by UX_ASSERT  */
 #endif
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_storage_request_sense              PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_storage_request_sense              PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function performs a request sense command.                     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    storage                               Pointer to storage class      */ 
+/*                                                                        */
+/*    This function performs a request sense command.                     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    storage                               Pointer to storage class      */
 /*    endpoint_in                           Pointer to IN endpoint        */
 /*    endpoint_out                          Pointer to OUT endpoint       */
-/*    cbwcb                                 Pointer to CBWCB              */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_class_storage_csw_send     Send CSW                      */ 
-/*    _ux_device_stack_transfer_request     Transfer request              */ 
-/*    _ux_utility_memory_copy               Copy memory                   */ 
-/*    _ux_utility_memory_set                Set memory                    */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Storage Class                                                */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    cbwcb                                 Pointer to CBWCB              */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_class_storage_csw_send     Send CSW                      */
+/*    _ux_device_stack_transfer_request     Transfer request              */
+/*    _ux_utility_memory_copy               Copy memory                   */
+/*    _ux_utility_memory_set                Set memory                    */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Storage Class                                                */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized command logic,    */
@@ -122,9 +122,9 @@ ULONG                   sense_length;
 
     /* Ensure it is cleaned.  */
     _ux_utility_memory_set(sense_buffer, 0, sense_length); /* Use case of memset is verified. */
-    
+
     /* Initialize the response buffer with the error code.  */
-    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE] = 
+    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE] =
                     UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE_VALUE;
 
     /* Extract sense key, code, qualifier.  */
@@ -145,7 +145,7 @@ ULONG                   sense_length;
     sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_CODE_QUALIFIER] = qualifier;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_REQUEST_SENSE, storage, lun, 
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_REQUEST_SENSE, storage, lun,
                             key, code, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
     /* Initialize the response buffer with the additional length.  */
@@ -176,7 +176,7 @@ ULONG                   sense_length;
     }
 #endif
 
-    /* Return completion status.  */    
+    /* Return completion status.  */
     return(status);
 }
 

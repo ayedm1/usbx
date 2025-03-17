@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -112,16 +112,16 @@ ULONG                            i;
                 _ux_device_thread_delete(&stream -> ux_device_class_audio_stream_feedback_thread);
                 _ux_utility_memory_free(stream -> ux_device_class_audio_stream_feedback_thread_stack);
             }
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
             _ux_utility_memory_free(stream -> ux_device_class_audio_stream_thread_stack);
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
             _ux_utility_memory_free(stream -> ux_device_class_audio_stream_buffer);
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
             _ux_utility_memory_free(stream -> ux_device_class_audio_stream_feedback_buffer);
-#endif
-#endif
+#endif /* UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT */
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
             /* Next stream instance.  */
             stream ++;
@@ -130,16 +130,16 @@ ULONG                            i;
 #if defined(UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT)
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
         _ux_utility_memory_free(audio -> ux_device_class_audio_interrupt_buffer);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 #if !defined(UX_DEVICE_STANDALONE)
         _ux_device_thread_delete(&audio_class -> ux_slave_class_thread);
         _ux_utility_memory_free(audio_class -> ux_slave_class_thread_stack);
 
         _ux_device_semaphore_delete(&audio -> ux_device_class_audio_status_semaphore);
         _ux_device_mutex_delete(&audio -> ux_device_class_audio_status_mutex);
-#else
-#endif
-#endif
+#else /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
+#endif /* !UX_DEVICE_STANDALONE */
+#endif /* UX_DEVICE_CLASS_AUDIO_INTERRUPT_SUPPORT */
 
         /* Free the audio instance with controls and streams.  */
         _ux_utility_memory_free(audio);

@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -129,12 +129,12 @@ ULONG                           actual_length;
             if (transfer_length)
                 _ux_utility_memory_copy(transfer -> ux_slave_transfer_request_data_pointer,
                     stream -> ux_device_class_audio_stream_transfer_pos -> ux_device_class_audio_frame_data, transfer_length); /* Use case of memcpy is verified. */
-#else
+#else /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 0 */
 
             /* Zero copy: directly use frame buffer to transfer.  */
             transfer -> ux_slave_transfer_request_data_pointer = stream ->
                     ux_device_class_audio_stream_transfer_pos -> ux_device_class_audio_frame_data;
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 0 */
 
             /* Issue transfer request, thread blocked until transfer done.  */
             status = _ux_device_stack_transfer_request(transfer, transfer_length, transfer_length);
@@ -199,4 +199,3 @@ ULONG                           actual_length;
         _ux_device_thread_suspend(&stream -> ux_device_class_audio_stream_thread);
     }
 }
-

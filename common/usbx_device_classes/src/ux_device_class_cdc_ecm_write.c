@@ -1,19 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device CDC_ECM Class                                                */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device CDC ECM Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -27,45 +27,44 @@
 #include "ux_device_class_cdc_ecm.h"
 #include "ux_device_stack.h"
 
-
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_cdc_ecm_write                      PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_cdc_ecm_write                      PORTABLE C      */
 /*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function writes a packet into a queue for later thread         */ 
-/*    processing.                                                         */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    cdc_ecm                               Address of cdc_ecm class      */ 
-/*                                          instance                      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*   _ux_device_stack_transfer_request      Transfer request              */ 
+/*                                                                        */
+/*    This function writes a packet into a queue for later thread         */
+/*    processing.                                                         */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    cdc_ecm                               Address of cdc_ecm class      */
+/*                                          instance                      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*   _ux_device_stack_transfer_request      Transfer request              */
 /*   _ux_device_mutex_off                   Release mutex                 */
 /*   _ux_device_event_flags_set             Set event flags               */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    ThreadX                                                             */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    ThreadX                                                             */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            used UX prefix to refer to  */
@@ -105,13 +104,13 @@ UX_SLAVE_CLASS_CDC_ECM      *cdc_ecm;
             cdc_ecm -> ux_slave_class_cdc_ecm_xmit_queue =  packet;
 
         else
-        
+
             /* Add the packet to the end of the queue.  */
             cdc_ecm -> ux_slave_class_cdc_ecm_xmit_queue_tail -> nx_packet_queue_next =  packet;
 
         /* Set the tail.  */
         cdc_ecm -> ux_slave_class_cdc_ecm_xmit_queue_tail =  packet;
-        
+
         /* The packet to be sent is the last in the chain.  */
         packet -> nx_packet_queue_next =  NX_NULL;
 
@@ -119,7 +118,7 @@ UX_SLAVE_CLASS_CDC_ECM      *cdc_ecm;
         _ux_device_mutex_off(&cdc_ecm -> ux_slave_class_cdc_ecm_mutex);
 
         /* Set an event to wake up the bulkin thread.  */
-        _ux_device_event_flags_set(&cdc_ecm -> ux_slave_class_cdc_ecm_event_flags_group, UX_DEVICE_CLASS_CDC_ECM_NEW_BULKIN_EVENT, UX_OR);                
+        _ux_device_event_flags_set(&cdc_ecm -> ux_slave_class_cdc_ecm_event_flags_group, UX_DEVICE_CLASS_CDC_ECM_NEW_BULKIN_EVENT, UX_OR);
 
         /* Packet successfully added. Return success.  */
         status =  UX_SUCCESS;
@@ -138,6 +137,6 @@ UX_SLAVE_CLASS_CDC_ECM      *cdc_ecm;
     }
 
     /* We are done here.  */
-    return(status);            
+    return(status);
 #endif
 }

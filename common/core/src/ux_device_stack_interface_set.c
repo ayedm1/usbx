@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -46,30 +45,30 @@
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    device_framework                      Address in device framework   */ 
+/*    device_framework                      Address in device framework   */
 /*                                          for selected alternate setting*/
-/*    device_framework_length               Length of device framework    */ 
-/*    alternate_setting_value               Alternate setting             */ 
+/*    device_framework_length               Length of device framework    */
+/*    alternate_setting_value               Alternate setting             */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
+/*  CALLS                                                                 */
 /*                                                                        */
-/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
-/*    _ux_device_stack_interface_start      Start interface               */ 
-/*    _ux_utility_descriptor_parse          Parse descriptor              */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
+/*    (ux_slave_dcd_function)               DCD dispatch function         */
+/*    _ux_device_stack_interface_start      Start interface               */
+/*    _ux_utility_descriptor_parse          Parse descriptor              */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -95,7 +94,7 @@ UX_SLAVE_INTERFACE      *interface_ptr;
 #if !defined(UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE) || UX_MAX_DEVICE_INTERFACES > 1
 UX_SLAVE_INTERFACE      *interface_link;
 ULONG                   interfaces_pool_number;
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 UX_SLAVE_ENDPOINT       *endpoint;
 UX_SLAVE_ENDPOINT       *endpoint_link;
 ULONG                   descriptor_length;
@@ -115,7 +114,7 @@ ULONG                   max_transfer_length, n_trans;
     /* Get the pointer to the device.  */
     device =  &_ux_system_slave -> ux_system_slave_device;
 
-    /* Find a free interface in the pool and hook it to the 
+    /* Find a free interface in the pool and hook it to the
        existing interface.  */
     interface_ptr = device -> ux_slave_device_interfaces_pool;
 
@@ -126,10 +125,10 @@ ULONG                   max_transfer_length, n_trans;
         /* Check if this interface is free.  */
         if (interface_ptr -> ux_slave_interface_status == UX_UNUSED)
             break;
-    
+
         /* Try the next interface.  */
         interface_ptr++;
-        
+
         /* Decrement the number of interfaces left to scan in the pool.  */
         interfaces_pool_number--;
     }
@@ -137,13 +136,13 @@ ULONG                   max_transfer_length, n_trans;
     /* Did we find a free interface ?  */
     if (interfaces_pool_number == 0)
         return(UX_MEMORY_INSUFFICIENT);
-#else
+#else /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
     /* Check if this interface is free.  */
     if (interface_ptr -> ux_slave_interface_status != UX_UNUSED)
         return(UX_MEMORY_INSUFFICIENT);
-    
-#endif
+
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
     /* Mark this interface as used now.  */
     interface_ptr -> ux_slave_interface_status = UX_USED;
@@ -173,11 +172,11 @@ ULONG                   max_transfer_length, n_trans;
             interface_link =  interface_link -> ux_slave_interface_next_interface;
         interface_link -> ux_slave_interface_next_interface =  interface_ptr;
     }
-#else
+#else /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
     /* It must be very first one.  */
     device -> ux_slave_device_first_interface = interface_ptr;
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
     /* Point beyond the interface descriptor.  */
     device_framework_length -=  (ULONG) *device_framework;
@@ -192,14 +191,14 @@ ULONG                   max_transfer_length, n_trans;
 
         /* And its type.  */
         descriptor_type =  *(device_framework + 1);
-                
+
         /* Check if this is an endpoint descriptor.  */
         switch(descriptor_type)
         {
 
         case UX_ENDPOINT_DESCRIPTOR_ITEM:
 
-            /* Find a free endpoint in the pool and hook it to the 
+            /* Find a free endpoint in the pool and hook it to the
                existing interface after it's created by DCD.  */
             endpoint = device -> ux_slave_device_endpoints_pool;
             endpoints_pool_number = device -> ux_slave_device_endpoints_pool_number;
@@ -212,12 +211,12 @@ ULONG                   max_transfer_length, n_trans;
                     endpoint ->    ux_slave_endpoint_status = UX_USED;
                     break;
                 }
-            
+
                 /* Try the next endpoint.  */
                 endpoint++;
-                
+
                 /* Decrement the number of endpoints to scan from the pool.  */
-               endpoints_pool_number--; 
+               endpoints_pool_number--;
             }
 
             /* Did we find a free endpoint ?  */
@@ -232,7 +231,7 @@ ULONG                   max_transfer_length, n_trans;
 
             /* Now we create a transfer request to accept transfer on this endpoint.  */
             transfer_request =  &endpoint -> ux_slave_endpoint_transfer_request;
-                
+
             /* Validate endpoint descriptor wMaxPacketSize.  */
             UX_ASSERT(endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize != 0);
 
@@ -259,19 +258,19 @@ ULONG                   max_transfer_length, n_trans;
 
             /* We store the endpoint in the transfer request as well.  */
             transfer_request -> ux_slave_transfer_request_endpoint =  endpoint;
-                
+
             /* By default the timeout is infinite on request.  */
             transfer_request -> ux_slave_transfer_request_timeout = UX_WAIT_FOREVER;
-            
+
             /* Attach the interface to the endpoint.  */
             endpoint -> ux_slave_endpoint_interface =  interface_ptr;
-                
+
             /* Attach the device to the endpoint.  */
             endpoint -> ux_slave_endpoint_device =  device;
-                
+
             /* Create the endpoint at the DCD level.  */
-            status =  dcd -> ux_slave_dcd_function(dcd, UX_DCD_CREATE_ENDPOINT, (VOID *) endpoint); 
-            
+            status =  dcd -> ux_slave_dcd_function(dcd, UX_DCD_CREATE_ENDPOINT, (VOID *) endpoint);
+
             /* Do a sanity check on endpoint creation.  */
             if (status != UX_SUCCESS)
             {
@@ -301,7 +300,7 @@ ULONG                   max_transfer_length, n_trans;
         case UX_INTERFACE_DESCRIPTOR_ITEM:
 
             /* If the descriptor is a configuration or interface,
-               we have parsed and mounted all endpoints. 
+               we have parsed and mounted all endpoints.
                The interface attached to this configuration must be started at the class level.  */
             status =  _ux_device_stack_interface_start(interface_ptr);
 
@@ -326,4 +325,3 @@ ULONG                   max_transfer_length, n_trans;
     /* Return the status to the caller.  */
     return(status);
 }
-

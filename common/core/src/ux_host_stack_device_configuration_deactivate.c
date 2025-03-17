@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -87,7 +86,7 @@ UINT  _ux_host_stack_device_configuration_deactivate(UX_DEVICE *device)
 
 #if defined(UX_HOST_STANDALONE)
 UX_INTERRUPT_SAVE_AREA
-#endif
+#endif /* UX_HOST_STANDALONE */
 UX_HOST_CLASS_COMMAND       command;
 UX_CONFIGURATION            *configuration;
 UX_INTERFACE                *interface_ptr;
@@ -121,7 +120,7 @@ UINT                        status;
     }
     device -> ux_device_flags |= UX_DEVICE_FLAG_LOCK;
     UX_RESTORE
-#else
+#else /* UX_HOST_STANDALONE */
 
     /* Protect the control endpoint semaphore here.  It will be unprotected in the
        transfer request function.  */
@@ -139,16 +138,16 @@ UINT                        status;
 
         return(UX_SEMAPHORE_ERROR);
     }
-#endif
+#endif /* UX_HOST_STANDALONE */
 
     /* Check for the state of the device, if not configured, we are done.  */
     if (device -> ux_device_state != UX_DEVICE_CONFIGURED)
     {
 #if defined(UX_HOST_STANDALONE)
         device -> ux_device_flags &= ~UX_DEVICE_FLAG_LOCK;
-#else
+#else /* UX_HOST_STANDALONE */
         _ux_host_semaphore_put(&device -> ux_device_protection_semaphore);
-#endif
+#endif /* UX_HOST_STANDALONE */
         return(UX_SUCCESS);
     }
 
@@ -187,7 +186,7 @@ UINT                        status;
 
 #if defined(UX_HOST_STANDALONE)
     device -> ux_device_flags &= ~UX_DEVICE_FLAG_LOCK;
-#endif
+#endif /* UX_HOST_STANDALONE */
 
     /* Return completion status.  */
     return(status);

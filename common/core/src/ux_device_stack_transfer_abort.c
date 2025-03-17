@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -54,21 +53,21 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_semaphore_put             Put semaphore                 */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_semaphore_put             Put semaphore                 */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            used UX prefix to refer to  */
@@ -113,8 +112,8 @@ UX_SLAVE_DCD    *dcd;
         UX_RESTORE
 
         /* We need to set the completion code for the transfer to aborted. Note
-           that the transfer request function cannot simultaneously modify this 
-           because if the transfer was pending, then the transfer's thread is 
+           that the transfer request function cannot simultaneously modify this
+           because if the transfer was pending, then the transfer's thread is
            currently waiting for it to complete.  */
         transfer_request -> ux_slave_transfer_request_status =  UX_TRANSFER_STATUS_ABORT;
 
@@ -129,6 +128,5 @@ UX_SLAVE_DCD    *dcd;
     }
 
     /* This function never fails.  */
-    return(UX_SUCCESS);       
+    return(UX_SUCCESS);
 }
-

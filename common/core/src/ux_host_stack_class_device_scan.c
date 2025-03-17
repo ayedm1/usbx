@@ -1,28 +1,27 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -33,45 +32,45 @@
     defined(UX_HOST_STACK_DEVICE_DRIVER_SCAN_DCSP_DISABLE)
 #error When device driver scan is enabled at least one of scan method must be enabled in (VIDPID, DeviceClassSubclassProtocol)
 #endif
-#endif
+#endif /* !UX_HOST_STACK_DEVICE_DRIVER_SCAN_DISABLE */
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_class_device_scan                    PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_class_device_scan                    PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function will scan all registered classes with a device        */ 
-/*    candidate. Priority is given to the PID/VID and then the            */ 
-/*    Class/Subclass/Protocol.                                            */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    device                                Pointer to device             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_class_call             Call host stack class         */ 
-/*    (ux_host_class_entry_function)        Class entry function          */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function will scan all registered classes with a device        */
+/*    candidate. Priority is given to the PID/VID and then the            */
+/*    Class/Subclass/Protocol.                                            */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    device                                Pointer to device             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_class_call             Call host stack class         */
+/*    (ux_host_class_entry_function)        Class entry function          */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            used query usage of device  */
@@ -109,19 +108,19 @@ UX_HOST_CLASS_COMMAND       class_command;
     /* We start with the PID/VID for this device.  */
     class_command.ux_host_class_command_usage =  UX_HOST_CLASS_COMMAND_USAGE_PIDVID;
     class_inst =  _ux_host_stack_class_call(&class_command);
-#endif
+#endif /* !UX_HOST_STACK_DEVICE_DRIVER_SCAN_VIDPID_DISABLE */
 
 #if !defined(UX_HOST_STACK_DEVICE_DRIVER_SCAN_DCSP_DISABLE)
     /* On return, either we have found a class or the device is still an orphan.  */
     if (class_inst == UX_NULL)
     {
 
-        /* It the PID/VID did not work, we continue looking for the Class\Subclass\Protocol match. */  
+        /* It the PID/VID did not work, we continue looking for the Class\Subclass\Protocol match. */
         class_command.ux_host_class_command_usage        =   UX_HOST_CLASS_COMMAND_USAGE_DCSP;
         class_inst =  _ux_host_stack_class_call(&class_command);
 
     }
-#endif
+#endif /* !UX_HOST_STACK_DEVICE_DRIVER_SCAN_DCSP_DISABLE */
 
     /* On return, either we have found a class or the device is still an orphan.  */
     if (class_inst != UX_NULL)
@@ -134,19 +133,18 @@ UX_HOST_CLASS_COMMAND       class_command;
         /* Activation may take time, run as state machine.  */
         status = UX_SUCCESS;
         return(status);
-#else
+#else /* UX_HOST_STANDALONE */
         class_command.ux_host_class_command_class_ptr =  class_inst;
         class_command.ux_host_class_command_request =  UX_HOST_CLASS_COMMAND_ACTIVATE;
         status =  device -> ux_device_class ->  ux_host_class_entry_function(&class_command);
 
         /* Return result of activation.  */
         return(status);
-#endif
+#endif /* UX_HOST_STANDALONE */
     }
 
-#endif
+#endif /* UX_HOST_STACK_DEVICE_DRIVER_SCAN_DISABLE */
 
     /* Return an error.  */
     return(UX_NO_CLASS_MATCH);
 }
-

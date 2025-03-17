@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Printer Class                                                */
+/**   Device PRINTER Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -124,10 +124,10 @@ UINT                        status = UX_SUCCESS;
     /* Run the transfer state machine.  */
     if (printer -> ux_device_class_printer_read_state == UX_STATE_RESET)
     {
-            
+
             /* If trace is enabled, insert this event into the trace buffer.  */
             UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_PRINTER_READ, printer, buffer, requested_length, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
-    
+
             printer -> ux_device_class_printer_read_state = UX_DEVICE_CLASS_PRINTER_READ_START;
             printer -> ux_device_class_printer_read_status = UX_TRANSFER_NO_ANSWER;
             transfer_request -> ux_slave_transfer_request_data_pointer = buffer;

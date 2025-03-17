@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Storage Class                                                       */
 /**                                                                       */
@@ -20,25 +20,25 @@
 /**************************************************************************/
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  COMPONENT DEFINITION                                   RELEASE        */ 
-/*                                                                        */ 
-/*    ux_host_class_storage.h                             PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  COMPONENT DEFINITION                                   RELEASE        */
+/*                                                                        */
+/*    ux_host_class_storage.h                             PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    This file contains all the header and extern functions used by the  */
-/*    USBX storage class.                                                 */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    USBX storage class.                                                 */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            added option to disable FX  */
@@ -72,15 +72,15 @@
 #ifndef UX_HOST_CLASS_STORAGE_H
 #define UX_HOST_CLASS_STORAGE_H
 
-/* Determine if a C++ compiler is being used.  If so, ensure that standard 
-   C is used to process the API information.  */ 
+/* Determine if a C++ compiler is being used.  If so, ensure that standard
+   C is used to process the API information.  */
 
-#ifdef   __cplusplus 
+#ifdef   __cplusplus
 
-/* Yes, C++ compiler is present.  Use standard C.  */ 
-extern   "C" { 
+/* Yes, C++ compiler is present.  Use standard C.  */
+extern   "C" {
 
-#endif  
+#endif
 
 
 /* Internal option: enable the basic USBX error checking. This define is typically used
@@ -236,7 +236,7 @@ extern   "C" {
 #define UX_HOST_CLASS_STORAGE_SCSI_VERIFY                   0x2f
 #define UX_HOST_CLASS_STORAGE_SCSI_MODE_SELECT              0x55
 #define UX_HOST_CLASS_STORAGE_SCSI_MODE_SENSE               0x5a
-#define UX_HOST_CLASS_STORAGE_SCSI_READ32                   0xa8 
+#define UX_HOST_CLASS_STORAGE_SCSI_READ32                   0xa8
 #define UX_HOST_CLASS_STORAGE_SCSI_WRITE32                  0xaa
 
 
@@ -260,7 +260,7 @@ extern   "C" {
 #define UX_HOST_CLASS_STORAGE_CSW_LENGTH                    13
 
 
-/* Define Storage Class SCSI inquiry command constants.  */ 
+/* Define Storage Class SCSI inquiry command constants.  */
 
 #define UX_HOST_CLASS_STORAGE_INQUIRY_OPERATION             0
 #define UX_HOST_CLASS_STORAGE_INQUIRY_LUN                   1
@@ -466,7 +466,7 @@ extern   "C" {
 typedef struct UX_HOST_CLASS_STORAGE_STRUCT
 {
 
-    struct UX_HOST_CLASS_STORAGE_STRUCT  
+    struct UX_HOST_CLASS_STORAGE_STRUCT
                     *ux_host_class_storage_next_instance;
     UX_HOST_CLASS   *ux_host_class_storage_class;
     UX_DEVICE       *ux_host_class_storage_device;
@@ -648,7 +648,7 @@ UINT    _ux_host_class_storage_media_write(UX_HOST_CLASS_STORAGE *storage, ULONG
 UINT    _ux_host_class_storage_partition_read(UX_HOST_CLASS_STORAGE *storage, UCHAR *sector_memory, ULONG sector);
 UINT    _ux_host_class_storage_request_sense(UX_HOST_CLASS_STORAGE *storage);
 UINT    _ux_host_class_storage_sense_code_translate(UX_HOST_CLASS_STORAGE *storage, UINT status);
-UINT    _ux_host_class_storage_start_stop(UX_HOST_CLASS_STORAGE *storage, 
+UINT    _ux_host_class_storage_start_stop(UX_HOST_CLASS_STORAGE *storage,
                                             ULONG start_stop_signal);
 VOID    _ux_host_class_storage_thread_entry(ULONG class_address);
 UINT    _ux_host_class_storage_transport(UX_HOST_CLASS_STORAGE *storage, UCHAR *data_pointer);
@@ -741,10 +741,10 @@ UINT    _uxe_host_class_storage_media_lock(UX_HOST_CLASS_STORAGE_MEDIA *storage_
 #endif
 
 
-/* Determine if a C++ compiler is being used.  If so, complete the standard 
-   C conditional started above.  */   
+/* Determine if a C++ compiler is being used.  If so, complete the standard
+   C conditional started above.  */
 #ifdef __cplusplus
-} 
+}
 #endif
 
 #endif

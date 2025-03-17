@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,9 +18,9 @@
 /**************************************************************************/
 /**************************************************************************/
 
-/* Include necessary system files.  */
-
 #define UX_SOURCE_CODE
+
+/* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_system.h"
@@ -75,15 +74,15 @@ UINT _ux_system_tasks_run(VOID)
 {
 #if defined(UX_DEVICE_STANDALONE) && !defined(UX_HOST_SIDE_ONLY)
     _ux_device_stack_tasks_run();
-#endif
+#endif /* UX_DEVICE_STANDALONE && !UX_HOST_SIDE_ONLY */
 #if defined(UX_HOST_STANDALONE) && !defined(UX_DEVICE_SIDE_ONLY)
     _ux_host_stack_tasks_run();
-#endif
+#endif /* UX_HOST_STANDALONE && !UX_DEVICE_SIDE_ONLY */
 #if defined(UX_OTG_STANDALONE) && defined(UX_OTG_SUPPORT)
     _ux_otg_tasks_run();
-#endif
+#endif /* UX_OTG_STANDALONE && UX_OTG_SUPPORT */
 
    /* Return code not used now.  */
    return(0);
 }
-#endif
+#endif /* UX_STANDALONE || UX_HOST_STANDALONE || UX_DEVICE_STANDALONE || UX_OTG_STANDALONE */

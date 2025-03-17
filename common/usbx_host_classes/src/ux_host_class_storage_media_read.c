@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Storage Class                                                       */
 /**                                                                       */
@@ -64,7 +64,7 @@ ULONG       command_length;
                     UX_HOST_CLASS_STORAGE_DATA_IN,
                     sector_count * storage -> ux_host_class_storage_sector_size,
                     command_length);
-    
+
     /* Prepare the MEDIA READ command block.  */
     *(cbw_cb + UX_HOST_CLASS_STORAGE_READ_OPERATION) =  UX_HOST_CLASS_STORAGE_SCSI_READ16;
 
@@ -76,46 +76,46 @@ ULONG       command_length;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_storage_media_read                   PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_storage_media_read                   PORTABLE C      */
 /*                                                           6.2.1        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function will read one or more logical sector from the media.  */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    storage                               Pointer to storage class      */ 
-/*    sector_start                          Starting sector               */ 
-/*    sector_count                          Number of sectors to read     */ 
-/*    data_pointer                          Pointer to data to read       */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_class_storage_cbw_initialize Initialize the CBW            */ 
-/*    _ux_host_class_storage_transport      Send command                  */ 
-/*    _ux_utility_long_put_big_endian       Put 32-bit word               */ 
-/*    _ux_utility_short_put_big_endian      Put 16-bit word               */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Storage Class                                                       */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function will read one or more logical sector from the media.  */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    storage                               Pointer to storage class      */
+/*    sector_start                          Starting sector               */
+/*    sector_count                          Number of sectors to read     */
+/*    data_pointer                          Pointer to data to read       */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_class_storage_cbw_initialize Initialize the CBW            */
+/*    _ux_host_class_storage_transport      Send command                  */
+/*    _ux_utility_long_put_big_endian       Put 32-bit word               */
+/*    _ux_utility_short_put_big_endian      Put 16-bit word               */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Storage Class                                                       */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -189,7 +189,7 @@ UINT            media_retry;
 
     /* Check if the media in the device has been removed. If so
        we have to tell UX_MEDIA (default FileX) that the media is closed.  */
-    return(UX_HOST_CLASS_STORAGE_SENSE_ERROR);                                            
+    return(UX_HOST_CLASS_STORAGE_SENSE_ERROR);
 #endif
 }
 

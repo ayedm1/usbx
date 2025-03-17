@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Audio Class                                                         */
 /**                                                                       */
@@ -29,48 +29,48 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_audio_streaming_sampling_get         PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_audio_streaming_sampling_get         PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function obtains successive sampling characteristics for the   */ 
-/*    audio streaming channel.                                            */ 
+/*                                                                        */
+/*    This function obtains successive sampling characteristics for the   */
+/*    audio streaming channel.                                            */
 /*                                                                        */
 /*    Note only Audio 1.0 and RAW (PCM like) format is supported.         */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    audio                                 Pointer to audio class        */ 
-/*    audio_sampling                        Pointer to audio sampling     */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_class_instance_verify  Verify instance is valid      */ 
-/*    _ux_utility_descriptor_parse          Parse the descriptor          */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    audio                                 Pointer to audio class        */
+/*    audio_sampling                        Pointer to audio sampling     */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_class_instance_verify  Verify instance is valid      */
+/*    _ux_utility_descriptor_parse          Parse the descriptor          */
 /*    _ux_host_mutex_on                     Get mutex                     */
 /*    _ux_host_mutex_off                    Put mutex                     */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*    Audio Class                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*    Audio Class                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -101,13 +101,13 @@ ULONG                                    lower_frequency;
 ULONG                                    higher_frequency;
 UINT                                     specific_frequency_count;
 UINT                                     previous_match_found;
-    
+
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_CLASS_AUDIO_STREAMING_SAMPLING_GET, audio, 0, 0, 0, UX_TRACE_HOST_CLASS_EVENTS, 0, 0)
 
     /* Ensure the instance is valid.  */
     if (_ux_host_stack_class_instance_verify(_ux_system_host_class_audio_name, (VOID *) audio) != UX_SUCCESS)
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -127,10 +127,10 @@ UINT                                     previous_match_found;
     /* Get the descriptor to the entire configuration.  */
     descriptor =               audio -> ux_host_class_audio_configuration_descriptor;
     total_descriptor_length =  audio -> ux_host_class_audio_configuration_descriptor_length;
-    
-    /* Default is Interface descriptor not yet found.  */    
+
+    /* Default is Interface descriptor not yet found.  */
     interface_found =  UX_FALSE;
-    
+
     /* Scan the descriptor for the Audio Streaming interface.  */
     while (total_descriptor_length)
     {
@@ -180,7 +180,7 @@ UINT                                     previous_match_found;
                 interface_found =  UX_FALSE;
             }
             break;
-                
+
 
         case UX_HOST_CLASS_AUDIO_CS_INTERFACE:
 
@@ -193,12 +193,12 @@ UINT                                     previous_match_found;
                                                 UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_ENTRIES, (UCHAR *) &audio_interface_descriptor);
 
                 /* This descriptor must refer to a PCM audio type.  */
-                if (audio_interface_descriptor.bFormatType != UX_HOST_CLASS_AUDIO_FORMAT_TYPE_I)    
+                if (audio_interface_descriptor.bFormatType != UX_HOST_CLASS_AUDIO_FORMAT_TYPE_I)
                     break;
 
                 /* If this is the first time we ask for a streaming interface characteristics
                    we return the first we find.  */
-                if ((audio_sampling -> ux_host_class_audio_sampling_characteristics_channels == 0) && 
+                if ((audio_sampling -> ux_host_class_audio_sampling_characteristics_channels == 0) &&
                     (audio_sampling -> ux_host_class_audio_sampling_characteristics_resolution == 0))
                 {
 
@@ -207,24 +207,24 @@ UINT                                     previous_match_found;
 
                     if (audio_interface_descriptor.bSamFreqType == 0)
                     {
-                        
+
                         /* The declaration of frequency is contiguous, so get the minimum and maximum */
-                        audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low =  
+                        audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low =
                                                                           (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH) |
                                                                           ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 1)) << 8 |
                                                                           ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 2)) << 16;
 
-                        audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_high = 
+                        audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_high =
                                                                           (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 3) |
-                                                                          ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 4)) << 8 |                                       
+                                                                          ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 4)) << 8 |
                                                                           ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 5)) << 16;
                     }
                     else
                     {
 
-                        /* The declaration of the frequency is declared as an array of specific values.  
+                        /* The declaration of the frequency is declared as an array of specific values.
                            We take the first one here.  */
-                        audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low =  
+                        audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low =
                                                                           (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH ) |
                                                                           ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 1 )) << 8 |
                                                                           ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 2 )) << 16;
@@ -250,14 +250,14 @@ UINT                                     previous_match_found;
 
                         if (audio_interface_descriptor.bSamFreqType == 0)
                         {
-                        
+
                             /* The declaration of frequency is contiguous, so get the minimum and maximum.  */
                             lower_frequency =  (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH) |
                                                ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 1)) << 8 |
                                                ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 2)) << 16;
 
                             higher_frequency =  (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 3) |
-                                                ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 4)) << 8 |                                       
+                                                ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 4)) << 8 |
                                                 ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 5)) << 16;
 
                             if ((audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low == lower_frequency) &&
@@ -283,7 +283,7 @@ UINT                                     previous_match_found;
                                 /* Compare the frequency.  */
                                 if (audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low == lower_frequency)
                                 {
-                                
+
                                     previous_match_found =  UX_TRUE;
                                 }
                                 else
@@ -306,7 +306,7 @@ UINT                                     previous_match_found;
                                         /* Return successful completion.  */
                                         return(UX_SUCCESS);
                                     }
-                                }                                   
+                                }
                             }
                         }
                     }
@@ -325,14 +325,14 @@ UINT                                     previous_match_found;
 
                             if (audio_interface_descriptor.bSamFreqType == 0)
                             {
-                        
+
                                 /* The declaration of frequency is contiguous, so get the minimum and maximum.  */
                                 lower_frequency =  (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH) |
                                                    ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 1)) << 8 |
                                                    ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 2)) << 16;
 
                                 higher_frequency =  (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 3) |
-                                                    ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 4)) << 8 |                                       
+                                                    ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 4)) << 8 |
                                                     ((ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH + 5)) << 16;
 
                                 audio_sampling -> ux_host_class_audio_sampling_characteristics_frequency_low =   lower_frequency;
@@ -344,7 +344,7 @@ UINT                                     previous_match_found;
                                 /* Return successful completion.  */
                                 return(UX_SUCCESS);
                             }
-                            else        
+                            else
                             {
 
                                 lower_frequency =  (ULONG) *(descriptor + UX_HOST_CLASS_AUDIO_INTERFACE_DESCRIPTOR_LENGTH) |
@@ -362,9 +362,9 @@ UINT                                     previous_match_found;
                             }
                         }
                     }
-                }                        
+                }
             }
-        }       
+        }
 
         /* Verify the descriptor is still valid.  */
         if (descriptor_length > total_descriptor_length)
@@ -421,8 +421,8 @@ UINT                                     previous_match_found;
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    audio                                 Pointer to audio class        */ 
-/*    audio_sampling                        Pointer to audio sampling     */ 
+/*    audio                                 Pointer to audio class        */
+/*    audio_sampling                        Pointer to audio sampling     */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

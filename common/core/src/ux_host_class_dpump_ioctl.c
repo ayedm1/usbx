@@ -1,72 +1,70 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Host Data Pump Class                                                */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Host DPUMP Class                                                    */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
-
-/* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
+
+/* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_host_class_dpump.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_dpump_ioctl                          PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_dpump_ioctl                          PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function is called by the application to change the alternate  */ 
-/*    setting of the dpump class.                                         */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    dpump                                 Pointer to the dpump class    */ 
-/*    ioctl_function                        ioctl function                */ 
-/*    parameter                             pointer to structure          */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function is called by the application to change the alternate  */
+/*    setting of the dpump class.                                         */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    dpump                                 Pointer to the dpump class    */
+/*    ioctl_function                        ioctl function                */
+/*    parameter                             pointer to structure          */
+/*                                                                        */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_host_stack_interface_setting_select                             */
 /*                                          Select alternate setting      */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -85,9 +83,9 @@ UX_INTERFACE                *interface_ptr;
 UINT                           status;
 
     /* Ensure the instance is valid.  */
-    if ((dpump -> ux_host_class_dpump_state !=  UX_HOST_CLASS_INSTANCE_LIVE) && 
+    if ((dpump -> ux_host_class_dpump_state !=  UX_HOST_CLASS_INSTANCE_LIVE) &&
         (dpump -> ux_host_class_dpump_state !=  UX_HOST_CLASS_INSTANCE_MOUNTING))
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -102,24 +100,24 @@ UINT                           status;
     switch (ioctl_function)
     {
 
-        case UX_HOST_CLASS_DPUMP_SELECT_ALTERNATE_SETTING: 
+        case UX_HOST_CLASS_DPUMP_SELECT_ALTERNATE_SETTING:
 
 
-            /* The parameter value has the alternate setting number. 
+            /* The parameter value has the alternate setting number.
                We need to scan the entire device framework.  Only one configuration for data pump device framework.  */
             interface_ptr = dpump -> ux_host_class_dpump_interface;
             configuration = interface_ptr -> ux_interface_configuration;
 
             /* Do some verification just in case !  */
             if (configuration == UX_NULL)
-            {            
+            {
 
             /* Error trap. */
             _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
 
                 return(UX_HOST_CLASS_INSTANCE_UNKNOWN);
             }
-                        
+
             /* Point to the first interface.  */
             interface_ptr =  configuration -> ux_configuration_first_interface;
 
@@ -133,11 +131,11 @@ UINT                           status;
 
                     /* We have found the alternate setting. Select it now.  */
                     status =  _ux_host_stack_interface_setting_select(interface_ptr);
-                    
+
                     /* We are done here.  */
                     return(status);
                 }
-            
+
                 /* Next interface.  */
                 interface_ptr = interface_ptr -> ux_interface_next_interface;
             }
@@ -150,7 +148,7 @@ UINT                           status;
 
             break;
 
-        default: 
+        default:
 
             /* If trace is enabled, insert this event into the trace buffer.  */
             UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_FUNCTION_NOT_SUPPORTED, 0, 0, 0, UX_TRACE_ERRORS, 0, 0)
@@ -161,9 +159,8 @@ UINT                           status;
             /* Error trap. */
             _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, status);
 
-    }   
+    }
 
     /* Return status to caller.  */
     return(status);
 }
-

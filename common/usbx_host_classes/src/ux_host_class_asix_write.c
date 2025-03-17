@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Asix Class                                                          */
 /**                                                                       */
@@ -29,44 +29,44 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_asix_write                           PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_asix_write                           PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function writes to the asix interface. The call is blocking    */ 
-/*    and only returns when there is either an error or when the transfer */ 
-/*    is complete.                                                        */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    asix                                  Pointer to asix class         */ 
-/*    packet                                Packet to write or queue      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_transfer_request       Process transfer request      */ 
+/*                                                                        */
+/*    This function writes to the asix interface. The call is blocking    */
+/*    and only returns when there is either an error or when the transfer */
+/*    is complete.                                                        */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    asix                                  Pointer to asix class         */
+/*    packet                                Packet to write or queue      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_transfer_request       Process transfer request      */
 /*    _ux_utility_short_put                 Put 16-bit value              */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -118,7 +118,7 @@ ULONG               copied;
 
     /* Ensure the instance is valid.  */
     if (asix -> ux_host_class_asix_state !=  UX_HOST_CLASS_INSTANCE_LIVE)
-    {        
+    {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -139,7 +139,7 @@ ULONG               copied;
         UX_RESTORE;
 
         /* Release the packet.  */
-        packet -> nx_packet_prepend_ptr =  packet -> nx_packet_prepend_ptr + NX_ETHERNET_SIZE; 
+        packet -> nx_packet_prepend_ptr =  packet -> nx_packet_prepend_ptr + NX_ETHERNET_SIZE;
         packet -> nx_packet_length =  packet -> nx_packet_length - NX_ETHERNET_SIZE;
         nx_packet_transmit_release(packet);
 
@@ -150,7 +150,7 @@ ULONG               copied;
 
     /* Load the address of the current packet header at the physical header.  */
     packet_header =  packet -> nx_packet_prepend_ptr;
-    
+
     /* Subtract 2 USHORT to store length of the packet.  */
     packet_header -= sizeof(USHORT) * 2;
 
@@ -189,7 +189,7 @@ ULONG               copied;
 
     /* Store the length of the payload in the first USHORT.  */
     _ux_utility_short_put(packet_header, (USHORT)(packet -> nx_packet_length));
-    
+
     /* Store the negative length of the payload in the first USHORT.  */
     _ux_utility_short_put(packet_header + sizeof(USHORT), (USHORT)(~packet -> nx_packet_length));
 
@@ -265,9 +265,9 @@ ULONG               copied;
     }
 
     else
-    
+
     {
-    
+
         /* We get here when there is something in the queue.  */
         current_packet =  asix -> ux_host_class_asix_xmit_queue;
 
@@ -279,7 +279,7 @@ ULONG               copied;
         {
             /* Remember the current packet.  */
             current_packet = next_packet;
-            
+
             /* See what the next packet in the chain is.  */
             next_packet = current_packet -> nx_packet_queue_next;
         }
@@ -295,6 +295,6 @@ ULONG               copied;
     }
 
     /* We are done here.  */
-    return(UX_SUCCESS);            
+    return(UX_SUCCESS);
 #endif
 }

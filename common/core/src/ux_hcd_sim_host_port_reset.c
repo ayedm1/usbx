@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Simulator Controller Driver                                    */
 /**                                                                       */
@@ -30,42 +29,42 @@
 #include "ux_device_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_hcd_sim_host_port_reset                         PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_hcd_sim_host_port_reset                         PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
+/*                                                                        */
 /*    Implements the PORT_RESET request.                                  */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hcd_sim_host                          Pointer to host controller    */ 
-/*    port_index                            Port index to reset           */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_stack_disconnect           Simulate device disconnection */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hcd_sim_host                          Pointer to host controller    */
+/*    port_index                            Port index to reset           */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_stack_disconnect           Simulate device disconnection */
 /*    _ux_dcd_sim_slave_initialize_complete Complete device initialization*/
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Host Simulator Controller Driver                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -80,11 +79,11 @@
 UINT  _ux_hcd_sim_host_port_reset(UX_HCD_SIM_HOST *hcd_sim_host, ULONG port_index)
 {
 
-UX_SLAVE_DEVICE     *device; 
+UX_SLAVE_DEVICE     *device;
 
 #if defined(UX_HOST_STANDALONE)
     /* No port reset wait simulated, return _STATE_NEXT later to move state.  */
-#endif
+#endif /* UX_HOST_STANDALONE */
 
     UX_PARAMETER_NOT_USED(hcd_sim_host);
     UX_PARAMETER_NOT_USED(port_index);
@@ -102,9 +101,9 @@ UX_SLAVE_DEVICE     *device;
     else
     {
 
-        /* Host sent a PORT_RESET when the device is Attached, Addressed, or 
-           Configured. Per the USB spec, we should go back to the default state. 
-           We do this by 1) simulating disconnect to get rid of class and device 
+        /* Host sent a PORT_RESET when the device is Attached, Addressed, or
+           Configured. Per the USB spec, we should go back to the default state.
+           We do this by 1) simulating disconnect to get rid of class and device
            resources and 2) recreating necessary entities for control transfers.  */
         _ux_device_stack_disconnect();
         _ux_dcd_sim_slave_initialize_complete();
@@ -116,8 +115,7 @@ UX_SLAVE_DEVICE     *device;
     /* This function should never fail.  */
 #if defined(UX_HOST_STANDALONE)
     return(UX_STATE_NEXT);
-#else
+#else /* UX_HOST_STANDALONE */
     return(UX_SUCCESS);
-#endif
+#endif /* UX_HOST_STANDALONE */
 }
-

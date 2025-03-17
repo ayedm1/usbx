@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device CDC Class                                                    */
+/**   Device CDC ACM Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -29,8 +29,6 @@
 
 
 #if defined(UX_DEVICE_STANDALONE)
-
-
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
@@ -309,7 +307,7 @@ UINT                        status = UX_SUCCESS;
         cdc_acm -> ux_device_class_cdc_acm_read_status = UX_INVALID_STATE;
         break;
     }
-    
+
 
     /* Error cases.  */
     return(UX_STATE_EXIT);

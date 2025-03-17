@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   CDC ECM Class                                                       */
 /**                                                                       */
@@ -31,37 +31,37 @@
 UX_HOST_CLASS_CDC_ECM_NX_ETHERNET_POOL_ALLOCSIZE_ASSERT
 
 #if !defined(UX_HOST_STANDALONE)
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_cdc_ecm_activate                     PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_cdc_ecm_activate                     PORTABLE C      */
 /*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function creates the cdc_ecm instance, configure the device.   */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    command                             CDC ECM class command pointer   */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function creates the cdc_ecm instance, configure the device.   */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    command                             CDC ECM class command pointer   */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_host_stack_transfer_request          Transfer request           */
-/*    _ux_host_class_cdc_ecm_endpoints_get     Get endpoints of cdc_ecm   */ 
+/*    _ux_host_class_cdc_ecm_endpoints_get     Get endpoints of cdc_ecm   */
 /*    _ux_host_class_cdc_ecm_mac_address_get   Get MAC address */
-/*    _ux_host_stack_class_instance_create     Create class instance      */ 
-/*    _ux_host_stack_class_instance_destroy    Destroy the class instance */ 
-/*    _ux_utility_memory_allocate              Allocate memory block      */ 
-/*    _ux_utility_memory_free                  Free memory block          */ 
+/*    _ux_host_stack_class_instance_create     Create class instance      */
+/*    _ux_host_stack_class_instance_destroy    Destroy the class instance */
+/*    _ux_utility_memory_allocate              Allocate memory block      */
+/*    _ux_utility_memory_free                  Free memory block          */
 /*    _ux_host_semaphore_create                Create semaphore           */
 /*    _ux_host_semaphore_delete                Delete semaphore           */
 /*    _ux_utility_thread_create                Create thread              */
@@ -70,15 +70,15 @@ UX_HOST_CLASS_CDC_ECM_NX_ETHERNET_POOL_ALLOCSIZE_ASSERT
 /*    _ux_network_driver_activate              Activate NetX USB interface*/
 /*    nx_packet_pool_create                    Create NetX packet pool    */
 /*    nx_packet_pool_delete                    Delete NetX packet pool    */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    _ux_host_class_cdc_ecm_entry             Entry of cdc_ecm class     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    _ux_host_class_cdc_ecm_entry             Entry of cdc_ecm class     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            used UX prefix to refer to  */
@@ -149,7 +149,7 @@ UX_INTERFACE                        *cur_interface;
     cdc_ecm -> ux_host_class_cdc_ecm_interface_data =  interface_ptr;
 
     /* We need to link the data and control interfaces together. In order
-       to do this, we first need to find the control interface. Per the spec, 
+       to do this, we first need to find the control interface. Per the spec,
        it should be behind this one.  */
 
     /* Set the current interface to the second interface. */
@@ -215,7 +215,7 @@ UX_INTERFACE                        *cur_interface;
     {
 
         /* Allocate a Thread stack.  */
-        cdc_ecm -> ux_host_class_cdc_ecm_thread_stack =  
+        cdc_ecm -> ux_host_class_cdc_ecm_thread_stack =
                     _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY, UX_THREAD_STACK_SIZE);
         if (cdc_ecm -> ux_host_class_cdc_ecm_thread_stack == UX_NULL)
             status =  UX_MEMORY_INSUFFICIENT;
@@ -225,13 +225,13 @@ UX_INTERFACE                        *cur_interface;
     {
 
         /* Create the semaphore for aborting bulk in transfers.  */
-        status =  _ux_host_semaphore_create(&cdc_ecm -> ux_host_class_cdc_ecm_bulk_in_transfer_waiting_for_check_and_arm_to_finish_semaphore, 
+        status =  _ux_host_semaphore_create(&cdc_ecm -> ux_host_class_cdc_ecm_bulk_in_transfer_waiting_for_check_and_arm_to_finish_semaphore,
                                                "host CDC-ECM bulk in wait semaphore", 0);
         if (status == UX_SUCCESS)
         {
 
             /* Create the semaphore for aborting bulk out transfers.  */
-            status =  _ux_host_semaphore_create(&cdc_ecm -> ux_host_class_cdc_ecm_bulk_out_transfer_waiting_for_check_and_arm_to_finish_semaphore, 
+            status =  _ux_host_semaphore_create(&cdc_ecm -> ux_host_class_cdc_ecm_bulk_out_transfer_waiting_for_check_and_arm_to_finish_semaphore,
                                                    "host CDC-ECM bulk out wait semaphore", 0);
             if (status == UX_SUCCESS)
             {
@@ -244,9 +244,9 @@ UX_INTERFACE                        *cur_interface;
                     /* Create the cdc_ecm class thread. We do not start it yet.  */
                     status =  _ux_utility_thread_create(&cdc_ecm -> ux_host_class_cdc_ecm_thread,
                                             "ux_host_cdc_ecm_thread", _ux_host_class_cdc_ecm_thread,
-                                            (ULONG) (ALIGN_TYPE) cdc_ecm, 
+                                            (ULONG) (ALIGN_TYPE) cdc_ecm,
                                             cdc_ecm -> ux_host_class_cdc_ecm_thread_stack,
-                                            UX_THREAD_STACK_SIZE, 
+                                            UX_THREAD_STACK_SIZE,
                                             UX_THREAD_PRIORITY_CLASS,
                                             UX_THREAD_PRIORITY_CLASS,
                                             UX_NO_TIME_SLICE, UX_DONT_START);
@@ -256,7 +256,7 @@ UX_INTERFACE                        *cur_interface;
                         UX_THREAD_EXTENSION_PTR_SET(&(cdc_ecm -> ux_host_class_cdc_ecm_thread), cdc_ecm)
 
                         /* We now need to retrieve the MAC address of the node which is embedded in the ECM descriptor.
-                            We will parse the entire configuration descriptor of the device and look for the ECM Ethernet Networking Functional Descriptor.  */ 
+                            We will parse the entire configuration descriptor of the device and look for the ECM Ethernet Networking Functional Descriptor.  */
                         status =  _ux_host_class_cdc_ecm_mac_address_get(cdc_ecm);
 
                         if (status == UX_SUCCESS)
@@ -264,7 +264,7 @@ UX_INTERFACE                        *cur_interface;
 
                             /* Setup the physical address of this IP instance.  */
                             physical_address_msw =  (ULONG)((cdc_ecm -> ux_host_class_cdc_ecm_node_id[0] << 8) | (cdc_ecm -> ux_host_class_cdc_ecm_node_id[1]));
-                            physical_address_lsw =  (ULONG)((cdc_ecm -> ux_host_class_cdc_ecm_node_id[2] << 24) | (cdc_ecm -> ux_host_class_cdc_ecm_node_id[3] << 16) | 
+                            physical_address_lsw =  (ULONG)((cdc_ecm -> ux_host_class_cdc_ecm_node_id[2] << 24) | (cdc_ecm -> ux_host_class_cdc_ecm_node_id[3] << 16) |
                                                                                 (cdc_ecm -> ux_host_class_cdc_ecm_node_id[4] << 8) | (cdc_ecm -> ux_host_class_cdc_ecm_node_id[5]));
 
                             /* The ethernet link is down by default.  */
@@ -275,8 +275,8 @@ UX_INTERFACE                        *cur_interface;
                         {
 
                             /* Register this interface to the NetX USB interface broker.  */
-                            status =  _ux_network_driver_activate((VOID *) cdc_ecm, _ux_host_class_cdc_ecm_write, 
-                                                                    &cdc_ecm -> ux_host_class_cdc_ecm_network_handle, 
+                            status =  _ux_network_driver_activate((VOID *) cdc_ecm, _ux_host_class_cdc_ecm_write,
+                                                                    &cdc_ecm -> ux_host_class_cdc_ecm_network_handle,
                                                                     physical_address_msw, physical_address_lsw);
                         }
 
@@ -309,18 +309,18 @@ UX_INTERFACE                        *cur_interface;
                                 /* Now we can start the CDC-ECM thread.  */
                                 _ux_utility_thread_resume(&cdc_ecm -> ux_host_class_cdc_ecm_thread);
 
-                                /* We need to inform the application if a function has been programmed 
+                                /* We need to inform the application if a function has been programmed
                                     in the system structure. */
                                 if (_ux_system_host -> ux_system_host_change_function != UX_NULL)
                                 {
-                                    
+
                                     /* Call system change function. Note that the application should
                                         wait until the link state is up until using this instance. The
                                         link state is changed to up by the CDC-ECM thread, which isn't
                                         started until after the data interface has been processed.  */
                                     _ux_system_host ->  ux_system_host_change_function(UX_DEVICE_INSERTION, cdc_ecm -> ux_host_class_cdc_ecm_class, (VOID *) cdc_ecm);
                                 }
-                            
+
                                 /* If trace is enabled, insert this event into the trace buffer.  */
                                 UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_CLASS_CDC_ECM_ACTIVATE, cdc_ecm, 0, 0, 0, UX_TRACE_HOST_CLASS_EVENTS, 0, 0)
 
@@ -367,8 +367,8 @@ UX_INTERFACE                        *cur_interface;
         _ux_utility_memory_free(cdc_ecm -> ux_host_class_cdc_ecm_thread_stack);
 
     _ux_utility_memory_free(cdc_ecm);
-    
+
     /* Return completion status.  */
-    return(status);    
+    return(status);
 }
 #endif

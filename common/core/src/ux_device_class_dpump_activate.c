@@ -1,20 +1,19 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
 /**                                                                       */
-/**   Device Data Pump Class                                              */
+/** USBX Component                                                        */
+/**                                                                       */
+/**   Device DPUMP Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -28,40 +27,40 @@
 #include "ux_device_class_dpump.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_device_class_dpump_activate                     PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_device_class_dpump_activate                     PORTABLE C      */
 /*                                                           6.3.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function activates the USB dpump device.                       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    command                                 Pointer to dpump command    */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function activates the USB dpump device.                       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    command                                 Pointer to dpump command    */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    None                                                                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Device Data Pump Class                                              */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Device Data Pump Class                                              */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -80,7 +79,7 @@
 /**************************************************************************/
 UINT  _ux_device_class_dpump_activate(UX_SLAVE_CLASS_COMMAND *command)
 {
-                                          
+
 UX_SLAVE_INTERFACE                      *interface_ptr;
 UX_SLAVE_CLASS_DPUMP                    *dpump;
 UX_SLAVE_CLASS                          *class_ptr;
@@ -94,20 +93,20 @@ UX_SLAVE_ENDPOINT                       *endpoint;
 
     /* Get the interface that owns this instance.  */
     interface_ptr =  (UX_SLAVE_INTERFACE  *) command -> ux_slave_class_command_interface;
-    
+
     /* Store the class instance into the interface.  */
     interface_ptr -> ux_slave_interface_class_instance =  (VOID *)dpump;
-         
+
     /* Now the opposite, store the interface in the class instance.  */
     dpump -> ux_slave_class_dpump_interface =  interface_ptr;
 
     /* Locate the endpoints.  Interrupt for Control and Bulk in/out for Data.  */
     endpoint =  interface_ptr -> ux_slave_interface_first_endpoint;
-    
+
     /* Parse all endpoints.  */
     while (endpoint != UX_NULL)
     {
-    
+
         /* Check the endpoint direction, and type.  */
         if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) == UX_ENDPOINT_IN)
         {
@@ -122,7 +121,7 @@ UX_SLAVE_ENDPOINT                       *endpoint;
                 endpoint -> ux_slave_endpoint_transfer_request.
                         ux_slave_transfer_request_data_pointer =
                                 UX_DEVICE_CLASS_DPUMP_WRITE_BUFFER(dpump);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
             }
         }
         else
@@ -130,16 +129,16 @@ UX_SLAVE_ENDPOINT                       *endpoint;
             /* Look at type for out endpoint.  */
             if ((endpoint -> ux_slave_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE) == UX_BULK_ENDPOINT)
             {
-                
+
                 /* We have found the bulk out endpoint, save it.  */
                 dpump -> ux_slave_class_dpump_bulkout_endpoint =  endpoint;
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
                 endpoint -> ux_slave_endpoint_transfer_request.
                         ux_slave_transfer_request_data_pointer =
                                 UX_DEVICE_CLASS_DPUMP_READ_BUFFER(dpump);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
             }
-        }                
+        }
 
         /* Next endpoint.  */
         endpoint =  endpoint -> ux_slave_endpoint_next_endpoint;
@@ -150,23 +149,22 @@ UX_SLAVE_ENDPOINT                       *endpoint;
     /* Reset read/write states.  */
     dpump -> ux_device_class_dpump_read_state = 0;
     dpump -> ux_device_class_dpump_write_state = 0;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 
     /* If there is a activate function call it.  */
     if (dpump -> ux_slave_class_dpump_parameter.ux_slave_class_dpump_instance_activate != UX_NULL)
     {
-    
+
         /* Invoke the application.  */
         dpump -> ux_slave_class_dpump_parameter.ux_slave_class_dpump_instance_activate(dpump);
     }
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_DPUMP_ACTIVATE, dpump, 0, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
-  
+
     /* If trace is enabled, register this object.  */
     UX_TRACE_OBJECT_REGISTER(UX_TRACE_DEVICE_OBJECT_TYPE_INTERFACE, dpump, 0, 0, 0)
 
     /* Return completion status.  */
     return(UX_SUCCESS);
 }
-

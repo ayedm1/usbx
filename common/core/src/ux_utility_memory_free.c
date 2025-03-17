@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 
@@ -88,10 +87,10 @@ UCHAR               **block_link_ptr;
 UCHAR               *memory_address;
 UCHAR               *regular_start, *regular_end;
 UCHAR               *cache_safe_start, *cache_safe_end;
-#endif
+#endif /* UX_ENABLE_MEMORY_POOL_SANITY_CHECK */
 #ifdef UX_ENABLE_MEMORY_STATISTICS
 UINT                index;
-#endif
+#endif /* UX_ENABLE_MEMORY_STATISTICS */
 
     /* Get the mutex as this is a critical section.  */
     _ux_system_mutex_on(&_ux_system -> ux_system_mutex);
@@ -121,7 +120,7 @@ UINT                index;
         /* No action taken.  */
         return;
     }
-#endif
+#endif /* UX_ENABLE_MEMORY_POOL_SANITY_CHECK */
 
     /* Set the pool pointer to NULL.  */
     pool_ptr =  UX_NULL;
@@ -219,7 +218,7 @@ UINT                index;
 
     _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_count --;
     _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_total -= UX_UCHAR_POINTER_DIF(next_block_ptr, work_ptr);
-#endif
+#endif /* UX_ENABLE_MEMORY_STATISTICS */
 
     /* Release the protection.  */
     _ux_system_mutex_off(&_ux_system -> ux_system_mutex);
@@ -227,4 +226,3 @@ UINT                index;
     /* Return to caller.  */
     return;
 }
-

@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -92,20 +91,23 @@ UX_HOST_CLASS       *class_inst;
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
 UINT                status;
 UINT                class_name_length =  0;
-#endif
+#endif /* !UX_NAME_REFERENCED_BY_POINTER */
 #if UX_MAX_CLASS_DRIVER > 1
 ULONG               class_index;
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_CLASS_REGISTER, class_name, class_entry_function, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
+
     /* Get the length of the class name (exclude null-terminator).  */
     status =  _ux_utility_string_length_check(class_name, &class_name_length, UX_MAX_CLASS_NAME_LENGTH);
-    if (status)
+
+    if (status != UX_SUCCESS)
         return(status);
-#endif
+
+#endif /* !UX_NAME_REFERENCED_BY_POINTER */
 
     /* Get first class.  */
     class_inst =  _ux_system_host -> ux_system_host_class_array;
@@ -114,7 +116,7 @@ ULONG               class_index;
     /* We need to parse the class table to find an empty spot.  */
     for (class_index = 0; class_index < _ux_system_host -> ux_system_host_max_class; class_index++)
     {
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
         /* Check if this class is already used.  */
         if (class_inst -> ux_host_class_status == UX_UNUSED)
@@ -122,11 +124,11 @@ ULONG               class_index;
 
 #if defined(UX_NAME_REFERENCED_BY_POINTER)
             class_inst -> ux_host_class_name = (const UCHAR *) class_name;
-#else
+#else /* UX_NAME_REFERENCED_BY_POINTER */
 
             /* We have found a free container for the class. Copy the name (with null-terminator).  */
             _ux_utility_memory_copy(class_inst -> ux_host_class_name, class_name, class_name_length + 1); /* Use case of memcpy is verified. */
-#endif
+#endif /* UX_NAME_REFERENCED_BY_POINTER */
 
             /* Memorize the entry function of this class.  */
             class_inst -> ux_host_class_entry_function =  class_entry_function;
@@ -161,7 +163,7 @@ ULONG               class_index;
         /* Move to the next class.  */
         class_inst ++;
     }
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_MEMORY_ARRAY_FULL, class_name, 0, 0, UX_TRACE_ERRORS, 0, 0)

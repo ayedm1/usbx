@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   HID Class                                                           */
 /**                                                                       */
@@ -29,45 +29,45 @@
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_hid_idle_get                         PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_hid_idle_get                         PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function performs a GET_IDLE to the HID device.                */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    hid                                   Pointer to HID class          */ 
-/*    idle_time                             Idle time                     */ 
-/*    report_id                             Report ID                     */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_host_stack_class_instance_verify  Verify instance is valid      */ 
-/*    _ux_host_stack_transfer_request       Process transfer request      */ 
-/*    _ux_host_semaphore_get                Get protection semaphore      */ 
-/*    _ux_host_semaphore_put                Release protection semaphore  */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    HID Class                                                           */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function performs a GET_IDLE to the HID device.                */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    hid                                   Pointer to HID class          */
+/*    idle_time                             Idle time                     */
+/*    report_id                             Report ID                     */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_host_stack_class_instance_verify  Verify instance is valid      */
+/*    _ux_host_stack_transfer_request       Process transfer request      */
+/*    _ux_host_semaphore_get                Get protection semaphore      */
+/*    _ux_host_semaphore_put                Release protection semaphore  */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    HID Class                                                           */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            protected default control   */
@@ -93,7 +93,7 @@ UINT            status;
 
     /* Ensure the instance is valid.  */
     if (_ux_host_stack_class_instance_verify(_ux_system_host_class_hid_name, (VOID *) hid) != UX_SUCCESS)
-    {        
+    {
 
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_HOST_CLASS_INSTANCE_UNKNOWN, hid, 0, 0, UX_TRACE_ERRORS, 0, 0)
@@ -119,7 +119,7 @@ UINT            status;
 
     status =  _ux_host_semaphore_get(&hid -> ux_host_class_hid_semaphore, UX_WAIT_FOREVER);
     if (status != UX_SUCCESS)
-    
+
         /* Return error.  */
         return(status);
 #endif
@@ -136,7 +136,7 @@ UINT            status;
         return(UX_MEMORY_INSUFFICIENT);
     }
 
-    /* Protect the control endpoint semaphore here.  It will be unprotected in the 
+    /* Protect the control endpoint semaphore here.  It will be unprotected in the
        transfer request function.  */
 #if defined(UX_HOST_STANDALONE)
     UX_DISABLE
@@ -193,7 +193,7 @@ UINT            status;
 
     /* Check for correct transfer and for the entire descriptor returned.  */
     if ((status == UX_SUCCESS) && (transfer_request -> ux_transfer_request_actual_length == 1))
-        *idle_time =  (USHORT) *idle_byte;    
+        *idle_time =  (USHORT) *idle_byte;
 
     /* Free used resources.  */
     _ux_utility_memory_free(idle_byte);
@@ -226,8 +226,8 @@ UINT            status;
 /*  INPUT                                                                 */
 /*                                                                        */
 /*    hid                                   Pointer to HID class          */
-/*    idle_time                             Idle time                     */ 
-/*    report_id                             Report ID                     */ 
+/*    idle_time                             Idle time                     */
+/*    report_id                             Report ID                     */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */

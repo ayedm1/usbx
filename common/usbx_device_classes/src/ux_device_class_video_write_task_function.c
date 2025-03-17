@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Video Class                                                  */
+/**   Device VIDEO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -128,13 +128,13 @@ UINT                            status;
         /* Zero copy: directly use frame buffer for transfer.  */
         transfer -> ux_slave_transfer_request_data_pointer = stream ->
                     ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_data;
-#else
+#else /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
         /* Copy frame buffer to transfer buffer.  */
         if (transfer_length)
             _ux_utility_memory_copy(transfer -> ux_slave_transfer_request_data_pointer,
                 stream -> ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_data, transfer_length); /* Use case of memcpy is verified. */
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
         /* Reset transfer state.  */
         UX_SLAVE_TRANSFER_STATE_RESET(transfer);

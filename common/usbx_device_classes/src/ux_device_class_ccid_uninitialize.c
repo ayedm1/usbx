@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -106,12 +106,12 @@ ULONG                                   i;
         _ux_device_mutex_delete(&ccid -> ux_device_class_ccid_mutex);
         _ux_device_semaphore_delete(&ccid -> ux_device_class_ccid_notify_semaphore);
         _ux_device_mutex_delete(&ccid -> ux_device_class_ccid_response_mutex);
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
         /* Free the bulk in endpoint memory.  */
         _ux_utility_memory_free(ccid -> ux_device_class_ccid_endpoint_buffer);
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
         /* Free instance memory.  */
         _ux_utility_memory_free(ccid);

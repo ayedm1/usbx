@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -117,7 +116,7 @@ UINT        status;
         return(UX_SUCCESS);
     }
 
-#else
+#else /* UX_HOST_STANDALONE */
 UX_DEVICE   *device = UX_NULL;
 UINT        index_loop;
 UINT        device_speed;
@@ -227,7 +226,7 @@ UINT        status;
            so we try again ! */
         _ux_utility_delay_ms(UX_RH_ENUMERATION_RETRY_DELAY);
     }
-#endif /* defined(UX_HOST_STANDALONE)  */
+#endif /* UX_HOST_STANDALONE */
 
     /* If we get here, the device did not enumerate completely.
        The device is still attached to the root hub and therefore

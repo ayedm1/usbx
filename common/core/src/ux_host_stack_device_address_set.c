@@ -1,68 +1,67 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_device_address_set                   PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_device_address_set                   PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function sets the device address to the new device.            */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    device                                Pointer to device             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_delay_ms                  Thread sleep                  */ 
-/*    _ux_host_stack_transfer_request       Process transfer request      */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function sets the device address to the new device.            */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    device                                Pointer to device             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_delay_ms                  Thread sleep                  */
+/*    _ux_host_stack_transfer_request       Process transfer request      */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -86,7 +85,7 @@ UX_HCD          *hcd;
 UINT            address_byte_index;
 UINT            address_bit_index;
 UCHAR           device_address_byte;
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* Retrieve the pointer to the control endpoint.  */
     control_endpoint =  &device -> ux_device_control_endpoint;
@@ -141,7 +140,7 @@ UCHAR           device_address_byte;
 
         /* We should never get here!  */
         return(UX_ERROR);
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_DEVICE_ADDRESS_SET, device, device_address, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
@@ -158,7 +157,7 @@ UCHAR           device_address_byte;
     device -> ux_device_enum_trans = transfer_request;
     status = UX_SUCCESS;
     return(status);
-#else
+#else /* UX_HOST_STANDALONE */
 
     /* Send request to HCD layer.  */
     status =  _ux_host_stack_transfer_request(transfer_request);
@@ -185,8 +184,8 @@ UCHAR           device_address_byte;
 
         /* We have an error at the first device transaction. This is mostly
             due to the device having failed on the reset after power up.
-            we will try again either at the root hub or regular hub. */   
+            we will try again either at the root hub or regular hub. */
         return(status);
     }
-#endif
+#endif /* UX_HOST_STANDALONE */
 }

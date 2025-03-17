@@ -1,75 +1,74 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_new_endpoint_create                  PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_new_endpoint_create                  PORTABLE C      */
 /*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function creates a new endpoint for the current interface      */ 
-/*    scanned. The endpoint is hooked to the interface that owns it.      */ 
-/*    It is not active yet until either the default interface for the     */ 
-/*    configuration is selected by a SET_CONFIGURATION or when an         */ 
+/*                                                                        */
+/*    This function creates a new endpoint for the current interface      */
+/*    scanned. The endpoint is hooked to the interface that owns it.      */
+/*    It is not active yet until either the default interface for the     */
+/*    configuration is selected by a SET_CONFIGURATION or when an         */
 /*    alternate setting for this interface is set.                        */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    interface                             Interface container that owns */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    interface                             Interface container that owns */
 /*                                            this endpoint               */
-/*    endpoint_pointer                      Pointer to a unparsed         */ 
+/*    endpoint_pointer                      Pointer to a unparsed         */
 /*                                            endpoint descriptor         */
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_utility_descriptor_parse          Parse the descriptor          */ 
-/*    _ux_utility_memory_allocate           Allocate memory block         */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_utility_descriptor_parse          Parse the descriptor          */
+/*    _ux_utility_memory_allocate           Allocate memory block         */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -104,7 +103,7 @@ ULONG           n_tran;
        endpoint container is not corrupted.  */
     endpoint -> ux_endpoint =  (ULONG) (ALIGN_TYPE) endpoint;
 
-    /* The endpoint container has a built in transfer_request. 
+    /* The endpoint container has a built in transfer_request.
        The transfer_request needs to point to the endpoint as well.  */
     endpoint -> ux_endpoint_transfer_request.ux_transfer_request_endpoint =  endpoint;
 
@@ -191,13 +190,13 @@ ULONG           n_tran;
     /* Save transfer packet size.  */
     endpoint -> ux_endpoint_transfer_request.ux_transfer_request_packet_length = packet_size;
 
-    /* The interface that owns this endpoint is memorized in the 
+    /* The interface that owns this endpoint is memorized in the
        endpoint container itself, easier for back chaining.  */
     endpoint -> ux_endpoint_interface =  interface_ptr;
 
-    /* There is 2 cases for the creation of the endpoint descriptor 
+    /* There is 2 cases for the creation of the endpoint descriptor
        if this is the first one, the endpoint descriptor is hooked
-       to the interface. 
+       to the interface.
        If it is not the first one, the endpoint is hooked to the
        end of the chain of endpoints.  */
     if (interface_ptr -> ux_interface_first_endpoint == UX_NULL)
@@ -209,7 +208,7 @@ ULONG           n_tran;
     {
 
         list_endpoint =  interface_ptr -> ux_interface_first_endpoint;
-        
+
         /* Traverse the list until the end.  */
         while (list_endpoint -> ux_endpoint_next_endpoint != UX_NULL)
             list_endpoint =  list_endpoint -> ux_endpoint_next_endpoint;
@@ -221,4 +220,3 @@ ULONG           n_tran;
     /* Return successful status.  */
     return(UX_SUCCESS);
 }
-    

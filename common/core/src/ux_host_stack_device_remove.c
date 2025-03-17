@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -90,7 +89,7 @@ UINT  _ux_host_stack_device_remove(UX_HCD *hcd, UX_DEVICE *parent, UINT port_ind
 
 #if UX_MAX_DEVICES > 1
 ULONG                       container_index;
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 UX_DEVICE                   *device;
 UX_CONFIGURATION            *configuration;
 UX_INTERFACE                *interface_ptr;
@@ -125,14 +124,14 @@ UX_HOST_CLASS_COMMAND       command;
 
     /* Device not found.  */
     if (container_index > _ux_system_host -> ux_system_host_max_devices)
-#else
+#else /* UX_MAX_DEVICES > 1 */
     UX_PARAMETER_NOT_USED(parent);
     UX_PARAMETER_NOT_USED(port_index);
 
     /* Device is available and HCD is expected.  */
     if (device -> ux_device_handle == UX_UNUSED ||
         !UX_DEVICE_HCD_MATCH(device, hcd))
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
     {
 
         /* Error trap. */

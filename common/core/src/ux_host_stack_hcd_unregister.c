@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -90,10 +89,10 @@ UX_DEVICE   *device;
 UX_HCD      *hcd;
 #if UX_MAX_CLASS_DRIVER > 1 || UX_MAX_DEVICES > 1
 ULONG       scan_index;
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 || UX_MAX_DEVICES > 1 */
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
 UINT        hcd_name_length =  0;
-#endif
+#endif /* !UX_NAME_REFERENCED_BY_POINTER */
 
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -105,7 +104,7 @@ UINT        hcd_name_length =  0;
                                     &hcd_name_length, UX_MAX_HCD_NAME_LENGTH);
     if (status)
         return(status);
-#endif
+#endif /* !UX_NAME_REFERENCED_BY_POINTER */
 
     /* Get first HCD.  */
     hcd =  _ux_system_host -> ux_system_host_hcd_array;
@@ -119,7 +118,7 @@ UINT        hcd_name_length =  0;
          scan_index < UX_SYSTEM_HOST_MAX_HCD_GET();
          scan_index++)
     {
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
         /* Is this slot available and saved hcd_parameters match?  */
         if (hcd -> ux_hcd_status != UX_UNUSED &&
@@ -136,14 +135,14 @@ UINT        hcd_name_length =  0;
             /* Break if name match (found HCD).  */
             if (status == UX_TRUE)
                 break;
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
             }
 
 #if UX_MAX_CLASS_DRIVER > 1
         /* Try the next HCD structure */
         hcd ++;
     }
-#endif
+#endif /* UX_MAX_CLASS_DRIVER > 1 */
 
     /* No valid HCD found.  */
     if (status != UX_TRUE)
@@ -161,12 +160,12 @@ UINT        hcd_name_length =  0;
          scan_index < _ux_system_host -> ux_system_host_max_devices;
          scan_index ++)
     {
-#else
+#else /* UX_MAX_DEVICES > 1 */
 
         /* No device.  */
         if (device -> ux_device_handle == UX_UNUSED)
             return(UX_SUCCESS);
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
         /* Is this device on the HCD root hub?  */
         if (UX_DEVICE_HCD_MATCH(device, hcd) &&
@@ -187,7 +186,7 @@ UINT        hcd_name_length =  0;
         /* Try the next device.  */
         device ++;
     }
-#endif
+#endif /* UX_MAX_DEVICES > 1 */
 
     /* And we have one new controller unregistered.  */
     _ux_system_host -> ux_system_host_registered_hcd --;

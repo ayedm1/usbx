@@ -1,13 +1,12 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
-
 
 /**************************************************************************/
 /**************************************************************************/
@@ -19,10 +18,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#define UX_SOURCE_CODE
+
 
 /* Include necessary system files.  */
-
-#define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
@@ -90,10 +89,10 @@ UX_HCD      *hcd;
 UINT        status;
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
 UINT        hcd_name_length =  0;
-#endif
+#endif /* !UX_NAME_REFERENCED_BY_POINTER */
 #if UX_MAX_HCD > 1
 ULONG       hcd_index;
-#endif
+#endif /* UX_MAX_HCD > 1 */
 
 
 
@@ -105,7 +104,7 @@ ULONG       hcd_index;
     status =  _ux_utility_string_length_check(hcd_name, &hcd_name_length, UX_MAX_HCD_NAME_LENGTH);
     if (status)
         return(status);
-#endif
+#endif /* !UX_NAME_REFERENCED_BY_POINTER */
 
     /* Get HCD.  */
     hcd =  _ux_system_host -> ux_system_host_hcd_array;
@@ -114,7 +113,7 @@ ULONG       hcd_index;
     /* We need to parse the controller driver table to find an empty spot.  */
     for(hcd_index = 0; hcd_index < _ux_system_host -> ux_system_host_max_hcd; hcd_index++)
     {
-#endif
+#endif /* UX_MAX_HCD > 1 */
 
         /* Is this slot available?  */
         if(hcd -> ux_hcd_status == UX_UNUSED)
@@ -124,11 +123,11 @@ ULONG       hcd_index;
 
 #if defined(UX_NAME_REFERENCED_BY_POINTER)
             hcd -> ux_hcd_name = (const UCHAR *)hcd_name;
-#else
+#else /* UX_NAME_REFERENCED_BY_POINTER */
 
             /* Initialize the array of the new controller with its name (include null-terminator).  */
             _ux_utility_memory_copy(hcd -> ux_hcd_name, hcd_name, hcd_name_length + 1); /* Use case of memcpy is verified. */
-#endif
+#endif /* UX_NAME_REFERENCED_BY_POINTER */
 
             /* Store the hardware resources of the controller */
             hcd -> ux_hcd_io =   hcd_param1;
@@ -150,7 +149,7 @@ ULONG       hcd_index;
         /* Try the next HCD structure */
         hcd++;
     }
-#endif
+#endif /* UX_MAX_HCD > 1 */
 
     /* We have exhausted the array of the HCDs, return an error.  */
     return(UX_MEMORY_INSUFFICIENT);

@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -138,7 +138,7 @@ UX_DEVICE_CLASS_CCID_MESSAGE_HEADER         *msg;
         ccid -> ux_device_class_ccid_cmd_state = UX_DEVICE_CLASS_CCID_CMD_START;
     if (ccid -> ux_device_class_ccid_rsp_state == UX_DEVICE_CLASS_CCID_RSP_WAIT)
         ccid -> ux_device_class_ccid_rsp_state = UX_DEVICE_CLASS_CCID_RSP_IDLE;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 
     /* Set aborting state.  */
     ccid_slot -> ux_device_class_ccid_slot_aborting = UX_TRUE;

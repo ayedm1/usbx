@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -125,7 +125,7 @@ UINT                            status;
         /* Zero copy: directly use stream buffer for transfer.  */
         transfer -> ux_slave_transfer_request_data_pointer =
             stream -> ux_device_class_audio_stream_transfer_pos -> ux_device_class_audio_frame_data;
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1 */
 
         /* Reset transfer state.  */
         UX_SLAVE_TRANSFER_STATE_RESET(transfer);
@@ -171,7 +171,7 @@ UINT                            status;
         _ux_utility_memory_copy(stream -> ux_device_class_audio_stream_transfer_pos -> ux_device_class_audio_frame_data,
                         transfer -> ux_slave_transfer_request_data_pointer,
                         actual_length); /* Use case of memcpy is verified. */
-#endif
+#endif /* UX_DEVICE_ENDPOINT_BUFFER_OWNER == 0 */
 
         /* For simple, do not advance the transfer position if there is overflow.  */
         next_pos = (UCHAR *)stream -> ux_device_class_audio_stream_transfer_pos;
@@ -201,4 +201,4 @@ UINT                            status;
     /* Keep waiting.  */
     return(UX_STATE_WAIT);
 }
-#endif
+#endif /* UX_DEVICE_STANDALONE */

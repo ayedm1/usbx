@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -13,7 +13,7 @@
 /**                                                                       */
 /** USBX Component                                                        */
 /**                                                                       */
-/**   Device Audio Class                                                  */
+/**   Device AUDIO Class                                                  */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -112,11 +112,11 @@ UX_SLAVE_DEVICE             *device;
     /* Start read task.  */
     if (stream -> ux_device_class_audio_stream_task_state == UX_DEVICE_CLASS_AUDIO_STREAM_RW_STOP)
         stream -> ux_device_class_audio_stream_task_state = UX_DEVICE_CLASS_AUDIO_STREAM_RW_START;
-#else
+#else /* UX_DEVICE_STANDALONE */
 
     /* Start read thread.  */
     _ux_device_thread_resume(&stream -> ux_device_class_audio_stream_thread);
-#endif
+#endif /* UX_DEVICE_STANDALONE */
     return(UX_SUCCESS);
 }
 

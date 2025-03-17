@@ -1,10 +1,10 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
@@ -933,7 +933,7 @@ typedef struct UX_CLASS_AUDIO10_TYPE_I_FORMAT_TYPE_CONTINUOUS_DESCRIPTOR_STRUCT
     UCHAR           tLowerSamFreq[3];
     UCHAR           tUpperSamFreq[3];
 }
-UX_CLASS_AUDIO10_TYPE_I_FORMAT_TYPE_CONTINUOUS_DESCRIPTOR, 
+UX_CLASS_AUDIO10_TYPE_I_FORMAT_TYPE_CONTINUOUS_DESCRIPTOR,
 UX_CLASS_AUDIO10_TYPE_I_FORMAT_TYPE_DESCRIPTOR_0;
 
 typedef struct UX_CLASS_AUDIO10_TYPE_I_FORMAT_TYPE_DISCRETE_DESCRIPTOR_STRUCT

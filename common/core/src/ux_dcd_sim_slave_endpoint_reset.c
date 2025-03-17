@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Slave Simulator Controller Driver                                   */
 /**                                                                       */
@@ -49,20 +48,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Slave Simulator Controller Driver                                   */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -82,7 +81,7 @@ UX_DCD_SIM_SLAVE_ED     *ed;
 ULONG                   transfer_waiting;
 #if !defined(UX_DEVICE_STANDALONE)
 UX_SLAVE_TRANSFER       *transfer;
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
 
     UX_PARAMETER_NOT_USED(dcd_sim_slave);
 
@@ -93,7 +92,7 @@ UX_SLAVE_TRANSFER       *transfer;
 
     /* Transfer pending always considered.  */
     transfer_waiting = UX_DCD_SIM_SLAVE_ED_STATUS_TRANSFER;
-#else
+#else /* UX_DEVICE_STANDALONE */
 
     /* Save waiting status for non-zero endpoints.  */
     if (ed -> ux_sim_slave_ed_index)
@@ -103,7 +102,7 @@ UX_SLAVE_TRANSFER       *transfer;
     }
     else
         transfer_waiting = 0;
-#endif
+#endif /* UX_DEVICE_STANDALONE */
 
     /* Clear pending transfer and stall status.  */
     ed -> ux_sim_slave_ed_status &=  ~(ULONG)(transfer_waiting |
@@ -119,9 +118,8 @@ UX_SLAVE_TRANSFER       *transfer;
         transfer -> ux_slave_transfer_request_completion_code = UX_TRANSFER_BUS_RESET;
         _ux_device_semaphore_put(&transfer -> ux_slave_transfer_request_semaphore);
     }
-#endif
+#endif /* !UX_DEVICE_STANDALONE */
 
     /* This function never fails.  */
-    return(UX_SUCCESS);         
+    return(UX_SUCCESS);
 }
-

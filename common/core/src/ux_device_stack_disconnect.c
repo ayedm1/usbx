@@ -1,18 +1,17 @@
 /***************************************************************************
- * Copyright (c) 2024 Microsoft Corporation 
- * 
+ * Copyright (c) 2024 Microsoft Corporation
+ *
  * This program and the accompanying materials are made available under the
  * terms of the MIT License which is available at
  * https://opensource.org/licenses/MIT.
- * 
+ *
  * SPDX-License-Identifier: MIT
  **************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -46,27 +45,27 @@
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
-/*    None                                                                */ 
+/*    None                                                                */
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    (ux_slave_class_entry_function)       Device class entry function   */ 
-/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    (ux_slave_class_entry_function)       Device class entry function   */
+/*    (ux_slave_dcd_function)               DCD dispatch function         */
 /*    _ux_device_stack_interface_delete     Delete interface              */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -83,14 +82,14 @@ UINT  _ux_device_stack_disconnect(VOID)
 
 UX_SLAVE_DCD                *dcd;
 UX_SLAVE_DEVICE             *device;
-UX_SLAVE_INTERFACE          *interface_ptr; 
+UX_SLAVE_INTERFACE          *interface_ptr;
 #if !defined(UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE) || UX_MAX_DEVICE_INTERFACES > 1
-UX_SLAVE_INTERFACE          *next_interface; 
-#endif
+UX_SLAVE_INTERFACE          *next_interface;
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 UX_SLAVE_CLASS              *class_ptr;
 UX_SLAVE_CLASS_COMMAND      class_command;
 UINT                        status = UX_ERROR;
-                        
+
     /* Get the pointer to the DCD.  */
     dcd =  &_ux_system_slave -> ux_system_slave_dcd;
 
@@ -114,7 +113,7 @@ UINT                        status = UX_ERROR;
         /* Parse all the interfaces if any.  */
         while (interface_ptr != UX_NULL)
         {
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
             /* Build all the fields of the Class Command.  */
             class_command.ux_slave_class_command_request =   UX_SLAVE_CLASS_COMMAND_DEACTIVATE;
@@ -122,20 +121,20 @@ UINT                        status = UX_ERROR;
 
             /* Get the pointer to the class container of this interface.  */
             class_ptr =  interface_ptr -> ux_slave_interface_class;
-            
+
             /* Store the class container. */
             class_command.ux_slave_class_command_class_ptr =  class_ptr;
 
             /* If there is a class container for this instance, deactivate it.  */
             if (class_ptr != UX_NULL)
-            
+
                 /* Call the class with the DEACTIVATE signal.  */
                 class_ptr -> ux_slave_class_entry_function(&class_command);
 
 #if !defined(UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE) || UX_MAX_DEVICE_INTERFACES > 1
             /* Get the next interface.  */
             next_interface =  interface_ptr -> ux_slave_interface_next_interface;
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
             /* Remove the interface and all endpoints associated with it.  */
             _ux_device_stack_interface_delete(interface_ptr);
@@ -144,7 +143,7 @@ UINT                        status = UX_ERROR;
             /* Now we refresh the interface pointer.  */
             interface_ptr =  next_interface;
         }
-#endif
+#endif /* !UX_DEVICE_INITIALIZE_FRAMEWORK_SCAN_DISABLE || UX_MAX_DEVICE_INTERFACES > 1 */
 
         /* Mark the device as attached now.  */
         device -> ux_slave_device_state =  UX_DEVICE_ATTACHED;
@@ -174,4 +173,3 @@ UINT                        status = UX_ERROR;
     /* Return the status to the caller.  */
     return(status);
 }
-
