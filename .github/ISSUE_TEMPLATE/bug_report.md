@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve Eclipse ThreadX.
 title: ''
-labels: bug
+labels: new, bug, hardware
 assignees: ''
 
 ---
@@ -13,13 +13,13 @@ A clear and concise description of what the bug is.
 Please also mention any information which could help others to understand
 the problem you're facing:
 - What target device are you using?
-- Which version of Eclipse ThreadX?
+- Which version of Eclipse USBX?
 - What toolchain and environment?
 - What have you tried to diagnose or workaround this issue?
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Build my project in IAR Workbench.
+1. Build my project in IAR Workbench/Keil/IDE.
 1. See error
 
 **Expected behavior**
